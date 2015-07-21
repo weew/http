@@ -1,0 +1,30 @@
+{
+    "name": "weew/php-http",
+    "description": "Basic http layer.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Maxim Kott",
+            "email": "weew@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.7"
+    },
+    "require": {
+        "weew/php-foundation": "0.*",
+        "weew/php-helpers-array": "0.*",
+        "weew/php-helpers-string": "0.*",
+        "weew/php-url": "0.*"
+    }
+}
