@@ -3,7 +3,9 @@
 namespace Tests\Weew\Http;
 
 use PHPUnit_Framework_TestCase;
+use Tests\Weew\Http\Mocks\StringableItem;
 use Weew\Http\HttpHeaders;
+use Weew\Http\HttpRequest;
 use Weew\Http\HttpResponse;
 use Weew\Http\HttpStatusCode;
 use Weew\Http\IHttpHeaders;
@@ -126,5 +128,15 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue($response->isOk());
         $response->setStatusCode(HttpStatusCode::NOT_FOUND);
         $this->assertFalse($response->isOk());
+    }
+
+    public function test_set_stringable_content() {
+        $item = new StringableItem();
+        $response = new HttpResponse();
+
+        $this->assertFalse($response->hasContent());
+        $response->setContent($item);
+        $this->assertTrue($response->hasContent());
+        $this->assertEquals($item->toString(), $response->getContent());
     }
 }

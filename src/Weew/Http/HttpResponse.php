@@ -5,6 +5,7 @@ namespace Weew\Http;
 use Exception;
 use Weew\Foundation\Interfaces\IArrayable;
 use Weew\Foundation\Interfaces\IJsonable;
+use Weew\Foundation\Interfaces\IStringable;
 
 class HttpResponse implements IHttpResponse {
     /**
@@ -129,6 +130,12 @@ class HttpResponse implements IHttpResponse {
      * @param $content
      */
     public function setContent($content) {
+        if ($content instanceof IStringable) {
+            $content = $content->toString();
+        } else if ( ! is_string($content)) {
+            $content = (string) $content;
+        }
+
         $this->content = $content;
     }
 
@@ -143,7 +150,7 @@ class HttpResponse implements IHttpResponse {
      * @return bool
      */
     public function hasContent() {
-        return $this->content !== null;
+        return ! empty($this->content);
     }
 
     /**
@@ -240,7 +247,6 @@ class HttpResponse implements IHttpResponse {
      * @param int $options
      */
     public function setJsonContent($content, $options = 0) {
-
         if ($content instanceof IArrayable) {
             $content = json_encode($content->toArray(), $options);
         } else if ($content instanceof IJsonable) {
