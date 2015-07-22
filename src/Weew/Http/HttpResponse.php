@@ -240,10 +240,48 @@ class HttpResponse implements IHttpResponse {
     }
 
     /**
+     * Check if response status code is 2xx.
+     *
      * @return bool
      */
     public function isOk() {
         return $this->getStatusCode() >= 200 && $this->getStatusCode() < 300;
+    }
+
+    /**
+     * Check if response status code is 3xx.
+     *
+     * @return bool
+     */
+    public function isRedirect() {
+        return $this->getStatusCode() >= 300 and $this->getStatusCode() < 400;
+    }
+
+    /**
+     * Check if response status code is 4xx.
+     *
+     * @return bool
+     */
+    public function isClientError() {
+        return $this->getStatusCode() >= 400 && $this->getStatusCode() < 500;
+    }
+
+    /**
+     * Check if response status code is 5xx.
+     *
+     * @return bool
+     */
+    public function isServerError() {
+        return $this->getStatusCode() >= 500 && $this->getStatusCode() < 600;
+    }
+
+    /**
+     * Check if response status code is 4xx or 5xx.
+     *
+     * @return bool
+     */
+    public function isError() {
+        return $this->isClientError() or $this->isServerError();
     }
 
     /**

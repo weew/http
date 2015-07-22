@@ -86,6 +86,36 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase {
         $this->assertFalse($response->isOk());
     }
 
+    public function test_is_redirect() {
+        $response = new HttpResponse();
+        $this->assertFalse($response->isRedirect());
+        $response->setStatusCode(HttpStatusCode::PERMANENTLY_REDIRECT);
+        $this->assertTrue($response->isRedirect());
+    }
+
+    public function test_is_client_error() {
+        $response = new HttpResponse();
+        $this->assertFalse($response->isClientError());
+        $response->setStatusCode(HttpStatusCode::NOT_FOUND);
+        $this->assertTrue($response->isClientError());
+    }
+
+    public function test_is_server_error() {
+        $response = new HttpResponse();
+        $this->assertFalse($response->isServerError());
+        $response->setStatusCode(HttpStatusCode::INTERNAL_SERVER_ERROR);
+        $this->assertTrue($response->isServerError());
+    }
+
+    public function test_is_error() {
+        $response = new HttpResponse();
+        $this->assertFalse($response->isError());
+        $response->setStatusCode(HttpStatusCode::NOT_FOUND);
+        $this->assertTrue($response->isError());
+        $response->setStatusCode(HttpStatusCode::INTERNAL_SERVER_ERROR);
+        $this->assertTrue($response->isError());
+    }
+
     public function test_set_stringable_content() {
         $item = new StringableItem();
         $response = new HttpResponse();

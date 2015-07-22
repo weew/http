@@ -24,4 +24,24 @@ interface IStatusHolder {
      * @return bool
      */
     function isOk();
+
+    /**
+     * @return bool
+     */
+    function isRedirect();
+
+    /**
+     * @return bool
+     */
+    function isError();
+
+    /**
+     * @return bool
+     */
+    function isServerError();
+
+    /**
+     * @return bool
+     */
+    function isClientError();
 }
