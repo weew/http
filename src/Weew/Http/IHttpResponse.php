@@ -8,5 +8,5 @@ interface IHttpResponse extends
     IHttpProtocolHolder,
     IStatusHolder,
     ISendable,
-    IJsonContentHolder {
+    IExtendable {
 }

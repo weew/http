@@ -3,8 +3,6 @@
 namespace Weew\Http;
 
 use Exception;
-use Weew\Foundation\Interfaces\IArrayable;
-use Weew\Foundation\Interfaces\IJsonable;
 use Weew\Foundation\Interfaces\IStringable;
 
 class HttpResponse implements IHttpResponse {
@@ -60,9 +58,23 @@ class HttpResponse implements IHttpResponse {
     }
 
     /**
-     * Use this as hook to extend your custom response.
+     * Use this method to transform a basic http response to its subclasses.
+     *
+     * @param IHttpResponse $httpResponse
+     *
+     * @return static
      */
-    protected function setDefaults() {}
+    public static function create(IHttpResponse $httpResponse, $forceContentType = true) {
+        $customResponse = new static();
+        $customResponse->extend($httpResponse);
+
+
+        if ($forceContentType) {
+            $customResponse->setDefaultContentType();
+        }
+
+        return $customResponse;
+    }
 
     /**
      * Response headers are read only.
@@ -80,13 +92,6 @@ class HttpResponse implements IHttpResponse {
      */
     public function setHeaders(IHttpHeaders $headers) {
         $this->headers = $headers;
-    }
-
-    /**
-     * @return HttpHeaders
-     */
-    protected function createHeaders() {
-        return new HttpHeaders();
     }
 
     /**
@@ -120,6 +125,18 @@ class HttpResponse implements IHttpResponse {
     }
 
     /**
+     * Use this as hook to extend your custom response.
+     */
+    protected function setDefaults() {}
+
+    /**
+     * @return HttpHeaders
+     */
+    protected function createHeaders() {
+        return new HttpHeaders();
+    }
+
+    /**
      * @return IHttpResponseBuilder
      */
     protected function getResponseBuilder() {
@@ -137,6 +154,13 @@ class HttpResponse implements IHttpResponse {
         }
 
         $this->content = $content;
+    }
+
+    /**
+     * Set the default content type of this response.
+     */
+    protected function setDefaultContentType() {
+        $this->setContentType('text/plain');
     }
 
     /**
@@ -162,11 +186,9 @@ class HttpResponse implements IHttpResponse {
 
     /**
      * @param $protocol
-     *
-     * @throws Exception
      */
     public function setProtocol($protocol) {
-        throw new Exception('Protocol is read only.');
+        $this->protocol = $protocol;
     }
 
     /**
@@ -178,11 +200,9 @@ class HttpResponse implements IHttpResponse {
 
     /**
      * @param $version
-     *
-     * @throws Exception
      */
     public function setProtocolVersion($version) {
-        throw new Exception('Protocol version is read only.');
+        $this->version = $version;
     }
 
     /**
@@ -199,12 +219,7 @@ class HttpResponse implements IHttpResponse {
         return $this->getHeaders()->get('Content-Type');
     }
 
-    /**
-     * Set the default content type of this response.
-     */
-    protected function setDefaultContentType() {
-        $this->setContentType('text/plain');
-    }
+
 
     /**
      * @param $key
@@ -232,30 +247,17 @@ class HttpResponse implements IHttpResponse {
     }
 
     /**
-     * @param bool $assoc
+     * Extend current response with another.
      *
-     * @return array
+     * @param IHttpResponse $response
+     *
+     * @return IHttpResponse
      */
-    public function getJsonContent($assoc = true) {
-        if ($this->hasContent()) {
-            return json_decode($this->getContent(), $assoc);
-        }
-    }
-
-    /**
-     * @param $content
-     * @param int $options
-     */
-    public function setJsonContent($content, $options = 0) {
-        if ($content instanceof IArrayable) {
-            $content = json_encode($content->toArray(), $options);
-        } else if ($content instanceof IJsonable) {
-            $content = $content->toJson($options);
-        } else {
-            $content = json_encode($content, $options);
-        }
-
-        $this->setContentType('application/json');
-        $this->setContent($content);
+    public function extend(IHttpResponse $response) {
+        $this->setHeaders($response->getHeaders());
+        $this->setProtocol($response->getProtocol());
+        $this->setProtocolVersion($response->getProtocolVersion());
+        $this->setContent($response->getContent());
+        $this->setStatusCode($response->getStatusCode());
     }
 }

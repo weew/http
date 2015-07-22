@@ -54,7 +54,7 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
         $request = new HttpRequest();
 
         $this->assertEquals(
-            'text/plain', $request->getAccept()
+            null, $request->getAccept()
         );
 
         $request->setAccept('text/html');

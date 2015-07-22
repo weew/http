@@ -1,20 +1,13 @@
 <?php
 
-namespace Weew\Http\Requests;
+namespace Weew\Http\Responses;
 
+use Weew\Http\HttpResponse;
 use Weew\Foundation\Interfaces\IArrayable;
 use Weew\Foundation\Interfaces\IJsonable;
-use Weew\Http\HttpRequest;
 use Weew\Http\IJsonContentHolder;
 
-class JsonRequest extends HttpRequest implements IJsonContentHolder {
-    /**
-     * Set accept.
-     */
-    protected function setDefaultAccept() {
-        $this->setAccept('application/json');
-    }
-
+class JsonResponse extends HttpResponse implements IJsonContentHolder {
     /**
      * Set content type.
      */
@@ -28,7 +21,9 @@ class JsonRequest extends HttpRequest implements IJsonContentHolder {
      * @return array
      */
     public function getJsonContent($assoc = true) {
-        return json_decode($this->getContent(), $assoc);
+        if ($this->hasContent()) {
+            return json_decode($this->getContent(), $assoc);
+        }
     }
 
     /**
@@ -36,13 +31,15 @@ class JsonRequest extends HttpRequest implements IJsonContentHolder {
      * @param int $options
      */
     public function setJsonContent($content, $options = 0) {
-        if ($content instanceof IJsonable) {
-            $content = $content->toJson($options);
-        } else if ($content instanceof IArrayable) {
+        if ($content instanceof IArrayable) {
             $content = json_encode($content->toArray(), $options);
+        } else if ($content instanceof IJsonable) {
+            $content = $content->toJson($options);
         } else {
             $content = json_encode($content, $options);
         }
+
+        $this->setDefaultContentType();
         $this->setContent($content);
     }
 }

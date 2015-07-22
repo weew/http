@@ -5,12 +5,10 @@ namespace Tests\Weew\Http;
 use PHPUnit_Framework_TestCase;
 use Tests\Weew\Http\Mocks\StringableItem;
 use Weew\Http\HttpHeaders;
-use Weew\Http\HttpRequest;
 use Weew\Http\HttpResponse;
 use Weew\Http\HttpStatusCode;
 use Weew\Http\IHttpHeaders;
-use Tests\Weew\Http\Mocks\ArrayableItem;
-use Tests\Weew\Http\Mocks\JsonableItem;
+use Tests\Weew\Http\Mocks\CustomResponse;
 
 class HttpResponseTest extends PHPUnit_Framework_TestCase {
     public function test_create_new_response() {
@@ -79,48 +77,6 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('foo', $response->getContent());
     }
 
-    public function test_get_and_set_json_content() {
-        $request = new HttpResponse();
-        $content = ['foo' => 'bar'];
-        $request->setJsonContent($content);
-        $this->assertEquals(
-            json_encode($content), $request->getContent()
-        );
-        $this->assertEquals(
-            $content, $request->getJsonContent()
-        );
-    }
-
-    public function test_get_and_set_json_content_with_arrayable_data() {
-        $request = new HttpResponse();
-        $content = new ArrayableItem(1);
-        $request->setJsonContent($content);
-        $this->assertEquals(
-            'application/json', $request->getContentType()
-        );
-        $this->assertEquals(
-            json_encode($content->toArray()), $request->getContent()
-        );
-        $this->assertEquals(
-            $content->toArray(), $request->getJsonContent()
-        );
-    }
-
-    public function test_get_and_set_json_content_with_jsonable_data() {
-        $request = new HttpResponse();
-        $content = new JsonableItem(1);
-        $request->setJsonContent($content);
-        $this->assertEquals(
-            'application/json', $request->getContentType()
-        );
-        $this->assertEquals(
-            $content->toJson(), $request->getContent()
-        );
-        $this->assertEquals(
-            ['id' => $content->getId()], $request->getJsonContent()
-        );
-    }
-
     public function test_is_ok() {
         $response = new HttpResponse();
         $this->assertTrue($response->isOk());
@@ -138,5 +94,47 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase {
         $response->setContent($item);
         $this->assertTrue($response->hasContent());
         $this->assertEquals($item->toString(), $response->getContent());
+    }
+
+    public function test_extend() {
+        $httpResponse = new HttpResponse(
+            HttpStatusCode::NOT_FOUND, 'yolo', new HttpHeaders(['foo-bar' => 'baz'])
+        );
+        $customResponse = new CustomResponse();
+        $customResponse->extend($httpResponse);
+        $this->assertEquals(
+            $httpResponse->getStatusCode(), $customResponse->getStatusCode()
+        );
+        $this->assertEquals(
+            $httpResponse->getProtocol(), $customResponse->getProtocol()
+        );
+        $this->assertEquals(
+            $httpResponse->getProtocolVersion(), $customResponse->getProtocolVersion()
+        );
+        $this->assertEquals(
+            $httpResponse->getContent(), $customResponse->getContent()
+        );
+        $this->assertEquals(
+            $httpResponse->getContentType(), $customResponse->getContentType()
+        );
+        $this->assertEquals(
+            'baz', $customResponse->getHeader('foo-bar')
+        );
+        $this->assertEquals(
+            'foo', $customResponse->customMethod()
+        );
+    }
+
+    public function test_create() {
+        $httpResponse = new HttpResponse();
+        $customResponse = CustomResponse::create($httpResponse);
+        $this->assertEquals(
+            'foo/bar', $customResponse->getContentType()
+        );
+
+        $customResponse = CustomResponse::create($httpResponse, false);
+        $this->assertEquals(
+            $httpResponse->getContentType(), $customResponse->getContentType()
+        );
     }
 }

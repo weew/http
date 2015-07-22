@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Weew\Http;
+namespace Tests\Weew\Http\Requests;
 
 use PHPUnit_Framework_TestCase;
 use Weew\Http\Requests\JsonRequest;

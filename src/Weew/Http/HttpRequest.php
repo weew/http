@@ -69,11 +69,11 @@ class HttpRequest implements IHttpRequest {
         $this->setBasicAuth($this->createBasicAuth());
 
         if ($this->getAccept() === null) {
-            $this->setAccept($this->getDefaultAccept());
+            $this->setDefaultAccept();
         }
 
         if ($this->getContentType() === null) {
-            $this->setContentType($this->getDefaultContentType());
+            $this->setDefaultContentType();
         }
 
         // todo: test
@@ -184,9 +184,7 @@ class HttpRequest implements IHttpRequest {
      *
      * @return string
      */
-    protected function getDefaultAccept() {
-        return 'text/plain';
-    }
+    protected function setDefaultAccept() {}
 
     /**
      * @return string
@@ -205,8 +203,8 @@ class HttpRequest implements IHttpRequest {
     /**
      * @return string
      */
-    protected function getDefaultContentType() {
-        return 'text/plain';
+    protected function setDefaultContentType() {
+        $this->setContentType('text/plain');
     }
 
     /**
