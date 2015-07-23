@@ -4,10 +4,10 @@ namespace Weew\Http\Responses;
 
 use Weew\Http\HttpResponse;
 use Weew\Http\HttpStatusCode;
-use Weew\Http\IRedirector;
+use Weew\Http\IRedirectable;
 use Weew\Url\IUrl;
 
-class RedirectResponse extends HttpResponse implements IRedirector {
+class RedirectResponse extends HttpResponse implements IRedirectable {
     /**
      * @var IUrl
      */

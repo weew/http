@@ -4,7 +4,7 @@ namespace Weew\Http;
 
 use Weew\Url\IUrl;
 
-interface IRedirector {
+interface IRedirectable {
     /**
      * @return IUrl
      */
