@@ -65,13 +65,13 @@ class HttpResponse implements IHttpResponse {
      * Use this method to transform a basic http response to its subclasses.
      *
      * @param IHttpResponse $httpResponse
+     * @param bool $forceContentType
      *
      * @return static
      */
     public static function create(IHttpResponse $httpResponse, $forceContentType = true) {
         $customResponse = new static();
         $customResponse->extend($httpResponse);
-
 
         if ($forceContentType) {
             $customResponse->setDefaultContentType();
