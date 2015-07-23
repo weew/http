@@ -167,4 +167,20 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase {
             $httpResponse->getContentType(), $customResponse->getContentType()
         );
     }
+
+    public function test_to_array() {
+        $response = new HttpResponse(HttpStatusCode::GONE, 'foo', new HttpHeaders(['foo' => 'bar']));
+
+        $this->assertEquals(
+            [
+                'protocol' => $response->getProtocol(),
+                'version' => $response->getProtocolVersion(),
+                'statusCode' => $response->getStatusCode(),
+                'statusCodeText' => $response->getStatusText(),
+                'headers' => $response->getHeaders()->toArray(),
+                'content' => $response->getContent(),
+            ],
+            $response->toArray()
+        );
+    }
 }

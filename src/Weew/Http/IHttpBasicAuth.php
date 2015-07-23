@@ -2,7 +2,9 @@
 
 namespace Weew\Http;
 
-interface IHttpBasicAuth {
+use Weew\Foundation\Interfaces\IArrayable;
+
+interface IHttpBasicAuth extends IArrayable {
     /**
      * @return string
      */

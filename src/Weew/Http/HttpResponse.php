@@ -3,9 +3,10 @@
 namespace Weew\Http;
 
 use Exception;
+use Weew\Foundation\Interfaces\IArrayable;
 use Weew\Foundation\Interfaces\IStringable;
 
-class HttpResponse implements IHttpResponse {
+class HttpResponse implements IHttpResponse, IArrayable {
     /**
      * @var IHttpHeaders
      */
@@ -223,8 +224,6 @@ class HttpResponse implements IHttpResponse {
         return $this->getHeaders()->get('Content-Type');
     }
 
-
-
     /**
      * @param $key
      * @param null $default
@@ -301,5 +300,19 @@ class HttpResponse implements IHttpResponse {
         $this->setProtocolVersion($response->getProtocolVersion());
         $this->setContent($response->getContent());
         $this->setStatusCode($response->getStatusCode());
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray() {
+        return [
+            'protocol' => $this->getProtocol(),
+            'version' => $this->getProtocolVersion(),
+            'statusCode' => $this->getStatusCode(),
+            'statusCodeText' => $this->getStatusText(),
+            'headers' => $this->getHeaders()->toArray(),
+            'content' => $this->getContent(),
+        ];
     }
 }

@@ -57,4 +57,11 @@ class HttpHeaders implements IHttpHeaders {
     public function remove($key) {
         array_remove($this->headers, $key);
     }
+
+    /**
+     * @return array
+     */
+    public function toArray() {
+        return $this->getAll();
+    }
 }

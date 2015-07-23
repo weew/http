@@ -60,4 +60,12 @@ class HttpDataTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(1, $data->count());
         $this->assertEquals(['yolo' => 'swag'], $data->getAll());
     }
+
+    public function test_to_array() {
+        $data = new HttpData(['foo' => 'bar', 'yolo' => 'swag']);
+
+        $this->assertEquals(
+            ['foo' => 'bar', 'yolo' => 'swag'], $data->toArray()
+        );
+    }
 }

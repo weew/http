@@ -122,4 +122,11 @@ class HttpData implements IHttpData {
     public function count() {
         return count($this->data);
     }
+
+    /**
+     * @return array
+     */
+    public function toArray() {
+        return $this->getAll();
+    }
 }

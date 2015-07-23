@@ -73,4 +73,15 @@ class HttpBasicAuth implements IHttpBasicAuth {
         $this->username = null;
         $this->password = null;
     }
+
+    /**
+     * @return array
+     */
+    public function toArray() {
+        return [
+            'username' => $this->getUsername(),
+            'password' => $this->getPassword(),
+            'token' => $this->getBasicAuthToken(),
+        ];
+    }
 }

@@ -2,7 +2,9 @@
 
 namespace Weew\Http;
 
-interface IHttpHeaders {
+use Weew\Foundation\Interfaces\IArrayable;
+
+interface IHttpHeaders extends IArrayable {
     /**
      * @return array
      */

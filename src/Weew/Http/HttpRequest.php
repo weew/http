@@ -40,14 +40,12 @@ class HttpRequest implements IHttpRequest {
      * @param string $method
      * @param null|IUrl $url
      * @param IHttpHeaders $headers
-     * @param IHttpQuery $query
      * @param IHttpData $data
      */
     public function __construct(
         $method = HttpRequestMethod::GET,
         IUrl $url = null,
         IHttpHeaders $headers = null,
-        IHttpQuery $query = null,
         IHttpData $data = null
     ) {
         if ( ! $headers instanceof IHttpHeaders) {
@@ -265,5 +263,19 @@ class HttpRequest implements IHttpRequest {
      */
     protected function createBasicAuth() {
         return new HttpBasicAuth();
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray() {
+        return [
+            'method' => $this->getMethod(),
+            'url' => $this->getUrl()->toString(),
+            'headers' => $this->getHeaders()->toArray(),
+            'data' => $this->getData()->toArray(),
+            'basicAuth' => $this->getBasicAuth()->toArray(),
+            'content' => $this->getContent(),
+        ];
     }
 }

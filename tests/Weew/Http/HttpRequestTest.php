@@ -7,13 +7,13 @@ use Weew\Http\HttpBasicAuth;
 use Weew\Http\HttpData;
 use Weew\Http\HttpHeaders;
 use Weew\Http\HttpQuery;
+use Weew\Http\HttpRequest;
+use Weew\Http\HttpRequestMethod;
 use Weew\Http\IHttpBasicAuth;
 use Weew\Http\IHttpData;
 use Weew\Http\IHttpHeaders;
 use Weew\Http\IHttpQuery;
 use Weew\Url\IUrl;
-use Weew\Http\HttpRequest;
-use Weew\Http\HttpRequestMethod;
 use Weew\Url\Url;
 
 class HttpRequestTest extends PHPUnit_Framework_TestCase {
@@ -89,5 +89,27 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('text/plain', $request->getContentType());
         $request->setContentType('foo/bar');
         $this->assertEquals('foo/bar', $request->getContentType());
+    }
+
+    public function test_to_array() {
+        $request = new HttpRequest(
+            HttpRequestMethod::PATCH,
+            new Url('/foo'),
+            new HttpHeaders(['yolo' => 'swag']),
+            new HttpData(['bar' => 'baz'])
+        );
+        $request->setBasicAuth(new HttpBasicAuth('xx:aa'));
+
+        $this->assertEquals(
+            [
+                'method' => $request->getMethod(),
+                'url' => $request->getUrl()->toString(),
+                'headers' => $request->getHeaders()->toArray(),
+                'data' => $request->getData()->toArray(),
+                'basicAuth' => $request->getBasicAuth()->toArray(),
+                'content' => $request->getContent(),
+            ],
+            $request->toArray()
+        );
     }
 }

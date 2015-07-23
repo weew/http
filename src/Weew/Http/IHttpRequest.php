@@ -2,12 +2,14 @@
 
 namespace Weew\Http;
 
+use Weew\Foundation\Interfaces\IArrayable;
 use Weew\Url\IUrl;
 
 interface IHttpRequest extends
     IHeadersHolder,
     IBasicAuthHolder,
-    IContentHolder {
+    IContentHolder,
+    IArrayable {
     /**
      * @return string
      *
