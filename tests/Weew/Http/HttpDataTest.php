@@ -42,4 +42,22 @@ class HttpDataTest extends PHPUnit_Framework_TestCase {
         $data->set('foo', 'bar');
         $this->assertEquals(1, $data->count());
     }
+
+    public function test_add() {
+        $data = new HttpData(['foo' => 'bar']);
+        $data->add(['bar' => 'baz']);
+
+        $this->assertEquals(2, $data->count());
+        $this->assertEquals(
+            ['foo' => 'bar', 'bar' => 'baz'], $data->getAll()
+        );
+    }
+
+    public function test_replace() {
+        $data = new HttpData(['foo' => 'bar']);
+        $data->replace(['yolo' => 'swag']);
+
+        $this->assertEquals(1, $data->count());
+        $this->assertEquals(['yolo' => 'swag'], $data->getAll());
+    }
 }

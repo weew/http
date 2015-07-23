@@ -65,4 +65,14 @@ interface IHttpData {
      * @return int
      */
     function count();
+
+    /**
+     * @param array $data
+     */
+    function add(array $data);
+
+    /**
+     * @param array $data
+     */
+    function replace(array $data);
 }

@@ -62,6 +62,20 @@ class HttpData implements IHttpData {
     }
 
     /**
+     * @param array $data
+     */
+    public function add(array $data) {
+        $this->data = array_extend($this->data, $data);
+    }
+
+    /**
+     * @param array $data
+     */
+    public function replace(array $data) {
+        $this->data = $data;
+    }
+
+    /**
      * @return string
      */
     public function getDataType() {
