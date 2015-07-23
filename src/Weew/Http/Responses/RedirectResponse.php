@@ -21,7 +21,7 @@ class RedirectResponse extends HttpResponse implements IRedirector {
      */
     public function __construct(
         IUrl $destination,
-        $statusCode = HttpStatusCode::TEMPORARY_REDIRECT,
+        $statusCode = HttpStatusCode::FOUND,
         $content = null,
         IHttpHeaders $headers = null
     ) {
