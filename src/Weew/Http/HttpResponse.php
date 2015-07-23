@@ -45,6 +45,10 @@ class HttpResponse implements IHttpResponse {
             $headers = $this->createHeaders();
         }
 
+        if ($statusCode === null) {
+            $statusCode = HttpStatusCode::OK;
+        }
+
         $this->setStatusCode($statusCode);
         $this->setHeaders($headers);
         $this->setContent($content);
