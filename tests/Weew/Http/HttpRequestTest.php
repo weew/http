@@ -86,7 +86,7 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
 
     public function test_get_and_set_content_type() {
         $request = new HttpRequest();
-        $this->assertEquals('text/plain', $request->getContentType());
+        $this->assertEquals(null, $request->getContentType());
         $request->setContentType('foo/bar');
         $this->assertEquals('foo/bar', $request->getContentType());
     }

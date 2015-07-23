@@ -164,9 +164,7 @@ class HttpResponse implements IHttpResponse, IArrayable {
     /**
      * Set the default content type of this response.
      */
-    protected function setDefaultContentType() {
-        $this->setContentType('text/plain');
-    }
+    protected function setDefaultContentType() {}
 
     /**
      * @return mixed

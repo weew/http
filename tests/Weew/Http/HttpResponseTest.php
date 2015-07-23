@@ -64,7 +64,7 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase {
 
     public function test_set_and_get_content_type() {
         $response = new HttpResponse();
-        $this->assertEquals('text/plain', $response->getContentType());
+        $this->assertEquals(null, $response->getContentType());
         $response->setContentType('text/html');
         $this->assertEquals('text/html', $response->getContentType());
     }

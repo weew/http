@@ -201,9 +201,7 @@ class HttpRequest implements IHttpRequest {
     /**
      * @return string
      */
-    protected function setDefaultContentType() {
-        $this->setContentType('text/plain');
-    }
+    protected function setDefaultContentType() {}
 
     /**
      * @return IHttpData
