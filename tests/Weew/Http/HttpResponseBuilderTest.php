@@ -18,16 +18,13 @@ class HttpResponseBuilderTest extends PHPUnit_Framework_TestCase {
                 HttpStatusCode::NOT_FOUND,
                 HttpStatusCode::getStatusText(HttpStatusCode::NOT_FOUND)
             ),
-            $builder->getProtocolAndStatus($response)
+            $builder->createRequestDefinition($response)
         );
     }
 
     public function test_get_header() {
         $builder = new HttpResponseBuilder();
-        $response = new HttpResponse();
-
-        $response->getHeaders()->set('foo', 'bar');
-        $this->assertEquals('foo: bar', $builder->getHeader($response, 'foo', 'foo'));
+        $this->assertEquals('foo: bar', $builder->createHeader('foo', 'bar'));
     }
 
     public function test_get_headers() {

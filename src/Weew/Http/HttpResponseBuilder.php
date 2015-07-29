@@ -24,7 +24,7 @@ class HttpResponseBuilder implements IHttpResponseBuilder {
             return;
         }
 
-        $protocol = $this->getProtocolAndStatus($response);
+        $protocol = $this->createRequestDefinition($response);
         $headers = $this->getHeaders($response);
 
         $this->sendHeader($protocol);
@@ -46,7 +46,7 @@ class HttpResponseBuilder implements IHttpResponseBuilder {
      *
      * @return string
      */
-    public function getProtocolAndStatus(IHttpResponse $response) {
+    public function createRequestDefinition(IHttpResponse $response) {
         return s(
             '%s/%s %d %s',
             $response->getProtocol(),
@@ -57,14 +57,13 @@ class HttpResponseBuilder implements IHttpResponseBuilder {
     }
 
     /**
-     * @param IHttpResponse $response
      * @param $key
-     * @param $path
+     * @param $value
      *
      * @return string
      */
-    public function getHeader(IHttpResponse $response, $key, $path) {
-        return s('%s: %s', $key, $response->getHeaders()->get($path));
+    public function createHeader($key, $value) {
+        return s('%s: %s', $key, $value);
     }
 
     /**
@@ -77,12 +76,12 @@ class HttpResponseBuilder implements IHttpResponseBuilder {
         $httpHeaders = [];
 
         foreach ($headers as $key => $value) {
-            if (is_array($value)) {
-                foreach ($value as $k => $v) {
-                    $httpHeaders[] = $this->getHeader($response, $key, s('%s.%s', $key, $k));
-                }
-            } else {
-                $httpHeaders[] = $this->getHeader($response, $key, $key);
+            if ( ! is_array($value)) {
+                $value = [$value];
+            }
+
+            foreach ($value as $k => $v) {
+                $httpHeaders[] = $this->createHeader($key, $v);
             }
         }
 
