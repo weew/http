@@ -27,7 +27,7 @@ class HttpResponseBuilderTest extends PHPUnit_Framework_TestCase {
         $response = new HttpResponse();
 
         $response->getHeaders()->set('foo', 'bar');
-        $this->assertEquals('foo: bar', $builder->getHeader($response, 'foo'));
+        $this->assertEquals('foo: bar', $builder->getHeader($response, 'foo', 'foo'));
     }
 
     public function test_get_headers() {
@@ -36,9 +36,11 @@ class HttpResponseBuilderTest extends PHPUnit_Framework_TestCase {
 
         $response->getHeaders()->set('foo', 'bar');
         $response->getHeaders()->set('bar', 'foo');
+        $response->getHeaders()->set('bar', 'baz', false);
         $headers = $builder->getHeaders($response);
 
         $this->assertContains('foo: bar', $headers);
         $this->assertContains('bar: foo', $headers);
+        $this->assertContains('bar: baz', $headers);
     }
 }

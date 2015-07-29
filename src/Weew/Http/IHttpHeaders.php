@@ -6,17 +6,20 @@ use Weew\Foundation\Interfaces\IArrayable;
 
 interface IHttpHeaders extends IArrayable {
     /**
+     * @param bool $distinct
+     *
      * @return array
      */
-    function getAll();
+    function getAll($distinct = true);
 
     /**
      * @param $key
      * @param null $default
+     * @param bool $distinct
      *
      * @return string or null
      */
-    function get($key, $default = null);
+    function get($key, $default = null, $distinct = true);
 
     /**
      * @param $key
@@ -28,8 +31,11 @@ interface IHttpHeaders extends IArrayable {
     /**
      * @param $key
      * @param $value
+     * @param bool $replace
+     *
+     * @return
      */
-    function set($key, $value);
+    function set($key, $value, $replace = true);
 
     /**
      * @param $key
