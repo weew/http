@@ -3,10 +3,9 @@
 namespace Weew\Http;
 
 use Exception;
-use Weew\Foundation\Interfaces\IArrayable;
 use Weew\Foundation\Interfaces\IStringable;
 
-class HttpResponse implements IHttpResponse, IArrayable {
+class HttpResponse implements IHttpResponse {
     /**
      * @var IHttpHeaders
      */
