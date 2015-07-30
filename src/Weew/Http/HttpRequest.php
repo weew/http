@@ -264,15 +264,23 @@ class HttpRequest implements IHttpRequest {
     }
 
     /**
+     * Tell headers holder to build its headers.
+     */
+    public function buildHeaders() {
+        $this->getBasicAuth()->writeHeaders($this->getHeaders());
+    }
+
+    /**
      * @return array
      */
     public function toArray() {
+        $this->buildHeaders();
+
         return [
             'method' => $this->getMethod(),
             'url' => $this->getUrl()->toString(),
             'headers' => $this->getHeaders()->toArray(),
             'data' => $this->getData()->toArray(),
-            'basicAuth' => $this->getBasicAuth()->toArray(),
             'content' => $this->getContent(),
         ];
     }

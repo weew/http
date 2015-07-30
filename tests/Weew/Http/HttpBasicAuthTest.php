@@ -4,6 +4,7 @@ namespace Tests\Weew\Http;
 
 use PHPUnit_Framework_TestCase;
 use Weew\Http\HttpBasicAuth;
+use Weew\Http\HttpHeaders;
 
 class HttpBasicAuthTest extends PHPUnit_Framework_TestCase {
     public function test_create_basic_auth() {
@@ -44,6 +45,21 @@ class HttpBasicAuthTest extends PHPUnit_Framework_TestCase {
                 'token' => $auth->getBasicAuthToken(),
             ],
             $auth->toArray()
+        );
+    }
+
+    public function test_write_headers() {
+        $auth = new HttpBasicAuth();
+        $headers = new HttpHeaders();
+        $auth->writeHeaders($headers);
+        $this->assertFalse($headers->has($auth->getHeaderKey()));
+        $auth->setUsername('foo');
+        $auth->setPassword('bar');
+        $auth->writeHeaders($headers);
+        $this->assertTrue($headers->has($auth->getHeaderKey()));
+        $this->assertEquals(
+            $auth->getHeaderValue(),
+            $headers->get($auth->getHeaderKey())
         );
     }
 }

@@ -27,4 +27,9 @@ interface IHeadersHolder {
      * @param $value
      */
     function setHeader($key, $value);
+
+    /**
+     * Tell the holder to build its headers.
+     */
+    function buildHeaders();
 }

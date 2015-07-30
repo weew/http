@@ -69,9 +69,34 @@ class HttpBasicAuth implements IHttpBasicAuth {
     /**
      * Remove basic authentication.
      */
-    function removeBasicAuth() {
-        $this->username = null;
-        $this->password = null;
+    public function removeBasicAuth() {
+        $this->setUsername(null);
+        $this->setPassword(null);
+    }
+
+    /**
+     * Write basic auth headers.
+     *
+     * @param IHttpHeaders $headers
+     */
+    public function writeHeaders(IHttpHeaders $headers) {
+        if ($this->hasBasicAuth()) {
+            $headers->set($this->getHeaderKey(), $this->getHeaderValue());
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getHeaderKey() {
+        return 'Authorization';
+    }
+
+    /**
+     * @return string
+     */
+    public function getHeaderValue() {
+        return s('Basic %s', $this->getBasicAuthToken());
     }
 
     /**

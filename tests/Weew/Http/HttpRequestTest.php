@@ -91,6 +91,19 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('foo/bar', $request->getContentType());
     }
 
+    public function test_build_headers() {
+        $auth = new HttpBasicAuth('foo', 'bar');
+        $request = new HttpRequest();
+        $request->setHeader('yolo', 'swag');
+        $request->setBasicAuth($auth);
+        $request->buildHeaders();
+
+        $this->assertEquals([
+            'yolo' => 'swag',
+            $auth->getHeaderKey() =>  $auth->getHeaderValue(),
+        ], $request->getHeaders()->getAll());
+    }
+
     public function test_to_array() {
         $request = new HttpRequest(
             HttpRequestMethod::PATCH,
@@ -98,7 +111,8 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
             new HttpHeaders(['yolo' => 'swag']),
             new HttpData(['bar' => 'baz'])
         );
-        $request->setBasicAuth(new HttpBasicAuth('xx:aa'));
+        $request->setBasicAuth(new HttpBasicAuth('xx', 'aa'));
+        $actual = $request->toArray();
 
         $this->assertEquals(
             [
@@ -106,10 +120,8 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
                 'url' => $request->getUrl()->toString(),
                 'headers' => $request->getHeaders()->toArray(),
                 'data' => $request->getData()->toArray(),
-                'basicAuth' => $request->getBasicAuth()->toArray(),
                 'content' => $request->getContent(),
-            ],
-            $request->toArray()
+            ], $actual
         );
     }
 }

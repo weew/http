@@ -4,7 +4,7 @@ namespace Weew\Http;
 
 use Weew\Foundation\Interfaces\IArrayable;
 
-interface IHttpBasicAuth extends IArrayable {
+interface IHttpBasicAuth extends IHeadersAware, IArrayable {
     /**
      * @return string
      */
