@@ -6,11 +6,6 @@ use Weew\Foundation\Interfaces\IArrayable;
 
 interface IHttpData extends IArrayable {
     /**
-     * @return array
-     */
-    function getAll();
-
-    /**
      * @param string $key
      * @param null $default
      *

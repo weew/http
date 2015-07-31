@@ -59,7 +59,7 @@ class HttpBasicAuthTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue($headers->has($auth->getHeaderKey()));
         $this->assertEquals(
             $auth->getHeaderValue(),
-            $headers->get($auth->getHeaderKey())
+            $headers->find($auth->getHeaderKey())
         );
     }
 }

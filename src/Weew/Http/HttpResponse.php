@@ -57,7 +57,6 @@ class HttpResponse implements IHttpResponse {
             $this->setDefaultContentType();
         }
 
-        // todo: test
         $this->setDefaults();
     }
 
@@ -119,6 +118,12 @@ class HttpResponse implements IHttpResponse {
      */
     public function getStatusText() {
         return HttpStatusCode::getStatusText($this->getStatusCode());
+    }
+
+    /**
+     * Tell headers holder to build its headers.
+     */
+    public function buildHeaders() {
     }
 
     /**
@@ -218,25 +223,7 @@ class HttpResponse implements IHttpResponse {
      * @return string
      */
     public function getContentType() {
-        return $this->getHeaders()->get('Content-Type');
-    }
-
-    /**
-     * @param $key
-     * @param null $default
-     *
-     * @return string
-     */
-    public function getHeader($key, $default = null) {
-        return $this->getHeaders()->get($key, $default);
-    }
-
-    /**
-     * @param $key
-     * @param $value
-     */
-    public function setHeader($key, $value) {
-        $this->getHeaders()->set($key, $value);
+        return $this->getHeaders()->find('Content-Type');
     }
 
     /**

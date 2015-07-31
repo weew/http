@@ -19,7 +19,7 @@ class RedirectResponseTest extends PHPUnit_Framework_TestCase {
         $url = new Url('http://foo.bar');
         $redirect = new RedirectResponse($url);
         $this->assertEquals(
-            $url->toString(), $redirect->getHeader('Location')
+            $url->toString(), $redirect->getHeaders()->find('Location')
         );
     }
 }

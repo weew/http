@@ -42,6 +42,6 @@ class RedirectResponse extends HttpResponse implements IRedirectable {
      */
     public function setDestination(IUrl $destination) {
         $this->destination = $destination;
-        $this->setHeader('Location', $destination->toString());
+        $this->getHeaders()->set('Location', $destination->toString());
     }
 }

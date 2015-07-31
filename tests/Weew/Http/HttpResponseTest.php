@@ -38,14 +38,14 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase {
         $response->setHeaders($headers);
         $this->assertTrue($response->getHeaders() instanceof IHttpHeaders);
         $this->assertEquals(
-            $headers->get('foo'),
-            $response->getHeaders()->get('foo')
+            $headers->find('foo'),
+            $response->getHeaders()->find('foo')
         );
 
-        $this->assertEquals($headers->get('foo'), $response->getHeader('foo'));
-        $this->assertEquals('yolo', $response->getHeader('swag', 'yolo'));
-        $response->setHeader('swag', 'yolo');
-        $this->assertEquals('yolo', $response->getHeader('swag'));
+        $this->assertEquals($headers->find('foo'), $response->getHeaders()->find('foo'));
+        $this->assertEquals('yolo', $response->getHeaders()->find('swag', 'yolo'));
+        $response->getHeaders()->set('swag', 'yolo');
+        $this->assertEquals('yolo', $response->getHeaders()->find('swag'));
     }
 
     public function test_get_protocol_and_version() {
@@ -148,7 +148,7 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase {
             $httpResponse->getContentType(), $customResponse->getContentType()
         );
         $this->assertEquals(
-            'baz', $customResponse->getHeader('foo-bar')
+            'baz', $customResponse->getHeaders()->find('foo-bar')
         );
         $this->assertEquals(
             'foo', $customResponse->customMethod()

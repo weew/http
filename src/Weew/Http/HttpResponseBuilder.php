@@ -12,6 +12,7 @@ class HttpResponseBuilder implements IHttpResponseBuilder {
      * @param IHttpResponse $response
      */
     public function build(IHttpResponse $response) {
+        $response->buildHeaders();
         $this->sendHeaders($response);
         $this->sendContent($response);
     }
@@ -57,35 +58,12 @@ class HttpResponseBuilder implements IHttpResponseBuilder {
     }
 
     /**
-     * @param $key
-     * @param $value
-     *
-     * @return string
-     */
-    public function createHeader($key, $value) {
-        return s('%s: %s', $key, $value);
-    }
-
-    /**
      * @param IHttpResponse $response
      *
      * @return array
      */
     public function getHeaders(IHttpResponse $response) {
-        $headers = $response->getHeaders()->getAll(false);
-        $httpHeaders = [];
-
-        foreach ($headers as $key => $value) {
-            if ( ! is_array($value)) {
-                $value = [$value];
-            }
-
-            foreach ($value as $k => $v) {
-                $httpHeaders[] = $this->createHeader($key, $v);
-            }
-        }
-
-        return $httpHeaders;
+        return $response->getHeaders()->toFlatArray();
     }
 
     /**

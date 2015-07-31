@@ -22,22 +22,17 @@ class HttpResponseBuilderTest extends PHPUnit_Framework_TestCase {
         );
     }
 
-    public function test_get_header() {
-        $builder = new HttpResponseBuilder();
-        $this->assertEquals('foo: bar', $builder->createHeader('foo', 'bar'));
-    }
-
     public function test_get_headers() {
         $builder = new HttpResponseBuilder();
         $response = new HttpResponse();
 
-        $response->getHeaders()->set('foo', 'bar');
-        $response->getHeaders()->set('bar', 'foo');
-        $response->getHeaders()->set('bar', 'baz', false);
+        $response->getHeaders()->add('foo', 'bar');
+        $response->getHeaders()->add('foo', 'foo');
+        $response->getHeaders()->set('bar', 'baz');
         $headers = $builder->getHeaders($response);
 
         $this->assertContains('foo: bar', $headers);
-        $this->assertContains('bar: foo', $headers);
+        $this->assertContains('foo: foo', $headers);
         $this->assertContains('bar: baz', $headers);
     }
 }

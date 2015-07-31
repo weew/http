@@ -74,7 +74,6 @@ class HttpRequest implements IHttpRequest {
             $this->setDefaultContentType();
         }
 
-        // todo: test
         $this->setDefaults();
     }
 
@@ -167,14 +166,14 @@ class HttpRequest implements IHttpRequest {
      * @return string
      */
     public function getAccept() {
-        return $this->getHeader('Accept');
+        return $this->getHeaders()->find('Accept');
     }
 
     /**
      * @param string $accept
      */
     public function setAccept($accept) {
-        $this->setHeader('Accept', $accept);
+        $this->getHeaders()->set('Accept', $accept);
     }
 
     /**
@@ -188,14 +187,14 @@ class HttpRequest implements IHttpRequest {
      * @return string
      */
     public function getContentType() {
-        return $this->getHeader('Content-Type');
+        return $this->getHeaders()->find('Content-Type');
     }
 
     /**
      * @param string $contentType
      */
     public function setContentType($contentType) {
-        $this->setHeader('Content-Type', $contentType);
+        $this->getHeaders()->set('Content-Type', $contentType);
     }
 
     /**
@@ -222,24 +221,6 @@ class HttpRequest implements IHttpRequest {
      */
     protected function createData() {
         return new HttpData();
-    }
-
-    /**
-     * @param $key
-     * @param null $default
-     *
-     * @return string
-     */
-    public function getHeader($key, $default = null) {
-        return $this->getHeaders()->get($key, $default);
-    }
-
-    /**
-     * @param $key
-     * @param $value
-     */
-    public function setHeader($key, $value) {
-        $this->getHeaders()->set($key, $value);
     }
 
     /**

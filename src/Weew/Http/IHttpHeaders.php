@@ -6,22 +6,43 @@ use Weew\Foundation\Interfaces\IArrayable;
 
 interface IHttpHeaders extends IArrayable {
     /**
-     * @param bool $distinct
+     * Add header.
      *
-     * @return array
+     * @param $key
+     * @param $value
      */
-    function getAll($distinct = true);
+    function add($key, $value);
 
     /**
+     * Find the last added header.
+     *
      * @param $key
      * @param null $default
-     * @param bool $distinct
      *
-     * @return string or null
+     * @return string
      */
-    function get($key, $default = null, $distinct = true);
+    function find($key, $default = null);
 
     /**
+     * Replace all previous headers with this one.
+     *
+     * @param $key
+     * @param $value
+     */
+    function set($key, $value);
+
+    /**
+     * Get all headers by key.
+     *
+     * @param $key
+     *
+     * @return string
+     */
+    function get($key);
+
+    /**
+     * Check if there are any headers.
+     *
      * @param $key
      *
      * @return bool
@@ -29,16 +50,27 @@ interface IHttpHeaders extends IArrayable {
     function has($key);
 
     /**
-     * @param $key
-     * @param $value
-     * @param bool $replace
+     * Remove all registered headers.
      *
-     * @return
-     */
-    function set($key, $value, $replace = true);
-
-    /**
      * @param $key
      */
     function remove($key);
+
+    /**
+     * @param string $key
+     * @param string $header
+     *
+     * @return string
+     */
+    function formatHeader($key, $header);
+
+    /**
+     * @return array
+     */
+    function toDistinctArray();
+
+    /**
+     * @return array
+     */
+    function toFlatArray();
 }

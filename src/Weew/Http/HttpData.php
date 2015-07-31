@@ -21,13 +21,6 @@ class HttpData implements IHttpData {
     }
 
     /**
-     * @return array
-     */
-    public function getAll() {
-        return $this->data;
-    }
-
-    /**
      * @param string $key
      * @param null $default
      *
@@ -127,6 +120,6 @@ class HttpData implements IHttpData {
      * @return array
      */
     public function toArray() {
-        return $this->getAll();
+        return $this->data;
     }
 }

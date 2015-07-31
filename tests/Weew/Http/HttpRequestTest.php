@@ -27,11 +27,11 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
         $request = new HttpRequest();
         $headers = new HttpHeaders(['foo' => 'bar']);
         $request->setHeaders($headers);
-        $this->assertEquals('bar', $request->getHeaders()->get('foo'));
-        $this->assertNull($request->getHeader('bar'));
-        $request->setHeader('bar', 'foo');
-        $this->assertEquals('foo', $request->getHeader('bar'));
-        $this->assertEquals('yolo', $request->getHeader('swag', 'yolo'));
+        $this->assertEquals('bar', $request->getHeaders()->find('foo'));
+        $this->assertNull($request->getHeaders()->find('bar'));
+        $request->getHeaders()->set('bar', 'foo');
+        $this->assertEquals('foo', $request->getHeaders()->find('bar'));
+        $this->assertEquals('yolo', $request->getHeaders()->find('swag', 'yolo'));
     }
 
     public function test_get_and_set_request_method() {
@@ -94,14 +94,14 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
     public function test_build_headers() {
         $auth = new HttpBasicAuth('foo', 'bar');
         $request = new HttpRequest();
-        $request->setHeader('yolo', 'swag');
+        $request->getHeaders()->set('yolo', 'swag');
         $request->setBasicAuth($auth);
         $request->buildHeaders();
 
         $this->assertEquals([
             'yolo' => 'swag',
-            $auth->getHeaderKey() =>  $auth->getHeaderValue(),
-        ], $request->getHeaders()->getAll());
+            $auth->getHeaderKey() => $auth->getHeaderValue(),
+        ], $request->getHeaders()->toDistinctArray());
     }
 
     public function test_to_array() {

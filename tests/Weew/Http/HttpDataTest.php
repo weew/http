@@ -10,7 +10,7 @@ class HttpDataTest extends PHPUnit_Framework_TestCase {
     public function test_getters_and_setters() {
         $data = new HttpData(['foo' => 'bar']);
         $this->assertEquals(
-            ['foo' => 'bar'], $data->getAll()
+            ['foo' => 'bar'], $data->toArray()
         );
         $this->assertEquals('bar', $data->get('foo'));
         $data->set('foo', 'yolo');
@@ -49,7 +49,7 @@ class HttpDataTest extends PHPUnit_Framework_TestCase {
 
         $this->assertEquals(2, $data->count());
         $this->assertEquals(
-            ['foo' => 'bar', 'bar' => 'baz'], $data->getAll()
+            ['foo' => 'bar', 'bar' => 'baz'], $data->toArray()
         );
     }
 
@@ -58,7 +58,7 @@ class HttpDataTest extends PHPUnit_Framework_TestCase {
         $data->replace(['yolo' => 'swag']);
 
         $this->assertEquals(1, $data->count());
-        $this->assertEquals(['yolo' => 'swag'], $data->getAll());
+        $this->assertEquals(['yolo' => 'swag'], $data->toArray());
     }
 
     public function test_to_array() {

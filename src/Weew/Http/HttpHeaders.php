@@ -13,47 +13,70 @@ class HttpHeaders implements IHttpHeaders {
      */
     public function __construct(array $headers = []) {
         foreach ($headers as $key => $value) {
-            $this->set($key, $value, true);
+            $this->set($key, $value);
         }
     }
 
     /**
-     * @param bool $distinct
+     * Add header.
      *
-     * @return array
+     * @param $key
+     * @param $value
      */
-    public function getAll($distinct = true) {
-        if ($distinct) {
+    public function add($key, $value) {
+        $headers = $this->get($key);
+
+        if ($headers === null) {
             $headers = [];
-
-            foreach ($this->headers as $key => $value) {
-                $headers[$key] = $this->get($key);
-            }
-
-            return $headers;
         }
 
-        return $this->headers;
+        $headers[] = $value;
+
+        array_set($this->headers, $key, $headers);
     }
 
     /**
+     * Find the last added header.
+     *
      * @param $key
      * @param null $default
-     * @param bool $distinct
      *
-     * @return string or null
+     * @return string
      */
-    public function get($key, $default = null, $distinct = true) {
-        $value = array_get($this->headers, $key, $default);
+    public function find($key, $default = null) {
+        $headers = array_get($this->headers, $key, $default);
 
-        if ($distinct and is_array($value)) {
-            return array_pop($value);
+        if (is_array($headers)) {
+            $headers = array_pop($headers);
         }
 
-        return $value;
+        return $headers;
     }
 
     /**
+     * Replace all previous headers with this one.
+     *
+     * @param $key
+     * @param $value
+     */
+    public function set($key, $value) {
+        array_set($this->headers, $key, [$value]);
+    }
+
+    /**
+     * Get all headers by key.
+     *
+     * @param $key
+     *
+     * @return string
+     */
+    public function get($key) {
+        return array_get($this->headers, $key);
+    }
+
+    /**
+     * Check if there are any headers.
+     *
      * @param $key
      *
      * @return bool
@@ -63,27 +86,8 @@ class HttpHeaders implements IHttpHeaders {
     }
 
     /**
-     * @param $key
-     * @param $value
-     * @param bool $replace
-     */
-    public function set($key, $value, $replace = true) {
-        if ( ! $replace and $this->has($key)) {
-            $headers = $this->get($key);
-
-            if ( ! is_array($headers)) {
-                $headers = [$headers];
-            }
-
-            $headers[] = $value;
-
-            array_set($this->headers, $key, $headers);
-        } else {
-            array_set($this->headers, $key, $value);
-        }
-    }
-
-    /**
+     * Remove all registered headers.
+     *
      * @param $key
      */
     public function remove($key) {
@@ -91,9 +95,53 @@ class HttpHeaders implements IHttpHeaders {
     }
 
     /**
+     * @param $key
+     * @param $header
+     *
+     * @return string
+     */
+    public function formatHeader($key, $header) {
+        return s('%s: %s', $key, $header);
+    }
+
+    /**
+     * Get an array of header keys and all assigned header values.
+     *
      * @return array
      */
     public function toArray() {
-        return $this->getAll(false);
+        return $this->headers;
+    }
+
+    /**
+     * Get an array of hey keys and the most recent header values.
+     *
+     * @return array
+     */
+    public function toDistinctArray() {
+        $array = [];
+
+        foreach ($this->headers as $key => $headers) {
+            $array[$key] = array_pop($headers);
+        }
+
+        return $array;
+    }
+
+    /**
+     * Get a list of formatted header strings.
+     *
+     * @return array
+     */
+    public function toFlatArray() {
+        $array = [];
+
+        foreach ($this->headers as $key => $headers) {
+            foreach ($headers as $header) {
+                $array[] = $this->formatHeader($key, $header);
+            }
+        }
+
+        return $array;
     }
 }
