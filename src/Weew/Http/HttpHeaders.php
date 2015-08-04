@@ -24,6 +24,7 @@ class HttpHeaders implements IHttpHeaders {
      * @param $value
      */
     public function add($key, $value) {
+        $key = $this->formatKey($key);
         $headers = $this->get($key);
 
         if ($headers === null) {
@@ -44,6 +45,7 @@ class HttpHeaders implements IHttpHeaders {
      * @return string
      */
     public function find($key, $default = null) {
+        $key = $this->formatKey($key);
         $headers = array_get($this->headers, $key, $default);
 
         if (is_array($headers)) {
@@ -60,6 +62,7 @@ class HttpHeaders implements IHttpHeaders {
      * @param $value
      */
     public function set($key, $value) {
+        $key = $this->formatKey($key);
         array_set($this->headers, $key, [$value]);
     }
 
@@ -71,6 +74,7 @@ class HttpHeaders implements IHttpHeaders {
      * @return string
      */
     public function get($key) {
+        $key = $this->formatKey($key);
         return array_get($this->headers, $key);
     }
 
@@ -82,6 +86,7 @@ class HttpHeaders implements IHttpHeaders {
      * @return bool
      */
     public function has($key) {
+        $key = $this->formatKey($key);
         return array_has($this->headers, $key);
     }
 
@@ -91,6 +96,7 @@ class HttpHeaders implements IHttpHeaders {
      * @param $key
      */
     public function remove($key) {
+        $key = $this->formatKey($key);
         array_remove($this->headers, $key);
     }
 
@@ -102,6 +108,15 @@ class HttpHeaders implements IHttpHeaders {
      */
     public function formatHeader($key, $header) {
         return s('%s: %s', $key, $header);
+    }
+
+    /**
+     * @param $key
+     *
+     * @return string
+     */
+    public function formatKey($key) {
+        return mb_strtolower($key);
     }
 
     /**

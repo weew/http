@@ -89,7 +89,7 @@ class HttpBasicAuth implements IHttpBasicAuth {
      * @return string
      */
     public function getHeaderKey() {
-        return 'Authorization';
+        return 'authorization';
     }
 
     /**

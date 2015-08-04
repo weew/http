@@ -28,6 +28,21 @@ class HttpHeadersTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('aa', $headers->find('bb', 'aa'));
     }
 
+    public function test_format_key() {
+        $headers = new HttpHeaders();
+        $this->assertEquals('foo', $headers->formatKey('FOO'));
+    }
+
+    public function test_case_insensitive() {
+        $headers = new HttpHeaders();
+        $headers->set('FOO', 'bar');
+        $this->assertTrue($headers->has('fOO'));
+        $this->assertEquals('bar', $headers->find('fOO'));
+        $this->assertEquals(
+            ['foo' => 'bar'], $headers->toDistinctArray()
+        );
+    }
+
     public function test_format_header() {
         $headers = new HttpHeaders();
         $this->assertEquals(
