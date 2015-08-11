@@ -4,13 +4,15 @@ namespace Weew\Http\Responses;
 
 use Weew\Http\HttpResponse;
 use Weew\Http\IHtmlContentHolder;
+use Weew\Http\IHttpResponse;
 
 class HtmlResponse extends HttpResponse implements IHtmlContentHolder {
     /**
-     * @return string
+     * @param IHttpResponse $response
      */
-    protected function setDefaultContentType() {
-        $this->setContentType('text/html');
+    public function extend(IHttpResponse $response) {
+        parent::extend($response);
+        $this->setDefaultContentType();
     }
 
     /**
@@ -26,5 +28,12 @@ class HtmlResponse extends HttpResponse implements IHtmlContentHolder {
      */
     public function getHtmlContent() {
         return $this->getContent();
+    }
+
+    /**
+     * @return string
+     */
+    protected function setDefaultContentType() {
+        $this->setContentType('text/html');
     }
 }

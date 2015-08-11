@@ -5,9 +5,18 @@ namespace Weew\Http\Responses;
 use Weew\Http\HttpResponse;
 use Weew\Foundation\Interfaces\IArrayable;
 use Weew\Foundation\Interfaces\IJsonable;
+use Weew\Http\IHttpResponse;
 use Weew\Http\IJsonContentHolder;
 
 class JsonResponse extends HttpResponse implements IJsonContentHolder {
+    /**
+     * @param IHttpResponse $response
+     */
+    public function extend(IHttpResponse $response) {
+        parent::extend($response);
+        $this->setDefaultContentType();
+    }
+
     /**
      * Set content type.
      */
