@@ -19,6 +19,6 @@ class BasicAuthResponse extends HttpResponse {
     ) {
         parent::__construct($statusCode, null, $headers);
 
-        $this->getHeaders()->set('WWW-Authenticate', s('Basic realm="%s"', $realm));
+        $this->getHeaders()->set('www-authenticate', s('basic realm="%s"', $realm));
     }
 }
