@@ -2,12 +2,9 @@
 
 namespace Weew\Http;
 
-interface IHttpCookies extends IHeadersAware {
-    /**
-     * @return array
-     */
-    function getAll();
+use Weew\Foundation\Interfaces\IArrayable;
 
+interface IQueuedCookies extends IArrayable {
     /**
      * @param ICookie $cookie
      */
@@ -18,7 +15,7 @@ interface IHttpCookies extends IHeadersAware {
      *
      * @return ICookie
      */
-    function getByName($name);
+    function findByName($name);
 
     /**
      * @param $name
