@@ -5,67 +5,122 @@ namespace Tests\Weew\Http;
 use PHPUnit_Framework_TestCase;
 use Weew\Http\HttpData;
 use Weew\Http\HttpDataType;
+use Weew\Http\HttpRequest;
 
 class HttpDataTest extends PHPUnit_Framework_TestCase {
-    public function test_getters_and_setters() {
-        $data = new HttpData(['foo' => 'bar']);
-        $this->assertEquals(
-            ['foo' => 'bar'], $data->toArray()
-        );
-        $this->assertEquals('bar', $data->get('foo'));
-        $data->set('foo', 'yolo');
-        $this->assertEquals('yolo', $data->get('foo'));
-        $data->remove('foo');
-        $this->assertNull($data->get('foo'));
-        $this->assertEquals('bar', $data->get('foo', 'bar'));
-    }
-
-    public function test_set_and_get_data_type() {
-        $data = new HttpData();
-        $this->assertEquals(HttpDataType::URL_ENCODED, $data->getDataType());
-        $this->assertTrue($data->isUrlEncoded());
-        $data->setDataType(HttpDataType::MULTI_PART);
-        $this->assertTrue($data->isMultipart());
-        $this->assertEquals(HttpDataType::MULTI_PART, $data->getDataType());
-    }
-
     public function test_get_data_encoded() {
-        $data = new HttpData(['foo' => 'bar']);
-        $this->assertEquals(http_build_query(['foo' => 'bar']), $data->getDataEncoded());
-        $data->setDataType(HttpDataType::MULTI_PART);
-        $this->assertEquals(['foo' => 'bar'], $data->getDataEncoded());
-    }
+        $request = new HttpRequest();
+        $data = new HttpData($request);
+        $request->setContent('foo=bar');
 
-    public function test_count() {
-        $data = new HttpData();
-        $this->assertEquals(0, $data->count());
-        $data->set('foo', 'bar');
-        $this->assertEquals(1, $data->count());
-    }
-
-    public function test_add() {
-        $data = new HttpData(['foo' => 'bar']);
-        $data->add(['bar' => 'baz']);
-
-        $this->assertEquals(2, $data->count());
         $this->assertEquals(
-            ['foo' => 'bar', 'bar' => 'baz'], $data->toArray()
+            'foo=bar', $data->getDataEncoded()
         );
     }
 
-    public function test_replace() {
-        $data = new HttpData(['foo' => 'bar']);
-        $data->replace(['yolo' => 'swag']);
+    public function test_set_data_encoded() {
+        $request = new HttpRequest();
+        $data = new HttpData($request);
+        $data->setDataEncoded('foo=bar');
 
-        $this->assertEquals(1, $data->count());
-        $this->assertEquals(['yolo' => 'swag'], $data->toArray());
+        $this->assertEquals(
+            'foo=bar', $data->getDataEncoded()
+        );
+    }
+
+    public function test_get_data() {
+        $request = new HttpRequest();
+        $data = new HttpData($request);
+        $request->setContent(http_build_query(['foo' => 'bar']));
+
+        $this->assertEquals(['foo' => 'bar'], $data->getData());
+    }
+
+    public function test_set_data() {
+        $request = new HttpRequest();
+        $data = new HttpData($request);
+
+        $this->assertEquals([], $data->getData());
+        $this->assertNotEquals(
+            $request->getContent(), $data->getDataType()
+        );
+        $data->setData(['foo' => 'bar']);
+        $this->assertEquals(['foo' => 'bar'], $data->getData());
+        $this->assertEquals(
+            $data->getDataType(), $request->getContentType()
+        );
+    }
+
+    public function test_has_data() {
+        $request = new HttpRequest();
+        $data = new HttpData($request);
+
+        $this->assertFalse($data->hasData());
+        $data->setData(['foo' => 'bar']);
+        $this->assertTrue($data->hasData());
+    }
+
+    public function test_create_with_data() {
+        $request = new HttpRequest();
+        $data = new HttpData($request, ['foo' => 'bar']);
+
+        $this->assertEquals(['foo' => 'bar'], $data->getData());
+    }
+
+    public function test_getters_and_setters() {
+        $request = new HttpRequest();
+        $data = new HttpData($request, ['foo' => 'bar']);
+
+        $this->assertEquals('bar', $data->get('foo'));
+        $this->assertNull($data->get('bar'));
+        $data->set('bar', 'foo');
+        $this->assertEquals('foo', $data->get('bar'));
+        $this->assertEquals(2, $data->count());
+        $this->assertFalse($data->has('yolo'));
+        $data->set('yolo', 'swag');
+        $this->assertTrue($data->has('yolo'));
+        $data->remove('yolo');
+        $this->assertFalse($data->has('yolo'));
+        $data->add(['foo' => 'foo', 'yolo' => 'swag']);
+        $this->assertEquals(
+            ['foo' => 'foo', 'bar' => 'foo', 'yolo' => 'swag'], $data->getData()
+        );
+        $this->assertTrue($data->hasData());
+        $request->setContent(null);
+        $this->assertFalse($data->hasData());
+    }
+
+    public function test_data_type() {
+        $request = new HttpRequest();
+        $data = new HttpData($request);
+
+        $this->assertNotEquals(
+            $data->getDataType(), $request->getContentType()
+        );
+        $this->assertEquals(
+            HttpDataType::URL_ENCODED, $data->getDataType()
+        );
+        $this->assertTrue($data->isUrlEncoded());
+        $this->assertFalse($data->isMultipart());
+        $data->setDataType(HttpDataType::MULTI_PART);
+        $this->assertEquals(
+            HttpDataType::MULTI_PART, $data->getDataType()
+        );
+        $this->assertTrue($data->isMultipart());
+        $this->assertTrue($data->isMultipart());
+    }
+
+    public function test_to_string() {
+        $request = new HttpRequest();
+        $data = new HttpData($request, ['foo' => 'bar']);
+
+        $this->assertEquals('foo=bar', $data->toString());
     }
 
     public function test_to_array() {
-        $data = new HttpData(['foo' => 'bar', 'yolo' => 'swag']);
+        $request = new HttpRequest();
+        $data = new HttpData($request, ['foo' => 'bar']);
 
-        $this->assertEquals(
-            ['foo' => 'bar', 'yolo' => 'swag'], $data->toArray()
-        );
+        $this->assertEquals(['foo' => 'bar'], $data->toArray());
     }
 }

@@ -3,8 +3,9 @@
 namespace Weew\Http;
 
 use Weew\Foundation\Interfaces\IArrayable;
+use Weew\Foundation\Interfaces\IStringable;
 
-interface IHttpData extends IArrayable {
+interface IHttpData extends IStringable, IArrayable {
     /**
      * @param string $key
      * @param null $default
@@ -32,6 +33,31 @@ interface IHttpData extends IArrayable {
     function remove($key);
 
     /**
+     * @param array $data
+     */
+    function add(array $data);
+
+    /**
+     * @return int
+     */
+    function count();
+
+    /**
+     * @return array
+     */
+    function getData();
+
+    /**
+     * @param array $data
+     */
+    function setData(array $data);
+
+    /**
+     * @return bool
+     */
+    function hasData();
+
+    /**
      * @param $dataType
      *
      * @see HttpDataType
@@ -54,22 +80,12 @@ interface IHttpData extends IArrayable {
     function isUrlEncoded();
 
     /**
-     * @return mixed
+     * @return string
      */
     function getDataEncoded();
 
     /**
-     * @return int
+     * @param string $data
      */
-    function count();
-
-    /**
-     * @param array $data
-     */
-    function add(array $data);
-
-    /**
-     * @param array $data
-     */
-    function replace(array $data);
+    function setDataEncoded($data);
 }

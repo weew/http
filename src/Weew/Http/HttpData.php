@@ -4,20 +4,22 @@ namespace Weew\Http;
 
 class HttpData implements IHttpData {
     /**
-     * @var array
-     */
-    protected $data = [];
-
-    /**
      * @var string
      */
     protected  $dataType = HttpDataType::URL_ENCODED;
 
     /**
+     * @var IContentHolder
+     */
+    private $holder;
+
+    /**
+     * @param IContentHolder $holder
      * @param array $data
      */
-    public function __construct(array $data = []) {
-        $this->data = $data;
+    public function __construct(IContentHolder $holder, array $data = []) {
+        $this->holder = $holder;
+        $this->setData($data);
     }
 
     /**
@@ -27,7 +29,7 @@ class HttpData implements IHttpData {
      * @return mixed
      */
     public function get($key, $default = null) {
-        return array_get($this->data, $key, $default);
+        return array_get($this->getData(), $key, $default);
     }
 
     /**
@@ -35,7 +37,9 @@ class HttpData implements IHttpData {
      * @param $value
      */
     public function set($key, $value) {
-        array_set($this->data, $key, $value);
+        $data = $this->getData();
+        array_set($data, $key, $value);
+        $this->setData($data);
     }
 
     /**
@@ -44,28 +48,59 @@ class HttpData implements IHttpData {
      * @return bool
      */
     public function has($key) {
-        return array_has($this->data, $key);
+        return array_has($this->getData(), $key);
     }
 
     /**
      * @param string $key
      */
     public function remove($key) {
-        array_remove($this->data, $key);
+        $data = $this->getData();
+        array_remove($data, $key);
+        $this->setData($data);
     }
 
     /**
      * @param array $data
      */
     public function add(array $data) {
-        $this->data = array_extend($this->data, $data);
+        $current = $this->getData();
+        $extended = array_extend($current, $data);
+        $this->setData($extended);
+    }
+
+    /**
+     * @return int
+     */
+    public function count() {
+        return count($this->getData());
+    }
+
+    /**
+     * @return array
+     */
+    public function getData() {
+        $data = [];
+        parse_str($this->holder->getContent(), $data);
+
+        return $data;
     }
 
     /**
      * @param array $data
      */
-    public function replace(array $data) {
-        $this->data = $data;
+    public function setData(array $data) {
+        if (count($data) > 0) {
+            $this->holder->setContent(http_build_query($data));
+            $this->holder->setContentType($this->getDataType());
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasData() {
+        return $this->count() > 0;
     }
 
     /**
@@ -88,38 +123,50 @@ class HttpData implements IHttpData {
      * @return bool
      */
     public function isMultipart() {
-        return $this->dataType === HttpDataType::MULTI_PART;
+        return stripos($this->getDataType(), HttpDataType::MULTI_PART) !== false;
     }
 
     /**
      * @return bool
      */
     public function isUrlEncoded() {
-        return $this->dataType === HttpDataType::URL_ENCODED;
+        return stripos($this->getDataType(), HttpDataType::URL_ENCODED) !== false;
     }
 
     /**
-     * @return array|string
+     * @return string
      */
     public function getDataEncoded() {
-        if ($this->isMultipart()) {
-            return $this->data;
-        } else {
-            return http_build_query($this->data);
+        if ( ! $this->hasData()) {
+            return null;
+        }
+
+        if ($this->isUrlEncoded()) {
+            return http_build_query($this->getData());
+        } else if ($this->isMultipart()) {
+            // todo
         }
     }
 
     /**
-     * @return int
+     * @param string $data
      */
-    public function count() {
-        return count($this->data);
+    public function setDataEncoded($data) {
+        $this->holder->setContent($data);
+        $this->holder->setContentType($this->getDataType());
     }
 
     /**
      * @return array
      */
     public function toArray() {
-        return $this->data;
+        return $this->getData();
+    }
+
+    /**
+     * @return string
+     */
+    public function toString() {
+        return $this->getDataEncoded();
     }
 }
