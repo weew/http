@@ -36,7 +36,7 @@ interface IHttpHeaders extends IArrayable {
      *
      * @param $key
      *
-     * @return string
+     * @return array
      */
     function get($key);
 

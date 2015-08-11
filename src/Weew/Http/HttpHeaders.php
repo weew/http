@@ -71,11 +71,11 @@ class HttpHeaders implements IHttpHeaders {
      *
      * @param $key
      *
-     * @return string
+     * @return array
      */
     public function get($key) {
         $key = $this->formatKey($key);
-        return array_get($this->headers, $key);
+        return array_get($this->headers, $key, []);
     }
 
     /**

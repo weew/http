@@ -24,7 +24,7 @@ class HttpHeadersTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(['bar', 'yolo'], $headers->get('yolo'));
         $this->assertEquals('yolo', $headers->find('yolo'));
         $headers->remove('yolo');
-        $this->assertNull($headers->get('yolo'));
+        $this->assertEquals([], $headers->get('yolo'));
         $this->assertEquals('aa', $headers->find('bb', 'aa'));
     }
 
