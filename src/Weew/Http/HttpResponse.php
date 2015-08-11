@@ -12,6 +12,11 @@ class HttpResponse implements IHttpResponse {
     protected $headers;
 
     /**
+     * @var IQueuedCookies
+     */
+    protected $cookies;
+
+    /**
      * @var int
      */
     protected $statusCode;
@@ -24,33 +29,42 @@ class HttpResponse implements IHttpResponse {
     /**
      * @var string
      */
-    protected $protocol = 'HTTP';
+    protected $protocol = HttpProtocol::HTTP;
 
     /**
      * @var string
      */
-    protected $version = '1.1';
+    protected $version = HttpProtocol::CURRENT_VERSION;
 
     /**
      * @param int $statusCode
      * @param null $content
      * @param IHttpHeaders $headers
+     * @param IQueuedCookies $cookies
      */
     public function __construct(
         $statusCode = HttpStatusCode::OK,
         $content = null,
-        IHttpHeaders $headers = null
+        IHttpHeaders $headers = null,
+        IQueuedCookies $cookies = null
     ) {
         if ( ! $headers instanceof IHttpHeaders) {
             $headers = $this->createHeaders();
         }
+
+        $this->setHeaders($headers);
+
+        if ( ! $cookies instanceof IQueuedCookies) {
+            $cookies = $this->createCookies();
+        }
+
+        $this->setQueuedCookies($cookies);
 
         if ($statusCode === null) {
             $statusCode = HttpStatusCode::OK;
         }
 
         $this->setStatusCode($statusCode);
-        $this->setHeaders($headers);
         $this->setContent($content);
 
         if ($this->getContentType() === null) {
@@ -64,17 +78,12 @@ class HttpResponse implements IHttpResponse {
      * Use this method to transform a basic http response to its subclasses.
      *
      * @param IHttpResponse $httpResponse
-     * @param bool $forceContentType
      *
      * @return static
      */
-    public static function create(IHttpResponse $httpResponse, $forceContentType = true) {
+    public static function create(IHttpResponse $httpResponse) {
         $customResponse = new static();
         $customResponse->extend($httpResponse);
-
-        if ($forceContentType) {
-            $customResponse->setDefaultContentType();
-        }
 
         return $customResponse;
     }
@@ -121,12 +130,6 @@ class HttpResponse implements IHttpResponse {
     }
 
     /**
-     * Tell headers holder to build its headers.
-     */
-    public function buildHeaders() {
-    }
-
-    /**
      * Send response.
      */
     public function send() {
@@ -143,6 +146,13 @@ class HttpResponse implements IHttpResponse {
      */
     protected function createHeaders() {
         return new HttpHeaders();
+    }
+
+    /**
+     * @return QueuedCookies
+     */
+    protected function createCookies() {
+        return new QueuedCookies($this->getHeaders());
     }
 
     /**
@@ -193,6 +203,8 @@ class HttpResponse implements IHttpResponse {
 
     /**
      * @param $protocol
+     *
+     * @see HttpProtocol
      */
     public function setProtocol($protocol) {
         $this->protocol = $protocol;
@@ -207,23 +219,46 @@ class HttpResponse implements IHttpResponse {
 
     /**
      * @param $version
+     *
+     * @see HttpProtocol
      */
     public function setProtocolVersion($version) {
         $this->version = $version;
     }
 
     /**
+     * @return IQueuedCookies
+     */
+    public function getQueuedCookies() {
+        return $this->cookies;
+    }
+
+    /**
+     * @param IQueuedCookies $cookies
+     */
+    public function setQueuedCookies(IQueuedCookies $cookies) {
+        $this->cookies = $cookies;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSecure() {
+        return $this->getProtocol() == HttpProtocol::HTTPS;
+    }
+
+    /**
      * @param string $contentType
      */
     public function setContentType($contentType) {
-        $this->getHeaders()->set('Content-Type', $contentType);
+        $this->getHeaders()->set('content-type', $contentType);
     }
 
     /**
      * @return string
      */
     public function getContentType() {
-        return $this->getHeaders()->find('Content-Type');
+        return $this->getHeaders()->find('content-type');
     }
 
     /**
@@ -275,8 +310,6 @@ class HttpResponse implements IHttpResponse {
      * Extend current response with another.
      *
      * @param IHttpResponse $response
-     *
-     * @return IHttpResponse
      */
     public function extend(IHttpResponse $response) {
         $this->setHeaders($response->getHeaders());

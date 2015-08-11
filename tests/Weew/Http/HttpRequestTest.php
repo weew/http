@@ -4,12 +4,15 @@ namespace Tests\Weew\Http;
 
 use PHPUnit_Framework_TestCase;
 use Weew\Http\HttpBasicAuth;
+use Weew\Http\ReceivedCookies;
 use Weew\Http\HttpData;
 use Weew\Http\HttpHeaders;
+use Weew\Http\HttpProtocol;
 use Weew\Http\HttpQuery;
 use Weew\Http\HttpRequest;
 use Weew\Http\HttpRequestMethod;
 use Weew\Http\IHttpBasicAuth;
+use Weew\Http\IReceivedCookies;
 use Weew\Http\IHttpData;
 use Weew\Http\IHttpHeaders;
 use Weew\Http\IHttpQuery;
@@ -21,6 +24,7 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
         $request = new HttpRequest();
         $this->assertTrue($request->getHeaders() instanceof IHttpHeaders);
         $this->assertTrue($request->getUrl() instanceof IUrl);
+        $this->assertTrue($request->getBasicAuth() instanceof IHttpBasicAuth);
     }
 
     public function test_get_and_set_headers() {
@@ -67,7 +71,7 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
     public function test_get_and_set_data() {
         $request = new HttpRequest();
         $this->assertTrue($request->getData() instanceof IHttpData);
-        $data = new HttpData(['foo' => 'bar']);
+        $data = new HttpData($request, ['foo' => 'bar']);
         $request->setData($data);
         $this->assertTrue($request->getData() instanceof IHttpData);
         $this->assertEquals('bar', $request->getData()->get('foo'));
@@ -76,12 +80,9 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
     public function test_get_and_set_basic_auth() {
         $request = new HttpRequest();
         $this->assertTrue($request->getBasicAuth() instanceof IHttpBasicAuth);
-        $basicAuth = new HttpBasicAuth('foo', 'bar');
+        $basicAuth = new HttpBasicAuth($request->getHeaders(), 'foo', 'bar');
         $request->setBasicAuth($basicAuth);
-        $this->assertTrue($request->getBasicAuth() instanceof IHttpBasicAuth);
-        $this->assertEquals(
-            $basicAuth->getUsername(), $request->getBasicAuth()->getUsername()
-        );
+        $this->assertTrue($basicAuth === $request->getBasicAuth());
     }
 
     public function test_get_and_set_content_type() {
@@ -91,35 +92,53 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('foo/bar', $request->getContentType());
     }
 
-    public function test_build_headers() {
-        $auth = new HttpBasicAuth('foo', 'bar');
+    public function test_get_and_set_protocol() {
         $request = new HttpRequest();
-        $request->getHeaders()->set('yolo', 'swag');
-        $request->setBasicAuth($auth);
-        $request->buildHeaders();
+        $this->assertEquals(
+            HttpProtocol::HTTP, $request->getProtocol()
+        );
+        $this->assertEquals(
+            HttpProtocol::CURRENT_VERSION, $request->getProtocolVersion()
+        );
 
-        $this->assertEquals([
-            'yolo' => 'swag',
-            $auth->getHeaderKey() => $auth->getHeaderValue(),
-        ], $request->getHeaders()->toDistinctArray());
+        $request->setProtocol('foo');
+        $this->assertEquals(
+            'foo', $request->getProtocol()
+        );
+        $request->setProtocolVersion('bar');
+        $this->assertEquals(
+            'bar', $request->getProtocolVersion()
+        );
+    }
+
+    public function test_get_and_set_cookie_jar() {
+        $request = new HttpRequest();
+        $jar = new ReceivedCookies($request->getHeaders());
+
+        $this->assertTrue($request->getReceivedCookies() instanceof IReceivedCookies);
+        $request->setReceivedCookies($jar);
+        $this->assertTrue($jar === $request->getReceivedCookies());
     }
 
     public function test_to_array() {
         $request = new HttpRequest(
             HttpRequestMethod::PATCH,
             new Url('/foo'),
-            new HttpHeaders(['yolo' => 'swag']),
-            new HttpData(['bar' => 'baz'])
+            new HttpHeaders(['yolo' => 'swag'])
         );
-        $request->setBasicAuth(new HttpBasicAuth('xx', 'aa'));
+        $request->setBasicAuth(new HttpBasicAuth($request->getHeaders(), 'xx', 'aa'));
+        $request->getData()->setData(['foo' => 'bar']);
         $actual = $request->toArray();
 
         $this->assertEquals(
             [
+                'protocol' => $request->getProtocol(),
+                'version' => $request->getProtocolVersion(),
                 'method' => $request->getMethod(),
                 'url' => $request->getUrl()->toString(),
                 'headers' => $request->getHeaders()->toArray(),
                 'data' => $request->getData()->toArray(),
+                'cookies' => $request->getReceivedCookies()->toArray(),
                 'content' => $request->getContent(),
             ], $actual
         );

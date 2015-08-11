@@ -10,6 +10,8 @@ interface IHttpProtocolHolder {
 
     /**
      * @param $protocol
+     *
+     * @see HttpProtocol
      */
     function setProtocol($protocol);
 
@@ -20,6 +22,13 @@ interface IHttpProtocolHolder {
 
     /**
      * @param $version
+     *
+     * @see HttpProtocol
      */
     function setProtocolVersion($version);
+
+    /**
+     * @return bool
+     */
+    function isSecure();
 }

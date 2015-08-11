@@ -12,7 +12,6 @@ class HttpResponseBuilder implements IHttpResponseBuilder {
      * @param IHttpResponse $response
      */
     public function build(IHttpResponse $response) {
-        $response->buildHeaders();
         $this->sendHeaders($response);
         $this->sendContent($response);
     }

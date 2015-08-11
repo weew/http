@@ -4,11 +4,13 @@ namespace Tests\Weew\Http;
 
 use PHPUnit_Framework_TestCase;
 use Tests\Weew\Http\Mocks\StringableItem;
+use Weew\Http\QueuedCookies;
 use Weew\Http\HttpHeaders;
+use Weew\Http\HttpProtocol;
 use Weew\Http\HttpResponse;
 use Weew\Http\HttpStatusCode;
+use Weew\Http\IQueuedCookies;
 use Weew\Http\IHttpHeaders;
-use Tests\Weew\Http\Mocks\CustomResponse;
 
 class HttpResponseTest extends PHPUnit_Framework_TestCase {
     public function test_create_new_response() {
@@ -50,8 +52,8 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase {
 
     public function test_get_protocol_and_version() {
         $response = new HttpResponse();
-        $this->assertEquals('HTTP', $response->getProtocol());
-        $this->assertEquals('1.1', $response->getProtocolVersion());
+        $this->assertEquals(HttpProtocol::HTTP, $response->getProtocol());
+        $this->assertEquals(HttpProtocol::CURRENT_VERSION, $response->getProtocolVersion());
     }
 
     public function test_get_status_text() {
@@ -130,7 +132,7 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase {
         $httpResponse = new HttpResponse(
             HttpStatusCode::NOT_FOUND, 'yolo', new HttpHeaders(['foo-bar' => 'baz'])
         );
-        $customResponse = new CustomResponse();
+        $customResponse = new HttpResponse();
         $customResponse->extend($httpResponse);
         $this->assertEquals(
             $httpResponse->getStatusCode(), $customResponse->getStatusCode()
@@ -150,22 +152,24 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(
             'baz', $customResponse->getHeaders()->find('foo-bar')
         );
-        $this->assertEquals(
-            'foo', $customResponse->customMethod()
-        );
     }
 
     public function test_create() {
         $httpResponse = new HttpResponse();
-        $customResponse = CustomResponse::create($httpResponse);
-        $this->assertEquals(
-            'foo/bar', $customResponse->getContentType()
-        );
+        $httpResponse->setContent('foo');
+        $httpResponse->setContentType('bar');
+        $customResponse = HttpResponse::create($httpResponse);
 
-        $customResponse = CustomResponse::create($httpResponse, false);
-        $this->assertEquals(
-            $httpResponse->getContentType(), $customResponse->getContentType()
-        );
+        $this->assertEquals('foo', $customResponse->getContent());
+        $this->assertEquals('bar', $customResponse->getContentType());
+    }
+
+    public function test_cookies() {
+        $response = new HttpResponse();
+        $cookies = new QueuedCookies($response->getHeaders());
+        $this->assertTrue($response->getQueuedCookies() instanceof IQueuedCookies);
+        $response->setQueuedCookies($cookies);
+        $this->assertTrue($cookies === $response->getQueuedCookies());
     }
 
     public function test_to_array() {

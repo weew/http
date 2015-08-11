@@ -5,11 +5,11 @@ namespace Weew\Http;
 use Weew\Foundation\Interfaces\IArrayable;
 
 interface IHttpResponse extends
-    IHeadersHolder,
+    IHttpHeadersHolder,
     IContentHolder,
     IHttpProtocolHolder,
     IStatusHolder,
+    IQueuedCookiesHolder,
     ISendable,
-    IExtendable,
     IArrayable {
 }

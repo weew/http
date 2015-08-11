@@ -32,38 +32,58 @@ class HttpRequest implements IHttpRequest {
     protected $data;
 
     /**
+     * @var IReceivedCookies
+     */
+    protected $cookieJar;
+
+    /**
      * @var IHttpBasicAuth
      */
     protected $basicAuth;
 
     /**
+     * @var string
+     */
+    protected $protocol = HttpProtocol::HTTP;
+
+    /**
+     * @var string
+     */
+    protected $version = HttpProtocol::CURRENT_VERSION;
+
+    /**
      * @param string $method
      * @param null|IUrl $url
      * @param IHttpHeaders $headers
-     * @param IHttpData $data
+     * @param IReceivedCookies $cookieJar
      */
     public function __construct(
         $method = HttpRequestMethod::GET,
         IUrl $url = null,
         IHttpHeaders $headers = null,
-        IHttpData $data = null
+        IReceivedCookies $cookieJar = null
     ) {
-        if ( ! $headers instanceof IHttpHeaders) {
-            $headers = $this->createHeaders();
-        }
+        $this->setMethod($method);
 
         if ( ! $url instanceof IUrl) {
             $url = $this->createUrl();
         }
 
-        if ( ! $data instanceof IHttpData) {
-            $data = $this->createData();
+        $this->setUrl($url);
+
+        if ( ! $headers instanceof IHttpHeaders) {
+            $headers = $this->createHeaders();
         }
 
-        $this->setMethod($method);
         $this->setHeaders($headers);
-        $this->setUrl($url);
-        $this->setData($data);
+
+        if ( ! $headers instanceof IReceivedCookies) {
+            $cookieJar = $this->createCookieJar();
+        }
+
+        $this->setReceivedCookies($cookieJar);
+
+        $this->setData($this->createData());
         $this->setBasicAuth($this->createBasicAuth());
 
         if ($this->getAccept() === null) {
@@ -76,11 +96,6 @@ class HttpRequest implements IHttpRequest {
 
         $this->setDefaults();
     }
-
-    /**
-     * Use this as hook to extend your custom request.
-     */
-    protected function setDefaults() {}
 
     /**
      * @return IHttpHeaders
@@ -97,10 +112,43 @@ class HttpRequest implements IHttpRequest {
     }
 
     /**
+     * @return IReceivedCookies
+     */
+    public function getReceivedCookies() {
+        return $this->cookieJar;
+    }
+
+    /**
+     * @param IReceivedCookies $cookieJar
+     */
+    public function setReceivedCookies(IReceivedCookies $cookieJar) {
+        $this->cookieJar = $cookieJar;
+    }
+
+    /**
+     * Use this as hook to extend your custom request.
+     */
+    protected function setDefaults() {}
+
+    /**
      * @return HttpHeaders
      */
     protected function createHeaders() {
         return new HttpHeaders();
+    }
+
+    /**
+     * @return ReceivedCookies
+     */
+    protected function createCookieJar() {
+        return new ReceivedCookies($this->getHeaders());
+    }
+
+    /**
+     * @return IUrl
+     */
+    protected function createUrl() {
+        return new Url();
     }
 
     /**
@@ -113,12 +161,24 @@ class HttpRequest implements IHttpRequest {
     }
 
     /**
+     * Get default accept header.
+     *
+     * @return string
+     */
+    protected function setDefaultAccept() {}
+
+    /**
      * @return string
      * @see HttpRequestMethods
      */
     public function getMethod() {
         return $this->method;
     }
+
+    /**
+     * @return string
+     */
+    protected function setDefaultContentType() {}
 
     /**
      * @return IUrl
@@ -128,10 +188,21 @@ class HttpRequest implements IHttpRequest {
     }
 
     /**
-     * @return IUrl
+     * @return HttpData
      */
-    protected function createUrl() {
-        return new Url();
+    protected function createData() {
+        $data = new HttpData($this);
+
+        return $data;
+    }
+
+    /**
+     * @return HttpBasicAuth
+     */
+    protected function createBasicAuth() {
+        $auth = new HttpBasicAuth($this->getHeaders());
+
+        return $auth;
     }
 
     /**
@@ -166,41 +237,29 @@ class HttpRequest implements IHttpRequest {
      * @return string
      */
     public function getAccept() {
-        return $this->getHeaders()->find('Accept');
+        return $this->getHeaders()->find('accept');
     }
 
     /**
      * @param string $accept
      */
     public function setAccept($accept) {
-        $this->getHeaders()->set('Accept', $accept);
+        $this->getHeaders()->set('accept', $accept);
     }
-
-    /**
-     * Get default accept header.
-     *
-     * @return string
-     */
-    protected function setDefaultAccept() {}
 
     /**
      * @return string
      */
     public function getContentType() {
-        return $this->getHeaders()->find('Content-Type');
+        return $this->getHeaders()->find('content-type');
     }
 
     /**
      * @param string $contentType
      */
     public function setContentType($contentType) {
-        $this->getHeaders()->set('Content-Type', $contentType);
+        $this->getHeaders()->set('content-type', $contentType);
     }
-
-    /**
-     * @return string
-     */
-    protected function setDefaultContentType() {}
 
     /**
      * @return IHttpData
@@ -214,13 +273,6 @@ class HttpRequest implements IHttpRequest {
      */
     public function setData(IHttpData $data) {
         $this->data = $data;
-    }
-
-    /**
-     * @return HttpData
-     */
-    protected function createData() {
-        return new HttpData();
     }
 
     /**
@@ -238,30 +290,56 @@ class HttpRequest implements IHttpRequest {
     }
 
     /**
-     * @return HttpBasicAuth
+     * @return string
      */
-    protected function createBasicAuth() {
-        return new HttpBasicAuth();
+    public function getProtocol() {
+        return $this->protocol;
     }
 
     /**
-     * Tell headers holder to build its headers.
+     * @param $protocol
+     *
+     * @see HttpProtocol
      */
-    public function buildHeaders() {
-        $this->getBasicAuth()->writeHeaders($this->getHeaders());
+    public function setProtocol($protocol) {
+        $this->protocol = $protocol;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProtocolVersion() {
+        return $this->version;
+    }
+
+    /**
+     * @param $version
+     *
+     * @see HttpProtocol
+     */
+    public function setProtocolVersion($version) {
+        $this->version = $version;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSecure() {
+        return $this->getProtocol() == HttpProtocol::HTTPS;
     }
 
     /**
      * @return array
      */
     public function toArray() {
-        $this->buildHeaders();
-
         return [
+            'protocol' => $this->getProtocol(),
+            'version' => $this->getProtocolVersion(),
             'method' => $this->getMethod(),
             'url' => $this->getUrl()->toString(),
             'headers' => $this->getHeaders()->toArray(),
             'data' => $this->getData()->toArray(),
+            'cookies' => $this->getReceivedCookies()->toArray(),
             'content' => $this->getContent(),
         ];
     }

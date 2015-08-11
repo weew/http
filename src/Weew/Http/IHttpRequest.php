@@ -6,9 +6,12 @@ use Weew\Foundation\Interfaces\IArrayable;
 use Weew\Url\IUrl;
 
 interface IHttpRequest extends
-    IHeadersHolder,
+    IHttpHeadersHolder,
+    IHttpProtocolHolder,
     IBasicAuthHolder,
     IContentHolder,
+    IHttpDataHolder,
+    IReceivedCookiesHolder,
     IArrayable {
     /**
      * @return string
@@ -43,14 +46,4 @@ interface IHttpRequest extends
      * @param string $accept
      */
     function setAccept($accept);
-
-    /**
-     * @return IHttpData
-     */
-    function getData();
-
-    /**
-     * @param IHttpData $data
-     */
-    function setData(IHttpData $data);
 }

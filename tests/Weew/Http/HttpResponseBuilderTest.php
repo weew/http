@@ -3,6 +3,7 @@
 namespace Tests\Weew\Http;
 
 use PHPUnit_Framework_TestCase;
+use Weew\Http\HttpProtocol;
 use Weew\Http\HttpResponse;
 use Weew\Http\HttpResponseBuilder;
 use Weew\Http\HttpStatusCode;
@@ -14,7 +15,9 @@ class HttpResponseBuilderTest extends PHPUnit_Framework_TestCase {
 
         $this->assertEquals(
             s(
-                'HTTP/1.1 %d %s',
+                '%s/%s %d %s',
+                HttpProtocol::HTTP,
+                HttpProtocol::CURRENT_VERSION,
                 HttpStatusCode::NOT_FOUND,
                 HttpStatusCode::getStatusText(HttpStatusCode::NOT_FOUND)
             ),
@@ -34,5 +37,13 @@ class HttpResponseBuilderTest extends PHPUnit_Framework_TestCase {
         $this->assertContains('foo: bar', $headers);
         $this->assertContains('foo: foo', $headers);
         $this->assertContains('bar: baz', $headers);
+    }
+
+    public function test_send_content() {
+        $builder = new HttpResponseBuilder();
+        $response = new HttpResponse(200, 'bar');
+        ob_start();
+        $builder->sendContent($response);
+        $this->assertEquals('bar', ob_get_clean());
     }
 }
