@@ -4,23 +4,26 @@ namespace Weew\Http;
 
 class HttpBasicAuth implements IHttpBasicAuth {
     /**
-     * @var string
+     * @var IHttpHeaders
      */
-    protected $username;
+    protected $headers;
 
     /**
-     * @var string
+     * @var BasicAuthParser
      */
-    protected $password;
+    protected $parser;
 
     /**
+     * @param IHttpHeaders $headers
      * @param null $username
      * @param null $password
      */
-    public function __construct($username = null, $password = null) {
+    public function __construct(IHttpHeaders $headers, $username = null, $password = null) {
+        $this->headers = $headers;
+        $this->parser = $this->createParser();
+
         if ($username !== null) {
-            $this->setUsername($username);
-            $this->setPassword($password);
+            $this->parser->setCredentials($this->headers, $username, $password);
         }
     }
 
@@ -28,75 +31,49 @@ class HttpBasicAuth implements IHttpBasicAuth {
      * @return string
      */
     public function getUsername() {
-        return $this->username;
+        return $this->parser->getUsername($this->headers);
     }
 
     /**
-     * @param string $username
+     * @param $username
      */
     public function setUsername($username) {
-        $this->username = $username;
+        $this->parser->setUsername($this->headers, $username);
     }
 
     /**
      * @return string
      */
     public function getPassword() {
-        return $this->password;
+        return $this->parser->getPassword($this->headers);
     }
 
     /**
-     * @param string $password
+     * @param $password
      */
     public function setPassword($password) {
-        $this->password = $password;
+        $this->parser->setPassword($this->headers, $password);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getToken() {
+        return $this->parser->getToken($this->headers);
+    }
+
+    /**
+     * @param $token
+     */
+    public function setToken($token) {
+        $this->parser->setToken($this->headers, $token);
     }
 
     /**
      * @return bool
      */
     public function hasBasicAuth() {
-        return $this->username !== null;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBasicAuthToken() {
-        return base64_encode(s('%s:%s', $this->getUsername(), $this->getPassword()));
-    }
-
-    /**
-     * Remove basic authentication.
-     */
-    public function removeBasicAuth() {
-        $this->setUsername(null);
-        $this->setPassword(null);
-    }
-
-    /**
-     * Write basic auth headers.
-     *
-     * @param IHttpHeaders $headers
-     */
-    public function writeHeaders(IHttpHeaders $headers) {
-        if ($this->hasBasicAuth()) {
-            $headers->set($this->getHeaderKey(), $this->getHeaderValue());
-        }
-    }
-
-    /**
-     * @return string
-     */
-    public function getHeaderKey() {
-        return 'authorization';
-    }
-
-    /**
-     * @return string
-     */
-    public function getHeaderValue() {
-        return s('Basic %s', $this->getBasicAuthToken());
+        return $this->parser->hasBasicAuth($this->headers);
     }
 
     /**
@@ -106,7 +83,14 @@ class HttpBasicAuth implements IHttpBasicAuth {
         return [
             'username' => $this->getUsername(),
             'password' => $this->getPassword(),
-            'token' => $this->getBasicAuthToken(),
+            'token' => $this->getToken(),
         ];
+    }
+
+    /**
+     * @return BasicAuthParser
+     */
+    protected function createParser() {
+        return new BasicAuthParser();
     }
 }

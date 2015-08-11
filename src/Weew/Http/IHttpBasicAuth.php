@@ -4,39 +4,39 @@ namespace Weew\Http;
 
 use Weew\Foundation\Interfaces\IArrayable;
 
-interface IHttpBasicAuth extends IHeadersAware, IArrayable {
+interface IHttpBasicAuth extends IArrayable {
     /**
      * @return string
      */
-    function getUsername();
+    public function getUsername();
 
     /**
-     * @param string $username
+     * @param $username
      */
-    function setUsername($username);
+    public function setUsername($username);
 
     /**
      * @return string
      */
-    function getPassword();
+    public function getPassword();
 
     /**
-     * @param string $password
+     * @param $password
      */
-    function setPassword($password);
+    public function setPassword($password);
 
     /**
      * @return bool
      */
-    function hasBasicAuth();
+    public function hasBasicAuth();
 
     /**
-     * @return
+     * @return string
      */
-    function getBasicAuthToken();
+    public function getToken();
 
     /**
-     * Remove basic authentication.
+     * @param $token
      */
-    function removeBasicAuth();
+    public function setToken($token);
 }
