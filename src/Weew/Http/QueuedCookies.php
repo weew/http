@@ -21,6 +21,20 @@ class QueuedCookies implements IQueuedCookies {
     }
 
     /**
+     * Cloning this object should also clone
+     * all of its cookies.
+     */
+    public function __clone() {
+        $cookies = [];
+
+        foreach ($this->cookies as $name => $cookie) {
+            $cookies[$name] = clone($cookie);
+        }
+
+        $this->cookies = $cookies;
+    }
+
+    /**
      * @param ICookie $cookie
      */
     public function add(ICookie $cookie) {

@@ -28,4 +28,18 @@ class QueuedCookiesTest extends PHPUnit_Framework_TestCase {
             $cookie->toString(), $headers->find('set-cookie')
         );
     }
+
+    public function test_clone() {
+        $cookies = new QueuedCookies(new HttpHeaders());
+        $cookie = new Cookie('foo', 'bar');
+        $cookies->add($cookie);
+        $cookies = clone($cookies);
+
+        $this->assertEquals(
+            'bar', $cookies->findByName('foo')->getValue()
+        );
+        $this->assertFalse(
+            $cookies->findByName('foo') === $cookie
+        );
+    }
 }

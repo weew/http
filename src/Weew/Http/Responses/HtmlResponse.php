@@ -4,17 +4,8 @@ namespace Weew\Http\Responses;
 
 use Weew\Http\HttpResponse;
 use Weew\Http\IHtmlContentHolder;
-use Weew\Http\IHttpResponse;
 
 class HtmlResponse extends HttpResponse implements IHtmlContentHolder {
-    /**
-     * @param IHttpResponse $response
-     */
-    public function extend(IHttpResponse $response) {
-        parent::extend($response);
-        $this->setDefaultContentType();
-    }
-
     /**
      * @param $content
      */

@@ -312,11 +312,14 @@ class HttpResponse implements IHttpResponse {
      * @param IHttpResponse $response
      */
     public function extend(IHttpResponse $response) {
-        $this->setHeaders($response->getHeaders());
+        $this->setHeaders(clone($response->getHeaders()));
         $this->setProtocol($response->getProtocol());
         $this->setProtocolVersion($response->getProtocolVersion());
-        $this->setContent($response->getContent());
         $this->setStatusCode($response->getStatusCode());
+        $this->setContent($response->getContent());
+        $this->setQueuedCookies(clone($response->getQueuedCookies()));
+
+        $this->setDefaultContentType();
     }
 
     /**

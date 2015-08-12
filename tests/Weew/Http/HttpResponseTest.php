@@ -4,6 +4,7 @@ namespace Tests\Weew\Http;
 
 use PHPUnit_Framework_TestCase;
 use Tests\Weew\Http\Mocks\StringableItem;
+use Weew\Http\Cookie;
 use Weew\Http\QueuedCookies;
 use Weew\Http\HttpHeaders;
 use Weew\Http\HttpProtocol;
@@ -129,9 +130,13 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_extend() {
+        $headers = new HttpHeaders(['foo-bar' => 'baz']);
+        $cookie = new Cookie('foo', 'bar');
+
         $httpResponse = new HttpResponse(
-            HttpStatusCode::NOT_FOUND, 'yolo', new HttpHeaders(['foo-bar' => 'baz'])
+            HttpStatusCode::NOT_FOUND, 'yolo',$headers
         );
+        $httpResponse->getQueuedCookies()->add($cookie);
         $customResponse = new HttpResponse();
         $customResponse->extend($httpResponse);
         $this->assertEquals(
@@ -151,6 +156,15 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase {
         );
         $this->assertEquals(
             'baz', $customResponse->getHeaders()->find('foo-bar')
+        );
+        $this->assertFalse(
+            $customResponse->getHeaders() === $headers
+        );
+        $this->assertEquals(
+            'bar', $customResponse->getQueuedCookies()->findByName('foo')->getValue()
+        );
+        $this->assertFalse(
+            $customResponse->getQueuedCookies()->findByName('foo') === $cookie
         );
     }
 
