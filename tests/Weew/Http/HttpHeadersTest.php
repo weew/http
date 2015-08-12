@@ -85,7 +85,7 @@ class HttpHeadersTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_construct() {
-        $headers = new HttpHeaders(['foo' => 'bar', 'bar' => 'foo']);
-        $this->assertEquals(['foo' => ['bar'], 'bar' => ['foo']], $headers->toArray());
+        $headers = new HttpHeaders(['foo' => 'bar', 'bar' => ['foo', 'baz']]);
+        $this->assertEquals(['foo' => ['bar'], 'bar' => ['foo', 'baz']], $headers->toArray());
     }
 }

@@ -13,7 +13,13 @@ class HttpHeaders implements IHttpHeaders {
      */
     public function __construct(array $headers = []) {
         foreach ($headers as $key => $value) {
-            $this->set($key, $value);
+            if (is_array($value)) {
+                foreach ($value as $header) {
+                    $this->add($key, $header);
+                }
+            } else {
+                $this->set($key, $value);
+            }
         }
     }
 
