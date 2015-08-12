@@ -39,6 +39,20 @@ class Cookie implements ICookie {
     protected $httpOnly;
 
     /**
+     * @param $string
+     * @param ICookieParser $parser
+     *
+     * @return static
+     */
+    public static function createFromString($string, ICookieParser $parser = null) {
+        if ( ! $parser instanceof ICookieParser) {
+             $parser = new CookieParser();
+        }
+
+        return $parser->parse($string);
+    }
+
+    /**
      * @param null $name
      * @param null $value
      */

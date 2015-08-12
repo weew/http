@@ -92,7 +92,21 @@ class CookieTest extends PHPUnit_Framework_TestCase {
 
         $this->assertEquals(
             strtolower(array_get(xdebug_get_headers(), 0)),
-            strtolower('Set-Cookie: ' . $cookie->toString())
+            strtolower('set-cookie: ' . $cookie->toString())
+        );
+    }
+
+    public function test_create_from_string() {
+        $cookie = new Cookie('foo', 'bar');
+        $cookie->setSecure(true);
+        $cookie->setHttpOnly(true);
+        $cookie->setMaxAge(time());
+        $cookie->setDomain('google.com');
+        $cookie->setPath('/foo/bar');
+
+        $this->assertEquals(
+            $cookie->toArray(),
+            Cookie::createFromString($cookie->toString())->toArray()
         );
     }
 }
