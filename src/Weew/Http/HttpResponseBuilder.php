@@ -73,6 +73,6 @@ class HttpResponseBuilder implements IHttpResponseBuilder {
             return;
         }
 
-        header($header);
+        header($header, false);
     }
 }
