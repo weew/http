@@ -100,11 +100,20 @@ class Cookies implements ICookies {
         $headers = $this->headers->get('set-cookie');
 
         foreach ($headers as $header) {
-            $cookie = Cookie::createFromString($header);
+            $cookie = $this->createCookieFromHeader($header);
 
             if ($cookie !== null) {
                 $this->storeCookie($cookie);
             }
         }
+    }
+
+    /**
+     * @param $header
+     *
+     * @return ICookie
+     */
+    protected function createCookieFromHeader($header) {
+        return Cookie::createFromString($header);
     }
 }

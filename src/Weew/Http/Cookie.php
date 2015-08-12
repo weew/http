@@ -42,7 +42,7 @@ class Cookie implements ICookie {
      * @param $string
      * @param ICookieParser $parser
      *
-     * @return static
+     * @return ICookie
      */
     public static function createFromString($string, ICookieParser $parser = null) {
         if ( ! $parser instanceof ICookieParser) {
