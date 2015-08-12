@@ -18,6 +18,7 @@ class Cookies implements ICookies {
      */
     public function __construct(IHttpHeaders $headers) {
         $this->headers = $headers;
+        $this->searchCookiesInHeaders();
     }
 
     /**
@@ -38,8 +39,8 @@ class Cookies implements ICookies {
      * @param ICookie $cookie
      */
     public function add(ICookie $cookie) {
-        array_set($this->cookies, $cookie->getName(), $cookie);
-        $this->headers->add($this->getHeaderKey(), $cookie->toString());
+        $this->storeCookie($cookie);
+        $this->headers->add('set-cookie', $cookie->toString());
     }
 
     /**
@@ -61,11 +62,11 @@ class Cookies implements ICookies {
 
         if ($cookie !== null) {
             $cookie = $cookie->toString();
-            $headers = $this->headers->get($this->getHeaderKey());
+            $headers = $this->headers->get('set-cookie');
 
             foreach ($headers as $index => $header) {
                 if ($header == $cookie) {
-                    $this->headers->remove(s('%s.%s', $this->getHeaderKey(), $index));
+                    $this->headers->remove(s('%s.%s', 'set-cookie', $index));
                 }
             }
         }
@@ -86,9 +87,24 @@ class Cookies implements ICookies {
     }
 
     /**
-     * @return string
+     * @param ICookie $cookie
      */
-    protected function getHeaderKey() {
-        return 'set-cookie';
+    protected function storeCookie(ICookie $cookie) {
+        array_set($this->cookies, $cookie->getName(), $cookie);
+    }
+
+    /**
+     * Parse headers for cookies.
+     */
+    protected function searchCookiesInHeaders() {
+        $headers = $this->headers->get('set-cookie');
+
+        foreach ($headers as $header) {
+            $cookie = Cookie::createFromString($header);
+
+            if ($cookie !== null) {
+                $this->storeCookie($cookie);
+            }
+        }
     }
 }

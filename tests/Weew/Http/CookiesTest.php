@@ -42,4 +42,17 @@ class CookiesTest extends PHPUnit_Framework_TestCase {
             $cookies->findByName('foo') === $cookie
         );
     }
+
+    public function test_search_cookies_in_headers() {
+        $headers = new HttpHeaders();
+        $cookies = new Cookies($headers);
+        $cookies->add(new Cookie('foo', 'bar'));
+        $cookies->add(new Cookie('bar', 'baz'));
+
+        $cookies = new Cookies($headers);
+        $this->assertNotNull($cookies->findByName('foo'));
+        $this->assertEquals('bar', $cookies->findByName('foo')->getValue());
+        $this->assertNotNull($cookies->findByName('bar'));
+        $this->assertEquals('baz', $cookies->findByName('bar')->getValue());
+    }
 }
