@@ -23,11 +23,14 @@ class CookieJarTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_add() {
-        $jar = new CookieJar(new HttpHeaders(['cookie' => 'foo=bar;yolo=swag; bar=foo;']));
+        $headers = new HttpHeaders(['cookie' => 'foo=bar;yolo=swag; bar=foo;']);
+        $jar = new CookieJar($headers);
         $jar->set('xx', 'yy');
 
+        $this->assertEquals(1, count($headers->get('cookie')));
         $this->assertEquals(
             'yy', $jar->get('xx')
         );
+        $this->assertEquals(1, count($headers->get('cookie')));
     }
 }

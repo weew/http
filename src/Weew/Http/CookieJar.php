@@ -20,7 +20,9 @@ class CookieJar implements ICookieJar {
      * @param $value
      */
     public function set($key, $value) {
-        $this->headers->add('cookie', $this->formatCookie($key, $value));
+        $cookies = $this->parseCookies();
+        $cookies[$key] = $value;
+        $this->buildCookies($cookies);
     }
 
     /**
@@ -39,10 +41,28 @@ class CookieJar implements ICookieJar {
      * @return array
      */
     public function toArray() {
+        return $this->parseCookies();
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     *
+     * @return string
+     */
+    protected function formatCookie($key, $value) {
+        return s('%s=%s;', $key, $value);
+    }
+
+    /**
+     * @return array
+     */
+    protected function parseCookies() {
         $cookies = [];
 
         foreach ($this->headers->get('cookie') as $header) {
             $pairs = explode(';', $header);
+            
             foreach ($pairs as $pair) {
                 $parts = explode('=', $pair);
                 $key = trim(array_get($parts, 0, ''));
@@ -58,12 +78,15 @@ class CookieJar implements ICookieJar {
     }
 
     /**
-     * @param $key
-     * @param $value
-     *
-     * @return string
+     * @param array $cookies
      */
-    protected function formatCookie($key, $value) {
-        return s('%s=%s;', $key, $value);
+    protected function buildCookies(array $cookies) {
+        $header = '';
+
+        foreach ($cookies as $key => $value) {
+            $header.= $this->formatCookie($key, $value) . ' ';
+        }
+
+        $this->headers->set('cookie', $header);
     }
 }
