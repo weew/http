@@ -22,7 +22,7 @@ Host: localhost
 Connection: close
 ```
 
-#### Response content and content type
+#### Content and content type
 
 ```php
 $response = new HttpResponse();
