@@ -4,7 +4,7 @@ namespace Tests\Weew\Http;
 
 use PHPUnit_Framework_TestCase;
 use Weew\Http\HttpBasicAuth;
-use Weew\Http\ReceivedCookies;
+use Weew\Http\CookieJar;
 use Weew\Http\HttpData;
 use Weew\Http\HttpHeaders;
 use Weew\Http\HttpProtocol;
@@ -12,7 +12,7 @@ use Weew\Http\HttpQuery;
 use Weew\Http\HttpRequest;
 use Weew\Http\HttpRequestMethod;
 use Weew\Http\IHttpBasicAuth;
-use Weew\Http\IReceivedCookies;
+use Weew\Http\ICookieJar;
 use Weew\Http\IHttpData;
 use Weew\Http\IHttpHeaders;
 use Weew\Http\IHttpQuery;
@@ -113,11 +113,11 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
 
     public function test_get_and_set_cookie_jar() {
         $request = new HttpRequest();
-        $jar = new ReceivedCookies($request->getHeaders());
+        $jar = new CookieJar($request->getHeaders());
 
-        $this->assertTrue($request->getReceivedCookies() instanceof IReceivedCookies);
-        $request->setReceivedCookies($jar);
-        $this->assertTrue($jar === $request->getReceivedCookies());
+        $this->assertTrue($request->getCookieJar() instanceof ICookieJar);
+        $request->setCookieJar($jar);
+        $this->assertTrue($jar === $request->getCookieJar());
     }
 
     public function test_to_array() {
@@ -138,7 +138,7 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
                 'url' => $request->getUrl()->toString(),
                 'headers' => $request->getHeaders()->toArray(),
                 'data' => $request->getData()->toArray(),
-                'cookies' => $request->getReceivedCookies()->toArray(),
+                'cookies' => $request->getCookieJar()->toArray(),
                 'content' => $request->getContent(),
             ], $actual
         );

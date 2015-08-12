@@ -2,7 +2,7 @@
 
 namespace Weew\Http;
 
-class ReceivedCookies implements IReceivedCookies {
+class CookieJar implements ICookieJar {
     /**
      * @var IHttpHeaders
      */
@@ -16,17 +16,23 @@ class ReceivedCookies implements IReceivedCookies {
     }
 
     /**
-     * @param $name
-     *
-     * @return Cookie
+     * @param $key
+     * @param $value
      */
-    public function findByName($name) {
-        $cookies = $this->toArray();
-        $value = array_get($cookies, $name);
+    public function set($key, $value) {
+        $this->headers->add('cookie', $this->formatCookie($key, $value));
+    }
 
-        if ($value !== null) {
-            return new Cookie($name, $value);
-        }
+    /**
+     * @param $key
+     * @param null $default
+     *
+     * @return string
+     */
+    public function get($key, $default = null) {
+        $cookies = $this->toArray();
+
+        return array_get($cookies, $key, $default);
     }
 
     /**
@@ -49,5 +55,15 @@ class ReceivedCookies implements IReceivedCookies {
         }
 
         return $cookies;
+    }
+
+    /**
+     * @param $key
+     * @param $value
+     *
+     * @return string
+     */
+    protected function formatCookie($key, $value) {
+        return s('%s=%s;', $key, $value);
     }
 }

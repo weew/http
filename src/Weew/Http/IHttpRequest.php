@@ -11,7 +11,7 @@ interface IHttpRequest extends
     IBasicAuthHolder,
     IContentHolder,
     IHttpDataHolder,
-    IReceivedCookiesHolder,
+    ICookieJarHolder,
     IArrayable {
     /**
      * @return string

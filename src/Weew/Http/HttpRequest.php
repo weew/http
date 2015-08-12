@@ -32,7 +32,7 @@ class HttpRequest implements IHttpRequest {
     protected $data;
 
     /**
-     * @var IReceivedCookies
+     * @var ICookieJar
      */
     protected $cookieJar;
 
@@ -55,13 +55,13 @@ class HttpRequest implements IHttpRequest {
      * @param string $method
      * @param null|IUrl $url
      * @param IHttpHeaders $headers
-     * @param IReceivedCookies $cookieJar
+     * @param ICookieJar $cookieJar
      */
     public function __construct(
         $method = HttpRequestMethod::GET,
         IUrl $url = null,
         IHttpHeaders $headers = null,
-        IReceivedCookies $cookieJar = null
+        ICookieJar $cookieJar = null
     ) {
         $this->setMethod($method);
 
@@ -77,11 +77,11 @@ class HttpRequest implements IHttpRequest {
 
         $this->setHeaders($headers);
 
-        if ( ! $headers instanceof IReceivedCookies) {
+        if ( ! $headers instanceof ICookieJar) {
             $cookieJar = $this->createCookieJar();
         }
 
-        $this->setReceivedCookies($cookieJar);
+        $this->setCookieJar($cookieJar);
 
         $this->setData($this->createData());
         $this->setBasicAuth($this->createBasicAuth());
@@ -112,16 +112,16 @@ class HttpRequest implements IHttpRequest {
     }
 
     /**
-     * @return IReceivedCookies
+     * @return ICookieJar
      */
-    public function getReceivedCookies() {
+    public function getCookieJar() {
         return $this->cookieJar;
     }
 
     /**
-     * @param IReceivedCookies $cookieJar
+     * @param ICookieJar $cookieJar
      */
-    public function setReceivedCookies(IReceivedCookies $cookieJar) {
+    public function setCookieJar(ICookieJar $cookieJar) {
         $this->cookieJar = $cookieJar;
     }
 
@@ -138,10 +138,10 @@ class HttpRequest implements IHttpRequest {
     }
 
     /**
-     * @return ReceivedCookies
+     * @return CookieJar
      */
     protected function createCookieJar() {
-        return new ReceivedCookies($this->getHeaders());
+        return new CookieJar($this->getHeaders());
     }
 
     /**
@@ -339,7 +339,7 @@ class HttpRequest implements IHttpRequest {
             'url' => $this->getUrl()->toString(),
             'headers' => $this->getHeaders()->toArray(),
             'data' => $this->getData()->toArray(),
-            'cookies' => $this->getReceivedCookies()->toArray(),
+            'cookies' => $this->getCookieJar()->toArray(),
             'content' => $this->getContent(),
         ];
     }
