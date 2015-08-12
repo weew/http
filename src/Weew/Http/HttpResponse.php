@@ -12,7 +12,7 @@ class HttpResponse implements IHttpResponse {
     protected $headers;
 
     /**
-     * @var IQueuedCookies
+     * @var ICookies
      */
     protected $cookies;
 
@@ -40,13 +40,13 @@ class HttpResponse implements IHttpResponse {
      * @param int $statusCode
      * @param null $content
      * @param IHttpHeaders $headers
-     * @param IQueuedCookies $cookies
+     * @param ICookies $cookies
      */
     public function __construct(
         $statusCode = HttpStatusCode::OK,
         $content = null,
         IHttpHeaders $headers = null,
-        IQueuedCookies $cookies = null
+        ICookies $cookies = null
     ) {
         if ( ! $headers instanceof IHttpHeaders) {
             $headers = $this->createHeaders();
@@ -54,11 +54,11 @@ class HttpResponse implements IHttpResponse {
 
         $this->setHeaders($headers);
 
-        if ( ! $cookies instanceof IQueuedCookies) {
+        if ( ! $cookies instanceof ICookies) {
             $cookies = $this->createCookies();
         }
 
-        $this->setQueuedCookies($cookies);
+        $this->setCookies($cookies);
 
         if ($statusCode === null) {
             $statusCode = HttpStatusCode::OK;
@@ -149,10 +149,10 @@ class HttpResponse implements IHttpResponse {
     }
 
     /**
-     * @return QueuedCookies
+     * @return Cookies
      */
     protected function createCookies() {
-        return new QueuedCookies($this->getHeaders());
+        return new Cookies($this->getHeaders());
     }
 
     /**
@@ -227,16 +227,16 @@ class HttpResponse implements IHttpResponse {
     }
 
     /**
-     * @return IQueuedCookies
+     * @return ICookies
      */
-    public function getQueuedCookies() {
+    public function getCookies() {
         return $this->cookies;
     }
 
     /**
-     * @param IQueuedCookies $cookies
+     * @param ICookies $cookies
      */
-    public function setQueuedCookies(IQueuedCookies $cookies) {
+    public function setCookies(ICookies $cookies) {
         $this->cookies = $cookies;
     }
 
@@ -317,7 +317,7 @@ class HttpResponse implements IHttpResponse {
         $this->setProtocolVersion($response->getProtocolVersion());
         $this->setStatusCode($response->getStatusCode());
         $this->setContent($response->getContent());
-        $this->setQueuedCookies(clone($response->getQueuedCookies()));
+        $this->setCookies(clone($response->getCookies()));
 
         $this->setDefaultContentType();
     }

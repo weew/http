@@ -5,12 +5,12 @@ namespace Tests\Weew\Http;
 use PHPUnit_Framework_TestCase;
 use Tests\Weew\Http\Mocks\StringableItem;
 use Weew\Http\Cookie;
-use Weew\Http\QueuedCookies;
+use Weew\Http\Cookies;
 use Weew\Http\HttpHeaders;
 use Weew\Http\HttpProtocol;
 use Weew\Http\HttpResponse;
 use Weew\Http\HttpStatusCode;
-use Weew\Http\IQueuedCookies;
+use Weew\Http\ICookies;
 use Weew\Http\IHttpHeaders;
 
 class HttpResponseTest extends PHPUnit_Framework_TestCase {
@@ -136,7 +136,7 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase {
         $httpResponse = new HttpResponse(
             HttpStatusCode::NOT_FOUND, 'yolo',$headers
         );
-        $httpResponse->getQueuedCookies()->add($cookie);
+        $httpResponse->getCookies()->add($cookie);
         $customResponse = new HttpResponse();
         $customResponse->extend($httpResponse);
         $this->assertEquals(
@@ -161,10 +161,10 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase {
             $customResponse->getHeaders() === $headers
         );
         $this->assertEquals(
-            'bar', $customResponse->getQueuedCookies()->findByName('foo')->getValue()
+            'bar', $customResponse->getCookies()->findByName('foo')->getValue()
         );
         $this->assertFalse(
-            $customResponse->getQueuedCookies()->findByName('foo') === $cookie
+            $customResponse->getCookies()->findByName('foo') === $cookie
         );
     }
 
@@ -180,10 +180,10 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase {
 
     public function test_cookies() {
         $response = new HttpResponse();
-        $cookies = new QueuedCookies($response->getHeaders());
-        $this->assertTrue($response->getQueuedCookies() instanceof IQueuedCookies);
-        $response->setQueuedCookies($cookies);
-        $this->assertTrue($cookies === $response->getQueuedCookies());
+        $cookies = new Cookies($response->getHeaders());
+        $this->assertTrue($response->getCookies() instanceof ICookies);
+        $response->setCookies($cookies);
+        $this->assertTrue($cookies === $response->getCookies());
     }
 
     public function test_to_array() {

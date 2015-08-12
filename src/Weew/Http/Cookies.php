@@ -2,7 +2,7 @@
 
 namespace Weew\Http;
 
-class QueuedCookies implements IQueuedCookies {
+class Cookies implements ICookies {
     /**
      * @var array
      */

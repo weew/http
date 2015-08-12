@@ -4,13 +4,13 @@ namespace tests\Weew\Http;
 
 use PHPUnit_Framework_TestCase;
 use Weew\Http\Cookie;
-use Weew\Http\QueuedCookies;
+use Weew\Http\Cookies;
 use Weew\Http\HttpHeaders;
 
-class QueuedCookiesTest extends PHPUnit_Framework_TestCase {
+class CookiesTest extends PHPUnit_Framework_TestCase {
     public function test_getters_and_setters() {
         $headers = new HttpHeaders();
-        $cookies = new QueuedCookies($headers);
+        $cookies = new Cookies($headers);
         $cookie = new Cookie('foo', 'bar');
         $this->assertEquals(0, count($cookies->toArray()));
         $this->assertNull($cookies->findByName('foo'));
@@ -30,7 +30,7 @@ class QueuedCookiesTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_clone() {
-        $cookies = new QueuedCookies(new HttpHeaders());
+        $cookies = new Cookies(new HttpHeaders());
         $cookie = new Cookie('foo', 'bar');
         $cookies->add($cookie);
         $cookies = clone($cookies);

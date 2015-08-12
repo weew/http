@@ -9,7 +9,7 @@ interface IHttpResponse extends
     IContentHolder,
     IHttpProtocolHolder,
     IStatusHolder,
-    IQueuedCookiesHolder,
+    ICookiesHolder,
     ISendable,
     IArrayable {
 }

@@ -4,7 +4,7 @@ namespace Weew\Http;
 
 use Weew\Foundation\Interfaces\IArrayable;
 
-interface IQueuedCookies extends IArrayable {
+interface ICookies extends IArrayable {
     /**
      * @param ICookie $cookie
      */
