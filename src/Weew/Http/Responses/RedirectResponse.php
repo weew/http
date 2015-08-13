@@ -4,6 +4,7 @@ namespace Weew\Http\Responses;
 
 use Weew\Http\HttpResponse;
 use Weew\Http\HttpStatusCode;
+use Weew\Http\IHttpHeaders;
 use Weew\Http\IRedirectable;
 use Weew\Url\IUrl;
 
