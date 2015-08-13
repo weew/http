@@ -141,11 +141,8 @@ class HttpData implements IHttpData {
             return null;
         }
 
-        if ($this->isUrlEncoded()) {
-            return http_build_query($this->getData());
-        } else if ($this->isMultipart()) {
-            // todo
-        }
+        // todo: handle multipart data
+        return http_build_query($this->getData());
     }
 
     /**

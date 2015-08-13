@@ -46,4 +46,45 @@ class HttpResponseBuilderTest extends PHPUnit_Framework_TestCase {
         $builder->sendContent($response);
         $this->assertEquals('bar', ob_get_clean());
     }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function test_send_headers() {
+        if ( ! function_exists('xdebug_get_headers')) {
+            throw new Exception(
+                'Test skipped, missing required function xdebug_get_headers.'
+            );
+        }
+
+        $builder = new HttpResponseBuilder();
+        $response = new HttpResponse();
+        $count = count(xdebug_get_headers());
+
+        $response->getHeaders()->set('foo', 'bar');
+        $builder->sendHeader('yolo');
+
+        $this->assertFalse(headers_sent());
+        $builder->sendHeaders($response);
+        $this->assertTrue(count(xdebug_get_headers()) > $count);
+    }
+
+    public function test_send_headers_while_headers_already_sent() {
+        if ( ! function_exists('xdebug_get_headers')) {
+            throw new Exception(
+                'Test skipped, missing required function xdebug_get_headers.'
+            );
+        }
+
+        $builder = new HttpResponseBuilder();
+        $response = new HttpResponse();
+        $count = count(xdebug_get_headers());
+
+        // headers already sent
+        $this->assertTrue(headers_sent());
+        $response->getHeaders()->set('bar', 'foo');
+        $builder->sendHeader('yolo');
+        $builder->sendHeaders($response);
+        $this->assertTrue(count(xdebug_get_headers()) == $count);
+    }
 }

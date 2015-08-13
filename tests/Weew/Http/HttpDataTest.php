@@ -11,8 +11,10 @@ class HttpDataTest extends PHPUnit_Framework_TestCase {
     public function test_get_data_encoded() {
         $request = new HttpRequest();
         $data = new HttpData($request);
-        $request->setContent('foo=bar');
 
+        $this->assertNull($data->getDataEncoded());
+
+        $request->setContent('foo=bar');
         $this->assertEquals(
             'foo=bar', $data->getDataEncoded()
         );

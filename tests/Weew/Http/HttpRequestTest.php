@@ -143,4 +143,18 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
             ], $actual
         );
     }
+
+    public function test_has_content() {
+        $request = new HttpRequest();
+        $this->assertFalse($request->hasContent());
+        $request->setContent('foo');
+        $this->assertTrue($request->hasContent());
+    }
+
+    public function test_is_secure() {
+        $request = new HttpRequest();
+        $this->assertFalse($request->isSecure());
+        $request->setProtocol(HttpProtocol::HTTPS);
+        $this->assertTrue($request->isSecure());
+    }
 }

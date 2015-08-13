@@ -16,14 +16,16 @@ class JsonResponse extends HttpResponse implements IJsonContentHolder {
     }
 
     /**
-     * @param bool $assoc
+     * @param bool|true $assoc
      *
-     * @return array
+     * @return string|null
      */
     public function getJsonContent($assoc = true) {
         if ($this->hasContent()) {
             return json_decode($this->getContent(), $assoc);
         }
+
+        return null;
     }
 
     /**

@@ -18,7 +18,7 @@ class CookieParserTest extends PHPUnit_Framework_TestCase {
         $this->assertFalse($cookie->hasDomain());
 
         $cookie = $parser->parse(
-            'foo=bar; expires=Wed, 23-Mar-2061 18:03:40 GMT; max-age=1439413310; path=/foo/bar; domain=google.com; secure; httpOnly'
+            'bad1=; bad2; =bad3; foo=bar; expires=Wed, 23-Mar-2061 18:03:40 GMT; max-age=1439413310; path=/foo/bar; domain=google.com; secure; httpOnly'
         );
         $this->assertTrue($cookie->isSecure());
         $this->assertTrue($cookie->isHttpOnly());

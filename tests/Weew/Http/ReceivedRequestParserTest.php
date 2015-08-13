@@ -5,6 +5,7 @@ namespace tests\Weew\Http;
 use PHPUnit_Framework_TestCase;
 use Weew\Http\HttpRequest;
 use Weew\Http\IHttpHeaders;
+use Weew\Http\IHttpRequest;
 use Weew\Http\ReceivedRequestParser;
 
 class ReceivedRequestParserTest extends PHPUnit_Framework_TestCase {
@@ -56,5 +57,14 @@ class ReceivedRequestParserTest extends PHPUnit_Framework_TestCase {
 
         $parser->setContent($request, 'foo');
         $this->assertEquals('foo', $request->getContent());
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function test_parse_request() {
+        $parser = new ReceivedRequestParser();
+        $request = $parser->parseRequest();
+        $this->assertTrue($request instanceof IHttpRequest);
     }
 }

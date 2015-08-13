@@ -36,9 +36,11 @@ class CookieTest extends PHPUnit_Framework_TestCase {
         $cookie->setDomain('bar');
         $this->assertTrue($cookie->hasDomain());
         $this->assertEquals('bar', $cookie->getDomain());
+        $this->assertNull($cookie->getExpires());
         $this->assertFalse($cookie->hasMaxAge());
         $cookie->setMaxAge(1);
         $this->assertTrue($cookie->hasMaxAge());
+        $this->assertEquals(time() + 1, $cookie->getExpires());
         $this->assertEquals(1, $cookie->getMaxAge());
         $this->assertEquals(time() + 1, $cookie->getExpires());
         $this->assertTrue($cookie->isHttpOnly());

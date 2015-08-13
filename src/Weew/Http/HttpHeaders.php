@@ -25,10 +25,6 @@ class HttpHeaders implements IHttpHeaders {
         $key = $this->formatKey($key);
         $headers = $this->get($key);
 
-        if ($headers === null) {
-            $headers = [];
-        }
-
         $headers[] = $value;
 
         array_set($this->headers, $key, $headers);

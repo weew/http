@@ -19,7 +19,7 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_set_and_get_status_code() {
-        $response = new HttpResponse();
+        $response = new HttpResponse(null);
 
         $this->assertEquals(
             HttpStatusCode::OK, $response->getStatusCode()
@@ -200,5 +200,25 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase {
             ],
             $response->toArray()
         );
+    }
+
+    public function test_is_secure() {
+        $response = new HttpResponse();
+        $this->assertFalse($response->isSecure());
+        $response->setProtocol(HttpProtocol::HTTPS);
+        $this->assertTrue($response->isSecure());
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function test_sending_response() {
+        $response = new HttpResponse();
+        ob_start();
+        $response->send();
+        $result = ob_get_clean();
+        $this->assertNotNull($result);
+
+        // todo: control result
     }
 }

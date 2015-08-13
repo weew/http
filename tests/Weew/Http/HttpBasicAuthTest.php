@@ -74,4 +74,17 @@ class HttpBasicAuthTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('foo', $auth->getUsername());
         $this->assertEquals('bar', $auth->getPassword());
     }
+
+    public function test_to_array() {
+        $auth = new HttpBasicAuth(new HttpHeaders(), 'foo', 'bar');
+
+        $this->assertEquals(
+            [
+                'username' => $auth->getUsername(),
+                'password' => $auth->getPassword(),
+                'token' => $auth->getToken(),
+            ],
+            $auth->toArray()
+        );
+    }
 }

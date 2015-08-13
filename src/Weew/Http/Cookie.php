@@ -206,7 +206,7 @@ class Cookie implements ICookie {
      * @return bool
      */
     public function isSecure() {
-        return $this->getSecure() == true;
+        return $this->getSecure() === true;
     }
 
     /**
@@ -227,7 +227,7 @@ class Cookie implements ICookie {
      * @return bool
      */
     public function isHttpOnly() {
-        return $this->getHttpOnly() == true;
+        return $this->getHttpOnly() === true;
     }
 
     /**
