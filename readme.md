@@ -1,7 +1,8 @@
 # HTTP layer for PHP
 
 [![Build Status](https://travis-ci.org/weew/php-http.svg?branch=master)](https://travis-ci.org/weew/php-http)
-[![Code Climate](https://codeclimate.com/github/weew/php-http/badges/gpa.svg)](https://codeclimate.com/github/weew/php-http)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/weew/php-http/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/weew/php-http/?branch=master)
+[![Coverage Status](https://coveralls.io/repos/weew/php-http/badge.svg?branch=master&service=github)](https://coveralls.io/github/weew/php-http?branch=master)
 [![License](https://poser.pugx.org/weew/php-http/license)](https://packagist.org/packages/weew/php-http)
 
 ## Motivation
