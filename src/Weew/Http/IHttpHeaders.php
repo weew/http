@@ -14,6 +14,11 @@ interface IHttpHeaders extends IArrayable {
     function add($key, $value);
 
     /**
+     * @param array $headers
+     */
+    function addMany(array $headers);
+
+    /**
      * Find the last added header.
      *
      * @param $key

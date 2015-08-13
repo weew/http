@@ -12,15 +12,7 @@ class HttpHeaders implements IHttpHeaders {
      * @param array $headers
      */
     public function __construct(array $headers = []) {
-        foreach ($headers as $key => $value) {
-            if (is_array($value)) {
-                foreach ($value as $header) {
-                    $this->add($key, $header);
-                }
-            } else {
-                $this->set($key, $value);
-            }
-        }
+        $this->addMany($headers);
     }
 
     /**
@@ -40,6 +32,21 @@ class HttpHeaders implements IHttpHeaders {
         $headers[] = $value;
 
         array_set($this->headers, $key, $headers);
+    }
+
+    /**
+     * @param array $headers
+     */
+    public function addMany(array $headers) {
+        foreach ($headers as $key => $value) {
+            if (is_array($value)) {
+                foreach ($value as $header) {
+                    $this->add($key, $header);
+                }
+            } else {
+                $this->set($key, $value);
+            }
+        }
     }
 
     /**
