@@ -22,11 +22,11 @@ class ReceivedHeadersParser implements IReceivedHeadersParser {
 
     /**
      * @param IHttpHeaders $headers
-     * @param array $source
+     * @param array $server
      * @param string $prefix
      */
-    public function extractPrefixedHeaders(IHttpHeaders $headers, array $source, $prefix = 'HTTP_') {
-        foreach ($source as $header => $value) {
+    public function extractPrefixedHeaders(IHttpHeaders $headers, array $server, $prefix = 'HTTP_') {
+        foreach ($server as $header => $value) {
             if (str_starts_with($header, $prefix)) {
                 $headers->add(
                     $this->formatHeaderAndRemovePrefix($header, $prefix), $value
@@ -37,15 +37,15 @@ class ReceivedHeadersParser implements IReceivedHeadersParser {
 
     /**
      * @param IHttpHeaders $headers
-     * @param array $source
+     * @param array $server
      * @param array $specialHeaders
      */
     public function extractSpecialHeaders(
         IHttpHeaders $headers,
-        array $source,
+        array $server,
         array $specialHeaders
     ) {
-        foreach ($source as $header => $value) {
+        foreach ($server as $header => $value) {
             if (in_array($header, $specialHeaders)) {
                 $headers->add(
                     $this->formatHeader($header), $value
@@ -56,25 +56,25 @@ class ReceivedHeadersParser implements IReceivedHeadersParser {
 
     /**
      * @param IHttpHeaders $headers
-     * @param array $source
+     * @param array $server
      */
-    public function extractAuthHeaders(IHttpHeaders $headers, array $source) {
+    public function extractAuthHeaders(IHttpHeaders $headers, array $server) {
         if ( ! $headers->has('authorization')) {
-            $this->writeBasicAuthHeaders($headers, $source);
+            $this->writeBasicAuthHeaders($headers, $server);
         }
 
         if ( ! $headers->has('authorization')) {
-            $this->writeCommonAuthHeaders($headers, $source);
+            $this->writeCommonAuthHeaders($headers, $server);
         }
     }
 
     /**
      * @param IHttpHeaders $headers
-     * @param array $source
+     * @param array $server
      */
-    public function writeBasicAuthHeaders(IHttpHeaders $headers, array $source) {
-        $username = array_get($source, 'PHP_AUTH_USER');
-        $password = array_get($source, 'PHP_AUTH_PW');
+    public function writeBasicAuthHeaders(IHttpHeaders $headers, array $server) {
+        $username = array_get($server, 'PHP_AUTH_USER');
+        $password = array_get($server, 'PHP_AUTH_PW');
 
         if ($username !== null) {
             new HttpBasicAuth($headers, $username, $password);
@@ -83,25 +83,13 @@ class ReceivedHeadersParser implements IReceivedHeadersParser {
 
     /**
      * @param IHttpHeaders $headers
-     * @param array $source
+     * @param array $server
      */
-    public function writeCommonAuthHeaders(IHttpHeaders $headers, array $source) {
-        $auth = null;
+    public function writeCommonAuthHeaders(IHttpHeaders $headers, array $server) {
+        $auth = $this->findAuthHeader($server);
 
-        if (array_has($source, 'HTTP_AUTHORIZATION')) {
-            $auth = array_get($source, 'HTTP_AUTHORIZATION');
-        } else if (array_has($source, 'REDIRECT_HTTP_AUTHORIZATION')) {
-            $auth = array_get($source, 'REDIRECT_HTTP_AUTHORIZATION');
-        }
-
-        if ($auth !== null) {
-            if (
-                str_starts_with($auth, 'basic') ||
-                str_starts_with($auth, 'digest') ||
-                str_starts_with($auth, 'bearer')
-            ) {
-                $headers->set('authorization', $auth);
-            }
+        if ($this->authIsValid($auth)) {
+            $headers->set('authorization', $auth);
         }
     }
 
@@ -138,5 +126,39 @@ class ReceivedHeadersParser implements IReceivedHeadersParser {
             $specialHeaders,
             ['CONTENT_LENGTH', 'CONTENT_MD5', 'CONTENT_TYPE']
         );
+    }
+
+    /**
+     * @param array $server
+     *
+     * @return string|null
+     */
+    protected function findAuthHeader(array $server) {
+        if (array_has($server, 'HTTP_AUTHORIZATION')) {
+            return array_get($server, 'HTTP_AUTHORIZATION');
+        } else if (array_has($server, 'REDIRECT_HTTP_AUTHORIZATION')) {
+            return array_get($server, 'REDIRECT_HTTP_AUTHORIZATION');
+        }
+
+        return null;
+    }
+
+    /**
+     * @param $auth
+     *
+     * @return bool
+     */
+    protected function authIsValid($auth) {
+        if ($auth !== null) {
+            if (
+                str_starts_with($auth, 'basic') ||
+                str_starts_with($auth, 'digest') ||
+                str_starts_with($auth, 'bearer')
+            ) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

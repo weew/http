@@ -38,11 +38,14 @@ class JsonRequest extends HttpRequest implements IJsonContentHolder {
     public function setJsonContent($content, $options = 0) {
         if ($content instanceof IJsonable) {
             $content = $content->toJson($options);
-        } else if ($content instanceof IArrayable) {
-            $content = json_encode($content->toArray(), $options);
         } else {
+            if ($content instanceof IArrayable) {
+                $content = $content->toArray();
+            }
+
             $content = json_encode($content, $options);
         }
+
         $this->setContent($content);
     }
 }

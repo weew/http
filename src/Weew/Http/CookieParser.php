@@ -49,15 +49,35 @@ class CookieParser {
             return;
         }
 
-        list($key, $value) = explode('=', $string);
-
-        $key = trim($key);
-        $value = trim($value);
+        list($key, $value) = $this->parseKeyValuePair($string);
 
         if (strlen($key) == 0 || strlen($value) == 0) {
             return;
         }
 
+        $this->attachKeyValuePair($cookie, $key, $value);
+    }
+
+    /**
+     * @param $string
+     *
+     * @return array
+     */
+    protected function parseKeyValuePair($string) {
+        list($key, $value) = explode('=', $string);
+
+        $key = trim($key);
+        $value = trim($value);
+
+        return [$key, $value];
+    }
+
+    /**
+     * @param ICookie $cookie
+     * @param $key
+     * @param $value
+     */
+    protected function attachKeyValuePair(ICookie $cookie, $key, $value) {
         if ($key == 'max-age') {
             $cookie->setMaxAge(intval($value));
         } else if ($key == 'path') {

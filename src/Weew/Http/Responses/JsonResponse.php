@@ -33,11 +33,13 @@ class JsonResponse extends HttpResponse implements IJsonContentHolder {
      * @param int $options
      */
     public function setJsonContent($content, $options = 0) {
-        if ($content instanceof IArrayable) {
-            $content = json_encode($content->toArray(), $options);
-        } else if ($content instanceof IJsonable) {
+        if ($content instanceof IJsonable) {
             $content = $content->toJson($options);
         } else {
+            if ($content instanceof IArrayable) {
+                $content = $content->toArray();
+            }
+
             $content = json_encode($content, $options);
         }
 
