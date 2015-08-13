@@ -135,15 +135,9 @@ class ReceivedHeadersParserTest extends PHPUnit_Framework_TestCase {
             $expected,
             $parser->parseHeaders($source, $specialHeaders)->toDistinctArray()
         );
-
-        $server = $_SERVER;
-
-        $_SERVER = $source;
         $this->assertEquals(
             $expected,
-            $parser->parseHeaders(null, $specialHeaders)->toDistinctArray()
+            $parser->parseHeaders($source, $specialHeaders)->toDistinctArray()
         );
-
-        $_SERVER = $server;
     }
 }

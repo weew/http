@@ -61,7 +61,7 @@ class ReceivedRequestParserTest extends PHPUnit_Framework_TestCase {
      */
     public function test_parse_request() {
         $parser = new ReceivedRequestParser();
-        $request = $parser->parseRequest();
+        $request = $parser->parseRequest($_SERVER);
         $this->assertTrue($request instanceof IHttpRequest);
     }
 }

@@ -4,9 +4,9 @@ namespace Weew\Http;
 
 interface IReceivedHeadersParser {
     /**
-     * @param array $source
+     * @param array $server
      *
      * @return IHttpHeaders
      */
-    function parseHeaders(array $source);
+    function parseHeaders(array $server);
 }

@@ -4,22 +4,18 @@ namespace Weew\Http;
 
 class ReceivedHeadersParser implements IReceivedHeadersParser {
     /**
-     * @param array|null $source
+     * @param array $server
      * @param array $specialHeaders
      *
      * @return HttpHeaders
      */
-    public function parseHeaders(array $source = null, array $specialHeaders = []) {
-        if ($source === null) {
-            $source = $_SERVER;
-        }
-
+    public function parseHeaders(array $server, array $specialHeaders = []) {
         $specialHeaders = $this->getSpecialHeaders($specialHeaders);
 
         $headers = new HttpHeaders();
-        $this->extractPrefixedHeaders($headers, $source);
-        $this->extractSpecialHeaders($headers, $source, $specialHeaders);
-        $this->extractAuthHeaders($headers, $source);
+        $this->extractPrefixedHeaders($headers, $server);
+        $this->extractSpecialHeaders($headers, $server, $specialHeaders);
+        $this->extractAuthHeaders($headers, $server);
 
         return $headers;
     }
@@ -100,8 +96,8 @@ class ReceivedHeadersParser implements IReceivedHeadersParser {
 
         if ($auth !== null) {
             if (
-                str_starts_with($auth, 'basic') or
-                str_starts_with($auth, 'digest') or
+                str_starts_with($auth, 'basic') ||
+                str_starts_with($auth, 'digest') ||
                 str_starts_with($auth, 'bearer')
             ) {
                 $headers->set('authorization', $auth);
