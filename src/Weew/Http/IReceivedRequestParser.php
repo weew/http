@@ -4,7 +4,9 @@ namespace Weew\Http;
 
 interface IReceivedRequestParser {
     /**
+     * @param array $source
+     *
      * @return IHttpRequest
      */
-    function parseRequest();
+    function parseRequest(array $source);
 }

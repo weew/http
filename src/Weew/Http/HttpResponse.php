@@ -276,7 +276,7 @@ class HttpResponse implements IHttpResponse {
      * @return bool
      */
     public function isRedirect() {
-        return $this->getStatusCode() >= 300 and $this->getStatusCode() < 400;
+        return $this->getStatusCode() >= 300 && $this->getStatusCode() < 400;
     }
 
     /**
@@ -303,7 +303,7 @@ class HttpResponse implements IHttpResponse {
      * @return bool
      */
     public function isError() {
-        return $this->isClientError() or $this->isServerError();
+        return $this->isClientError() || $this->isServerError();
     }
 
     /**

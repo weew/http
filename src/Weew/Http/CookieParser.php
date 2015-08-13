@@ -54,7 +54,7 @@ class CookieParser {
         $key = trim($key);
         $value = trim($value);
 
-        if (strlen($key) == 0 or strlen($value) == 0) {
+        if (strlen($key) == 0 || strlen($value) == 0) {
             return;
         }
 
