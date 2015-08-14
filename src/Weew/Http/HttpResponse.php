@@ -67,10 +67,6 @@ class HttpResponse implements IHttpResponse {
         $this->setStatusCode($statusCode);
         $this->setContent($content);
 
-        if ($this->getContentType() === null) {
-            $this->setDefaultContentType();
-        }
-
         $this->setDefaults();
     }
 
@@ -139,7 +135,11 @@ class HttpResponse implements IHttpResponse {
     /**
      * Use this as hook to extend your custom response.
      */
-    protected function setDefaults() {}
+    protected function setDefaults() {
+        if ($this->getContentType() === null) {
+            $this->setDefaultContentType();
+        }
+    }
 
     /**
      * @return HttpHeaders

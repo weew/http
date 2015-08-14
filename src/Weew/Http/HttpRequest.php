@@ -86,14 +86,6 @@ class HttpRequest implements IHttpRequest {
         $this->setData($this->createData());
         $this->setBasicAuth($this->createBasicAuth());
 
-        if ($this->getAccept() === null) {
-            $this->setDefaultAccept();
-        }
-
-        if ($this->getContentType() === null) {
-            $this->setDefaultContentType();
-        }
-
         $this->setDefaults();
     }
 
@@ -128,7 +120,15 @@ class HttpRequest implements IHttpRequest {
     /**
      * Use this as hook to extend your custom request.
      */
-    protected function setDefaults() {}
+    protected function setDefaults() {
+        if ($this->getAccept() === null) {
+            $this->setDefaultAccept();
+        }
+
+        if ($this->getContentType() === null) {
+            $this->setDefaultContentType();
+        }
+    }
 
     /**
      * @return HttpHeaders
