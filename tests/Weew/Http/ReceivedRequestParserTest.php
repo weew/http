@@ -64,4 +64,19 @@ class ReceivedRequestParserTest extends PHPUnit_Framework_TestCase {
         $request = $parser->parseRequest($_SERVER);
         $this->assertTrue($request instanceof IHttpRequest);
     }
+
+    public function test_get_fake_method() {
+        $parser = new ReceivedRequestParser();
+
+        $this->assertEquals(
+            'GET', $parser->getMethod(['_method' => 'get'])
+        );
+        $this->assertEquals(
+            'POST', $parser->getMethod(['_method' => 'POST'])
+        );
+        $this->assertEquals(
+            'DELETE',
+            $parser->getMethod(['_method' => 'foo', 'REQUEST_METHOD' => 'DELETE'])
+        );
+    }
 }

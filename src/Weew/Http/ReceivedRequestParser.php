@@ -38,7 +38,17 @@ class ReceivedRequestParser implements IReceivedRequestParser {
      * @return mixed
      */
     public function getMethod(array $server) {
-        return array_get($server, 'REQUEST_METHOD');
+        $method = array_get($server, 'REQUEST_METHOD');
+
+        if (array_has($server, '_method')) {
+            $_method = strtoupper(array_get($server, '_method'));
+
+            if (in_array($_method, HttpRequestMethod::getMethods())) {
+                return $_method;
+            }
+        }
+
+        return $method;
     }
 
     /**
