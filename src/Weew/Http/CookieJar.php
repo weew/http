@@ -4,7 +4,7 @@ namespace Weew\Http;
 
 class CookieJar implements ICookieJar {
     /**
-     * @var IHttpHeaders
+     * @var IHttpHeadersHolder
      */
     protected $holder;
 
