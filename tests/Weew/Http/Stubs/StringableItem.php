@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Weew\Http\Mocks;
+namespace Tests\Weew\Http\Stubs;
 
 use Weew\Foundation\Interfaces\IStringable;
 

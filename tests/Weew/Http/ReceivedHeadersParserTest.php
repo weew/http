@@ -5,6 +5,7 @@ namespace tests\Weew\Http;
 use PHPUnit_Framework_TestCase;
 use Weew\Http\HttpBasicAuth;
 use Weew\Http\HttpHeaders;
+use Weew\Http\HttpRequest;
 use Weew\Http\ReceivedHeadersParser;
 
 class ReceivedHeadersParserTest extends PHPUnit_Framework_TestCase {
@@ -52,11 +53,11 @@ class ReceivedHeadersParserTest extends PHPUnit_Framework_TestCase {
         $source = ['PHP_AUTH_USER' => 'foo', 'PHP_AUTH_PW' => 'bar'];
         $parser->writeBasicAuthHeaders($headers, $source);
 
-        $expectedHeaders = new HttpHeaders();
-        new HttpBasicAuth($expectedHeaders, 'foo', 'bar');
+        $request = new HttpRequest();
+        new HttpBasicAuth($request, 'foo', 'bar');
 
         $this->assertEquals(
-            $expectedHeaders->toDistinctArray(), $headers->toDistinctArray()
+            $request->getHeaders()->toDistinctArray(), $headers->toDistinctArray()
         );
     }
 

@@ -9,15 +9,15 @@ class Cookies implements ICookies {
     protected $cookies = [];
 
     /**
-     * @var IHttpHeaders
+     * @var IHttpHeadersHolder
      */
-    private $headers;
+    private $holder;
 
     /**
-     * @param IHttpHeaders $headers
+     * @param IHttpHeadersHolder $holder
      */
-    public function __construct(IHttpHeaders $headers) {
-        $this->headers = $headers;
+    public function __construct(IHttpHeadersHolder $holder) {
+        $this->holder = $holder;
         $this->searchCookiesInHeaders();
     }
 
@@ -40,7 +40,7 @@ class Cookies implements ICookies {
      */
     public function add(ICookie $cookie) {
         $this->storeCookie($cookie);
-        $this->headers->add('set-cookie', $cookie->toString());
+        $this->holder->getHeaders()->add('set-cookie', $cookie->toString());
     }
 
     /**
@@ -62,11 +62,11 @@ class Cookies implements ICookies {
 
         if ($cookie !== null) {
             $cookie = $cookie->toString();
-            $headers = $this->headers->get('set-cookie');
+            $headers = $this->holder->getHeaders()->get('set-cookie');
 
             foreach ($headers as $index => $header) {
                 if ($header == $cookie) {
-                    $this->headers->remove(s('%s.%s', 'set-cookie', $index));
+                    $this->holder->getHeaders()->remove(s('%s.%s', 'set-cookie', $index));
                 }
             }
         }
@@ -97,7 +97,7 @@ class Cookies implements ICookies {
      * Parse headers for cookies.
      */
     protected function searchCookiesInHeaders() {
-        $headers = $this->headers->get('set-cookie');
+        $headers = $this->holder->getHeaders()->get('set-cookie');
 
         foreach ($headers as $header) {
             $cookie = $this->createCookieFromHeader($header);

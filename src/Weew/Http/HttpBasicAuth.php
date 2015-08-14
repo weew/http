@@ -4,9 +4,9 @@ namespace Weew\Http;
 
 class HttpBasicAuth implements IHttpBasicAuth {
     /**
-     * @var IHttpHeaders
+     * @var IHttpHeadersHolder
      */
-    protected $headers;
+    protected $holder;
 
     /**
      * @var BasicAuthParser
@@ -14,16 +14,16 @@ class HttpBasicAuth implements IHttpBasicAuth {
     protected $parser;
 
     /**
-     * @param IHttpHeaders $headers
+     * @param IHttpHeadersHolder $holder
      * @param null $username
      * @param null $password
      */
-    public function __construct(IHttpHeaders $headers, $username = null, $password = null) {
-        $this->headers = $headers;
+    public function __construct(IHttpHeadersHolder $holder, $username = null, $password = null) {
+        $this->holder = $holder;
         $this->parser = $this->createParser();
 
         if ($username !== null) {
-            $this->parser->setCredentials($this->headers, $username, $password);
+            $this->parser->setCredentials($this->holder->getHeaders(), $username, $password);
         }
     }
 
@@ -31,49 +31,49 @@ class HttpBasicAuth implements IHttpBasicAuth {
      * @return string
      */
     public function getUsername() {
-        return $this->parser->getUsername($this->headers);
+        return $this->parser->getUsername($this->holder->getHeaders());
     }
 
     /**
      * @param $username
      */
     public function setUsername($username) {
-        $this->parser->setUsername($this->headers, $username);
+        $this->parser->setUsername($this->holder->getHeaders(), $username);
     }
 
     /**
      * @return string
      */
     public function getPassword() {
-        return $this->parser->getPassword($this->headers);
+        return $this->parser->getPassword($this->holder->getHeaders());
     }
 
     /**
      * @param $password
      */
     public function setPassword($password) {
-        $this->parser->setPassword($this->headers, $password);
+        $this->parser->setPassword($this->holder->getHeaders(), $password);
     }
 
     /**
      * @return null|string
      */
     public function getToken() {
-        return $this->parser->getToken($this->headers);
+        return $this->parser->getToken($this->holder->getHeaders());
     }
 
     /**
      * @param $token
      */
     public function setToken($token) {
-        $this->parser->setToken($this->headers, $token);
+        $this->parser->setToken($this->holder->getHeaders(), $token);
     }
 
     /**
      * @return bool
      */
     public function hasBasicAuth() {
-        return $this->parser->hasBasicAuth($this->headers);
+        return $this->parser->hasBasicAuth($this->holder->getHeaders());
     }
 
     /**

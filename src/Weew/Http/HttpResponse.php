@@ -40,31 +40,23 @@ class HttpResponse implements IHttpResponse {
      * @param int $statusCode
      * @param null $content
      * @param IHttpHeaders $headers
-     * @param ICookies $cookies
      */
     public function __construct(
         $statusCode = HttpStatusCode::OK,
         $content = null,
-        IHttpHeaders $headers = null,
-        ICookies $cookies = null
+        IHttpHeaders $headers = null
     ) {
-        if ( ! $headers instanceof IHttpHeaders) {
-            $headers = $this->createHeaders();
-        }
-
-        $this->setHeaders($headers);
-
-        if ( ! $cookies instanceof ICookies) {
-            $cookies = $this->createCookies();
-        }
-
-        $this->setCookies($cookies);
-
         if ($statusCode === null) {
             $statusCode = HttpStatusCode::OK;
         }
 
+        if ( ! $headers instanceof IHttpHeaders) {
+            $headers = $this->createHeaders();
+        }
+
         $this->setStatusCode($statusCode);
+        $this->setHeaders($headers);
+        $this->setCookies($this->createCookies());
         $this->setContent($content);
 
         $this->setDefaults();
@@ -152,7 +144,7 @@ class HttpResponse implements IHttpResponse {
      * @return Cookies
      */
     protected function createCookies() {
-        return new Cookies($this->getHeaders());
+        return new Cookies($this);
     }
 
     /**

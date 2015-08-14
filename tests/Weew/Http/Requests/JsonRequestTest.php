@@ -3,9 +3,9 @@
 namespace Tests\Weew\Http\Requests;
 
 use PHPUnit_Framework_TestCase;
+use Tests\Weew\Http\Stubs\ArrayableItem;
+use Tests\Weew\Http\Stubs\JsonableItem;
 use Weew\Http\Requests\JsonRequest;
-use Tests\Weew\Http\Mocks\ArrayableItem;
-use Tests\Weew\Http\Mocks\JsonableItem;
 
 class JsonRequestTest extends PHPUnit_Framework_TestCase {
     public function test_content_type_and_accept_header() {

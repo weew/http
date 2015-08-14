@@ -3,7 +3,7 @@
 namespace Tests\Weew\Http;
 
 use PHPUnit_Framework_TestCase;
-use Tests\Weew\Http\Mocks\StringableItem;
+use Tests\Weew\Http\Stubs\StringableItem;
 use Weew\Http\Cookie;
 use Weew\Http\Cookies;
 use Weew\Http\HttpHeaders;
@@ -180,7 +180,7 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase {
 
     public function test_cookies() {
         $response = new HttpResponse();
-        $cookies = new Cookies($response->getHeaders());
+        $cookies = new Cookies($response);
         $this->assertTrue($response->getCookies() instanceof ICookies);
         $response->setCookies($cookies);
         $this->assertTrue($cookies === $response->getCookies());

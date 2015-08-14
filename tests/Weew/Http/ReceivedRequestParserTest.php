@@ -24,7 +24,7 @@ class ReceivedRequestParserTest extends PHPUnit_Framework_TestCase {
 
         $this->assertEquals(
             ['bar' => 'foo', 'foo' => 'bar'],
-            $url->getSegments()->getQuery()->toArray()
+            $url->getQuery()->toArray()
         );
     }
 

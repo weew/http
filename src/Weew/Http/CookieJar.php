@@ -6,13 +6,13 @@ class CookieJar implements ICookieJar {
     /**
      * @var IHttpHeaders
      */
-    protected $headers;
+    protected $holder;
 
     /**
-     * @param IHttpHeaders $headers
+     * @param IHttpHeadersHolder $holder
      */
-    public function __construct(IHttpHeaders $headers) {
-        $this->headers = $headers;
+    public function __construct(IHttpHeadersHolder $holder) {
+        $this->holder = $holder;
     }
 
     /**
@@ -59,10 +59,11 @@ class CookieJar implements ICookieJar {
      */
     protected function parseCookies() {
         $cookies = [];
+        $headers = $this->holder->getHeaders()->get('cookie');
 
-        foreach ($this->headers->get('cookie') as $header) {
+        foreach ($headers as $header) {
             $pairs = explode(';', $header);
-            
+
             foreach ($pairs as $pair) {
                 $parts = explode('=', $pair);
                 $key = trim(array_get($parts, 0, ''));
@@ -87,6 +88,6 @@ class CookieJar implements ICookieJar {
             $header.= $this->formatCookie($key, $value) . ' ';
         }
 
-        $this->headers->set('cookie', $header);
+        $this->holder->getHeaders()->set('cookie', $header);
     }
 }

@@ -77,7 +77,7 @@ class ReceivedHeadersParser implements IReceivedHeadersParser {
         $password = array_get($server, 'PHP_AUTH_PW');
 
         if ($username !== null) {
-            new HttpBasicAuth($headers, $username, $password);
+            new HttpBasicAuth(new HttpRequest(null, null, $headers), $username, $password);
         }
     }
 

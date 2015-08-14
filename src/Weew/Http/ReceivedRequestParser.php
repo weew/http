@@ -7,15 +7,18 @@ use Weew\Url\Url;
 class ReceivedRequestParser implements IReceivedRequestParser {
     /**
      * @param array $server
+     * @param IHttpRequest $request
      *
      * @return IHttpRequest
      */
-    public function parseRequest(array $server) {
+    public function parseRequest(array $server, IHttpRequest $request = null) {
         $headers = $this->getHeaders($server);
         $method = $this->getMethod($server);
         $url = $this->getUrl($server);
 
-        $request = new HttpRequest($method, $url, $headers);
+        if ( ! $request instanceof IHttpRequest) {
+            $request = $this->createRequest($method, $url, $headers);
+        }
 
         $this->setProtocol($request, $server);
         $this->setContent($request);
@@ -87,5 +90,9 @@ class ReceivedRequestParser implements IReceivedRequestParser {
         }
 
         $request->setContent($content);
+    }
+
+    protected function createRequest($method, $url, $headers) {
+        return new HttpRequest($method, $url, $headers);
     }
 }

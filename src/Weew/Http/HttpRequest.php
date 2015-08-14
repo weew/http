@@ -55,36 +55,26 @@ class HttpRequest implements IHttpRequest {
      * @param string $method
      * @param null|IUrl $url
      * @param IHttpHeaders $headers
-     * @param ICookieJar $cookieJar
      */
     public function __construct(
         $method = HttpRequestMethod::GET,
         IUrl $url = null,
-        IHttpHeaders $headers = null,
-        ICookieJar $cookieJar = null
+        IHttpHeaders $headers = null
     ) {
-        $this->setMethod($method);
-
         if ( ! $url instanceof IUrl) {
             $url = $this->createUrl();
         }
-
-        $this->setUrl($url);
 
         if ( ! $headers instanceof IHttpHeaders) {
             $headers = $this->createHeaders();
         }
 
+        $this->setUrl($url);
+        $this->setMethod($method);
         $this->setHeaders($headers);
-
-        if ( ! $headers instanceof ICookieJar) {
-            $cookieJar = $this->createCookieJar();
-        }
-
-        $this->setCookieJar($cookieJar);
-
-        $this->setData($this->createData());
+        $this->setCookieJar($this->createCookieJar());
         $this->setBasicAuth($this->createBasicAuth());
+        $this->setData($this->createData());
 
         $this->setDefaults();
     }
@@ -141,7 +131,7 @@ class HttpRequest implements IHttpRequest {
      * @return CookieJar
      */
     protected function createCookieJar() {
-        return new CookieJar($this->getHeaders());
+        return new CookieJar($this);
     }
 
     /**
@@ -200,7 +190,7 @@ class HttpRequest implements IHttpRequest {
      * @return HttpBasicAuth
      */
     protected function createBasicAuth() {
-        $auth = new HttpBasicAuth($this->getHeaders());
+        $auth = new HttpBasicAuth($this);
 
         return $auth;
     }
@@ -339,6 +329,7 @@ class HttpRequest implements IHttpRequest {
             'url' => $this->getUrl()->toString(),
             'headers' => $this->getHeaders()->toArray(),
             'data' => $this->getData()->toArray(),
+            'query' => $this->getUrl()->getQuery()->toArray(),
             'cookies' => $this->getCookieJar()->toArray(),
             'content' => $this->getContent(),
         ];

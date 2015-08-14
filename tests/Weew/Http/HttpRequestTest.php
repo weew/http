@@ -80,7 +80,7 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
     public function test_get_and_set_basic_auth() {
         $request = new HttpRequest();
         $this->assertTrue($request->getBasicAuth() instanceof IHttpBasicAuth);
-        $basicAuth = new HttpBasicAuth($request->getHeaders(), 'foo', 'bar');
+        $basicAuth = new HttpBasicAuth($request, 'foo', 'bar');
         $request->setBasicAuth($basicAuth);
         $this->assertTrue($basicAuth === $request->getBasicAuth());
     }
@@ -113,7 +113,7 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
 
     public function test_get_and_set_cookie_jar() {
         $request = new HttpRequest();
-        $jar = new CookieJar($request->getHeaders());
+        $jar = new CookieJar($request);
 
         $this->assertTrue($request->getCookieJar() instanceof ICookieJar);
         $request->setCookieJar($jar);
@@ -126,7 +126,7 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
             new Url('/foo'),
             new HttpHeaders(['yolo' => 'swag'])
         );
-        $request->setBasicAuth(new HttpBasicAuth($request->getHeaders(), 'xx', 'aa'));
+        $request->setBasicAuth(new HttpBasicAuth($request, 'xx', 'aa'));
         $request->getData()->setData(['foo' => 'bar']);
         $actual = $request->toArray();
 
@@ -138,6 +138,7 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
                 'url' => $request->getUrl()->toString(),
                 'headers' => $request->getHeaders()->toArray(),
                 'data' => $request->getData()->toArray(),
+                'query' => $request->getUrl()->getQuery()->toArray(),
                 'cookies' => $request->getCookieJar()->toArray(),
                 'content' => $request->getContent(),
             ], $actual

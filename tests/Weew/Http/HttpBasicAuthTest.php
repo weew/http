@@ -6,13 +6,14 @@ use PHPUnit_Framework_TestCase;
 use Weew\Http\BasicAuthParser;
 use Weew\Http\HttpBasicAuth;
 use Weew\Http\HttpHeaders;
+use Weew\Http\HttpRequest;
 
 class HttpBasicAuthTest extends PHPUnit_Framework_TestCase {
     public function test_get_username() {
-        $headers = new HttpHeaders();
-        $auth = new HttpBasicAuth($headers);
+        $request = new HttpRequest();
+        $auth = new HttpBasicAuth($request);
         $parser = new BasicAuthParser();
-        $parser->setUsername($headers, 'foo');
+        $parser->setUsername($request->getHeaders(), 'foo');
 
         $this->assertEquals(
             'foo', $auth->getUsername()
@@ -20,10 +21,10 @@ class HttpBasicAuthTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_get_password() {
-        $headers = new HttpHeaders();
-        $auth = new HttpBasicAuth($headers);
+        $request = new HttpRequest();
+        $auth = new HttpBasicAuth($request);
         $parser = new BasicAuthParser();
-        $parser->setPassword($headers, 'bar');
+        $parser->setPassword($request->getHeaders(), 'bar');
 
         $this->assertEquals(
             'bar', $auth->getPassword()
@@ -31,37 +32,37 @@ class HttpBasicAuthTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_set_username() {
-        $auth = new HttpBasicAuth(new HttpHeaders());
+        $auth = new HttpBasicAuth(new HttpRequest());
 
         $auth->setUsername('foo');
         $this->assertEquals('foo', $auth->getUsername());
     }
 
     public function test_set_password() {
-        $auth = new HttpBasicAuth(new HttpHeaders());
+        $auth = new HttpBasicAuth(new HttpRequest());
 
         $auth->setPassword('bar');
         $this->assertEquals('bar', $auth->getPassword());
     }
 
     public function test_get_token() {
-        $headers = new HttpHeaders();
-        $auth = new HttpBasicAuth($headers);
+        $request = new HttpRequest();
+        $auth = new HttpBasicAuth($request);
         $parser = new BasicAuthParser();
 
-        $parser->setToken($headers, 'foo');
+        $parser->setToken($request->getHeaders(), 'foo');
         $this->assertEquals('foo', $auth->getToken());
     }
 
     public function test_set_token() {
-        $auth = new HttpBasicAuth(new HttpHeaders());
+        $auth = new HttpBasicAuth(new HttpRequest());
 
         $auth->setToken('foo');
         $this->assertEquals('foo', $auth->getToken());;
     }
 
     public function test_has_basic_auth() {
-        $auth = new HttpBasicAuth(new HttpHeaders());
+        $auth = new HttpBasicAuth(new HttpRequest());
 
         $this->assertFalse($auth->hasBasicAuth());
         $auth->setUsername('foo');
@@ -69,14 +70,14 @@ class HttpBasicAuthTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_create_with_credentials() {
-        $auth = new HttpBasicAuth(new HttpHeaders(), 'foo', 'bar');
+        $auth = new HttpBasicAuth(new HttpRequest(), 'foo', 'bar');
         $this->assertTrue($auth->hasBasicAuth());
         $this->assertEquals('foo', $auth->getUsername());
         $this->assertEquals('bar', $auth->getPassword());
     }
 
     public function test_to_array() {
-        $auth = new HttpBasicAuth(new HttpHeaders(), 'foo', 'bar');
+        $auth = new HttpBasicAuth(new HttpRequest(), 'foo', 'bar');
 
         $this->assertEquals(
             [

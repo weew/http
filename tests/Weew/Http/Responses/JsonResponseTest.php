@@ -3,8 +3,8 @@
 namespace Tests\Weew\Http\Responses;
 
 use PHPUnit_Framework_TestCase;
-use Tests\Weew\Http\Mocks\ArrayableItem;
-use Tests\Weew\Http\Mocks\JsonableItem;
+use Tests\Weew\Http\Stubs\ArrayableItem;
+use Tests\Weew\Http\Stubs\JsonableItem;
 use Weew\Http\Responses\JsonResponse;
 
 class JsonResponseTest extends PHPUnit_Framework_TestCase {

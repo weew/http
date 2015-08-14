@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Weew\Http\Mocks;
+namespace Tests\Weew\Http\Stubs;
 
 use Weew\Foundation\Interfaces\IJsonable;
 
@@ -13,6 +13,6 @@ class JsonableItem implements IJsonable {
         return $this->id;
     }
     public function toJson($options = 0) {
-        return json_encode(['id' => $this->id]);
+        return json_encode(['id' => $this->id], $options);
     }
 }
