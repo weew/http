@@ -258,28 +258,7 @@ class Cookie implements ICookie {
      * @return string
      */
     public function toString() {
-        $string = s('%s=%s;', $this->getName(), $this->getValue());
-
-        if ($this->hasMaxAge()) {
-            $string .= s(' expires=%s;', $this->getExpiresDate());
-            $string .= s(' max-age=%s;', $this->getMaxAge());
-        }
-
-        $string .= s(' path=%s;', $this->getPath());
-
-        if ($this->hasDomain()) {
-            $string .= s(' domain=%s;', $this->getDomain());
-        }
-
-        if ($this->isSecure()) {
-            $string .= ' secure;';
-        }
-
-        if ($this->isHttpOnly()) {
-            $string .= ' httpOnly';
-        }
-
-        return $string;
+        return $this->getBuilder()->build($this);
     }
 
     /**
@@ -306,5 +285,12 @@ class Cookie implements ICookie {
         $this->setPath('/');
         $this->setSecure(false);
         $this->setHttpOnly(true);
+    }
+
+    /**
+     * @return CookieBuilder
+     */
+    protected function getBuilder() {
+        return new CookieBuilder();
     }
 }
