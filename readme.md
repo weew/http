@@ -5,10 +5,6 @@
 [![Coverage Status](https://coveralls.io/repos/weew/php-http/badge.svg?branch=master&service=github)](https://coveralls.io/github/weew/php-http?branch=master)
 [![License](https://poser.pugx.org/weew/php-http/license)](https://packagist.org/packages/weew/php-http)
 
-## Motivation
-
-PHP deserves a solid http layer that doesn't suck. I've evaluated some of the existing open source solutions out there and realised that that there is basically no solid abstraction for the whole Request / Response interaction. Well, there is one - Symfony's HttpFoundation. To be true, I don't think that the code is pretty and the implementation versatile and abstract enough. So I've decided to give it a try and create a better http abstraction layer that would be lightweight and sophisticated. Did I succeed? - it's up to you. Right now, I'm pretty happy with the result.
-
 ## Response
 
 #### Basic response
@@ -116,4 +112,8 @@ set-cookie: foo=bar; path=/; httpOnly
 
 ---
 
-Work in progress
+## Request
+
+#### HttpClient
+
+Take a look at the [http-client](https://github.com/weew/php-http-client) for further info.
