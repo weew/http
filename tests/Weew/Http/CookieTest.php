@@ -93,8 +93,8 @@ class CookieTest extends PHPUnit_Framework_TestCase {
         $cookie->send();
 
         $this->assertEquals(
-            strtolower(array_get(xdebug_get_headers(), 0)),
-            strtolower('set-cookie: ' . $cookie->toString())
+            strtolower('set-cookie: ' . $cookie->toString()),
+            strtolower(array_get(xdebug_get_headers(), 0))
         );
     }
 

@@ -12,4 +12,18 @@ class HttpRequestMethodTest extends PHPUnit_Framework_TestCase {
             HttpRequestMethod::getMethods()
         );
     }
+
+    public function test_is_valid() {
+        foreach (HttpRequestMethod::getMethods() as $method) {
+            $this->assertTrue(
+                HttpRequestMethod::isValid($method)
+            );
+        }
+
+        foreach (['foo', 'bar', 'baz'] as $method) {
+            $this->assertFalse(
+                HttpRequestMethod::isValid($method)
+            );
+        }
+    }
 }

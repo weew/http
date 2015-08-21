@@ -22,4 +22,13 @@ class HttpRequestMethod {
             self::OPTIONS, self::HEAD,
         ];
     }
+
+    /**
+     * @param $method
+     *
+     * @return bool
+     */
+    public static function isValid($method) {
+        return in_array($method, static::getMethods());
+    }
 }

@@ -46,7 +46,7 @@ class ReceivedRequestParser implements IReceivedRequestParser {
         if (array_has($server, '_method')) {
             $_method = strtoupper(array_get($server, '_method'));
 
-            if (in_array($_method, HttpRequestMethod::getMethods())) {
+            if (HttpRequestMethod::isValid($_method)) {
                 return $_method;
             }
         }
