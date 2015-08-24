@@ -13,7 +13,8 @@ class HtmlResponseTest extends PHPUnit_Framework_TestCase {
     }
 
     public function test_get_and_set_content() {
-        $htmlResponse = new HtmlResponse();
+        $htmlResponse = new HtmlResponse(null, 'yolo');
+        $this->assertEquals('yolo', $htmlResponse->getHtmlContent());
         $htmlResponse->setHtmlContent('foo');
         $this->assertEquals('foo', $htmlResponse->getHtmlContent());
     }

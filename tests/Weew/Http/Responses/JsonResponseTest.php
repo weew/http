@@ -9,8 +9,9 @@ use Weew\Http\Responses\JsonResponse;
 
 class JsonResponseTest extends PHPUnit_Framework_TestCase {
     public function test_get_and_set_json_content() {
-        $response = new JsonResponse();
-        $content = ['foo' => 'bar'];
+        $response = new JsonResponse(null, ['foo' => 'bar']);
+        $this->assertEquals(['foo' => 'bar'], $response->getJsonContent());
+        $content = ['bar' => 'baz'];
         $response->setJsonContent($content);
         $this->assertEquals(
             json_encode($content), $response->getContent()
