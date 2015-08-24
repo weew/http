@@ -12,6 +12,10 @@
 [HTTP Client](https://github.com/weew/php-http-client): a simple http client that allows
 you to send and receive the standardized HttpRequest and HttpResponse objects.
 
+## Installation
+
+`composer require weew/php-http`
+
 ## Response
 
 #### Basic response
