@@ -12,9 +12,12 @@ class BasicAuthResponseTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals(
             HttpStatusCode::UNAUTHORIZED, $response->getStatusCode()
         );
+        $this->assertEquals('foo', $response->getRealm());
+        $response->setRealm('bar');
+        $this->assertEquals('bar', $response->getRealm());
         $this->assertEquals(
             $response->getHeaders()->find('www-authenticate'),
-            'basic realm="foo"'
+            'basic realm="bar"'
         );
     }
 }

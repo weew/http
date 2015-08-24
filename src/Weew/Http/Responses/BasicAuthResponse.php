@@ -8,6 +8,11 @@ use Weew\Http\IHttpHeaders;
 
 class BasicAuthResponse extends HttpResponse {
     /**
+     * @var string
+     */
+    protected $realm;
+
+    /**
      * @param string $realm
      * @param int|null $statusCode
      * @param IHttpHeaders|null $headers
@@ -19,6 +24,21 @@ class BasicAuthResponse extends HttpResponse {
     ) {
         parent::__construct($statusCode, null, $headers);
 
+        $this->setRealm($realm);
+    }
+
+    /**
+     * @return string
+     */
+    public function getRealm() {
+        return $this->realm;
+    }
+
+    /**
+     * @param $realm
+     */
+    public function setRealm($realm) {
+        $this->realm = $realm;
         $this->getHeaders()->set('www-authenticate', s('basic realm="%s"', $realm));
     }
 }
