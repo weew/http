@@ -9,13 +9,13 @@ use Weew\Http\IHttpRequest;
 use Weew\Http\ReceivedRequestParser;
 
 class ReceivedRequestParserTest extends PHPUnit_Framework_TestCase {
-    public function test_get_url() {
+    public function test_parse_url() {
         $source['HTTPS'] = true;
         $source['HTTP_HOST'] = 'google.com:9999';
         $source['REQUEST_URI'] = '/foo/bar?bar=foo&foo=bar';
 
         $parser = new ReceivedRequestParser();
-        $url = $parser->getUrl($source);
+        $url = $parser->parseUrl($source);
 
         $this->assertEquals(
             'https://google.com:9999/foo/bar?bar=foo&foo=bar',
@@ -28,15 +28,15 @@ class ReceivedRequestParserTest extends PHPUnit_Framework_TestCase {
         );
     }
 
-    public function test_get_method() {
+    public function test_parse_method() {
         $parser = new ReceivedRequestParser();
-        $this->assertEquals('foo', $parser->getMethod(['REQUEST_METHOD' => 'foo']));
+        $this->assertEquals('foo', $parser->parseMethod(['REQUEST_METHOD' => 'foo']));
     }
 
-    public function test_get_headers() {
+    public function test_parse_headers() {
         $parser = new ReceivedRequestParser();
 
-        $this->assertTrue($parser->getHeaders($_SERVER) instanceof IHttpHeaders);
+        $this->assertTrue($parser->parseHeaders($_SERVER) instanceof IHttpHeaders);
     }
 
     public function test_set_protocol() {
@@ -65,18 +65,18 @@ class ReceivedRequestParserTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue($request instanceof IHttpRequest);
     }
 
-    public function test_get_fake_method() {
+    public function test_parse_fake_method() {
         $parser = new ReceivedRequestParser();
 
         $this->assertEquals(
-            'GET', $parser->getMethod(['_method' => 'get'])
+            'GET', $parser->parseMethod(['_method' => 'get'])
         );
         $this->assertEquals(
-            'POST', $parser->getMethod(['_method' => 'POST'])
+            'POST', $parser->parseMethod(['_method' => 'POST'])
         );
         $this->assertEquals(
             'DELETE',
-            $parser->getMethod(['_method' => 'foo', 'REQUEST_METHOD' => 'DELETE'])
+            $parser->parseMethod(['_method' => 'foo', 'REQUEST_METHOD' => 'DELETE'])
         );
     }
 }

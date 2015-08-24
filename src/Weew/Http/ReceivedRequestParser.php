@@ -12,14 +12,13 @@ class ReceivedRequestParser implements IReceivedRequestParser {
      * @return IHttpRequest
      */
     public function parseRequest(array $server, IHttpRequest $request = null) {
-        $headers = $this->getHeaders($server);
-        $method = $this->getMethod($server);
-        $url = $this->getUrl($server);
-
         if ( ! $request instanceof IHttpRequest) {
-            $request = $this->createRequest($method, $url, $headers);
+            $request = $this->createRequest();
         }
 
+        $this->setMethod($request, $server);
+        $this->setUrl($request, $server);
+        $this->setHeaders($request, $server);
         $this->setProtocol($request, $server);
         $this->setContent($request);
 
@@ -31,7 +30,7 @@ class ReceivedRequestParser implements IReceivedRequestParser {
      *
      * @return HttpHeaders
      */
-    public function getHeaders(array $server) {
+    public function parseHeaders(array $server) {
         return (new ReceivedHeadersParser())->parseHeaders($server);
     }
 
@@ -40,13 +39,13 @@ class ReceivedRequestParser implements IReceivedRequestParser {
      *
      * @return mixed
      */
-    public function getMethod(array $server) {
+    public function parseMethod(array $server) {
         $method = array_get($server, 'REQUEST_METHOD');
 
         if (array_has($server, '_method')) {
             $_method = strtoupper(array_get($server, '_method'));
 
-            if (HttpRequestMethod::isValid($_method)) {
+            if (in_array($_method, HttpRequestMethod::getMethods())) {
                 return $_method;
             }
         }
@@ -59,7 +58,7 @@ class ReceivedRequestParser implements IReceivedRequestParser {
      *
      * @return Url
      */
-    public function getUrl(array $server) {
+    public function parseUrl(array $server) {
         $protocol = array_has($server, 'HTTPS') ? 'https' : 'http';
         $host = array_get($server, 'HTTP_HOST');
         $uri = array_get($server, 'REQUEST_URI');
@@ -92,7 +91,34 @@ class ReceivedRequestParser implements IReceivedRequestParser {
         $request->setContent($content);
     }
 
-    protected function createRequest($method, $url, $headers) {
-        return new HttpRequest($method, $url, $headers);
+    /**
+     * @param IHttpRequest $request
+     * @param array $server
+     */
+    public function setMethod(IHttpRequest $request, array $server) {
+        $request->setMethod($this->parseMethod($server));
+    }
+
+    /**
+     * @param IHttpRequest $request
+     * @param array $server
+     */
+    public function setUrl(IHttpRequest $request, array $server) {
+        $request->setUrl($this->parseUrl($server));
+    }
+
+    /**
+     * @param IHttpRequest $request
+     * @param array $server
+     */
+    public function setHeaders(IHttpRequest $request, array $server) {
+        $request->setHeaders($this->parseHeaders($server));
+    }
+
+    /**
+     * @return HttpRequest
+     */
+    protected function createRequest() {
+        return new HttpRequest();
     }
 }
