@@ -79,4 +79,11 @@ class ReceivedRequestParserTest extends PHPUnit_Framework_TestCase {
             $parser->parseMethod(['_method' => 'foo', 'REQUEST_METHOD' => 'DELETE'])
         );
     }
+
+    public function test_parse_https_protocol() {
+        $parser = new ReceivedRequestParser();
+        $_SERVER['HTTPS'] = 'on';
+        $request = $parser->parseRequest($_SERVER);
+        $this->assertTrue($request->isSecure());
+    }
 }

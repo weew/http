@@ -75,6 +75,10 @@ class ReceivedRequestParser implements IReceivedRequestParser {
         $protocol = array_get($parts, 0, $request->getProtocol());
         $version = array_get($parts, 1, $request->getProtocolVersion());
 
+        if (array_has($server, 'HTTPS')) {
+            $protocol = HttpProtocol::HTTPS;
+        }
+
         $request->setProtocol($protocol);
         $request->setProtocolVersion($version);
     }
