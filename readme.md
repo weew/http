@@ -5,20 +5,35 @@
 [![Coverage Status](https://coveralls.io/repos/weew/php-http/badge.svg?branch=master&service=github)](https://coveralls.io/github/weew/php-http?branch=master)
 [![License](https://poser.pugx.org/weew/php-http/license)](https://packagist.org/packages/weew/php-http)
 
-## Related Projects
+## Table of contents
 
-[URL](https://github.com/weew/php-url): used throughout the project.
-
-[HTTP Client](https://github.com/weew/php-http-client): a simple http client that allows
-you to send and receive the standardized HttpRequest and HttpResponse objects.
+- [Installation](#installation)
+- [Responses](#basic-response)
+    - [Basic response](#basic-response)
+    - [Content](#content)
+    - [Status codes](#status-codes)
+    - [Headers](#headers)
+    - [Cookies](#cookies)
+    - [Custom responses](#responses)
+        - [HtmlResponse](#htmpresponse)
+        - [JsonResponse](#jsonresponse)
+        - [BasicAuthResponse](#basicauthresponse)
+- [Requests](#requests)
+    - [Basic request](#basic-request)
+    - [GET parameters](#get-parameters)
+    - [POST data](#post-data)
+    - [Headers](#headers)
+    - [Current request](#current-request)
+    - [Basic authentication](#basic-authentication)
+- [Related projects](#related-projects)
 
 ## Installation
 
 `composer require weew/php-http`
 
-## Response
+## Responses
 
-#### Basic response
+### Basic response
 
 ```php
 $response = new HttpResponse();
@@ -30,12 +45,11 @@ Host: localhost
 Connection: close
 ```
 
-#### Content and content type
+### Content
 
 ```php
 $response = new HttpResponse();
 $response->setContent('<h1>Hello World!</h1>');
-$response->setContentType('text/html');
 $response->send();
 ```
 ```
@@ -47,7 +61,7 @@ content-type: text/html
 <h1>Hello World!</h1>
 ```
 
-#### Status codes
+### Status codes
 
 ```php
 $response = new HttpResponse(HttpStatusCode::UNAUTHORIZED);
@@ -61,7 +75,7 @@ Host: localhost
 Connection: close
 ```
 
-#### Custom headers
+### Headers
 
 ```php
 $response = new HttpResponse();
@@ -75,7 +89,22 @@ Connection: close
 foo: bar
 ```
 
-#### HtmlResponse
+### Cookies
+
+```php
+$response = new HttpResponse();
+$response->getQueuedCookies()->add(new Cookie('foo', 'bar'));
+$response->send();
+```
+```
+HTTP/1.1 200 OK
+Host: localhost
+Connection: close
+set-cookie: foo=bar; path=/; httpOnly
+```
+
+## Custom responses
+### HtmlResponse
 
 ```php
 $response = new HtmlResponse();
@@ -91,7 +120,7 @@ content-type: text/html
 <h1>Hello World!</h1>
 ```
 
-#### JsonResponse
+### JsonResponse
 
 ```php
 $response = new JsonResponse();
@@ -107,7 +136,7 @@ content-type: application/json
 {"Hello":"World!"}
 ```
 
-#### BasicAuthResponse
+### BasicAuthResponse
 
 ```php
 $response = new BasicAuthResponse('Please login');
@@ -120,23 +149,9 @@ Connection: close
 www-authenticate: basic realm="Please login"
 ```
 
-#### Attaching Cookies
+## Requests
 
-```php
-$response = new HttpResponse();
-$response->getQueuedCookies()->add(new Cookie('foo', 'bar'));
-$response->send();
-```
-```
-HTTP/1.1 200 OK
-Host: localhost
-Connection: close
-set-cookie: foo=bar; path=/; httpOnly
-```
-
-## Request
-
-#### Creating a simple request
+### Basic request
 
 It is very easy to build a custom request.
 
@@ -148,7 +163,7 @@ $request = new HttpRequest(
 $request->setContent('foo=bar');
 ```
 
-#### Working with GET data
+### GET parameters
 
 ```php
 $request = new HttpRequest();
@@ -158,7 +173,7 @@ echo $request->getUrl()->getQuery();
 // foo=bar
 ```
 
-#### Working with POST data
+### POST data
 
 ```php
 $request = new HttpRequest();
@@ -169,7 +184,7 @@ echo $request->getContent();
 // foo=bar&bar=foo
 ```
 
-#### Custom headers
+### Headers
 
 You can access headers the same way as on the `HttpResponse` class.
 
@@ -184,7 +199,7 @@ echo $request->getHeaders()->find('foo');
 // foo
 ```
 
-#### Current Request
+### Current Request
 
 Sometimes it is nice to have an object that would represent the current
 received http request.
@@ -195,7 +210,7 @@ var_dump($request->toArray());
 // all the data that the server received from the client
 ```
 
-#### Basic Authentication
+### Basic Authentication
 
 It is very easy to authenticate a request via basic auth.
 
@@ -208,3 +223,10 @@ echo $request->getBasicAuth()->getToken();
 echo $request->getHeaders()->find('authentication');
 // Basic Zm9vOmJhcg==
 ```
+
+## Related Projects
+
+[URL](https://github.com/weew/php-url): used throughout the project.
+
+[HTTP Client](https://github.com/weew/php-http-client): a simple http client that allows
+you to send and receive the standardized HttpRequest and HttpResponse objects.
