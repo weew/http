@@ -8,14 +8,14 @@
 ## Table of contents
 
 - [Installation](#installation)
-- [Responses](#basic-response)
+- [Responses](#responses)
     - [Basic response](#basic-response)
     - [Content](#content)
     - [Status codes](#status-codes)
     - [Headers](#headers)
     - [Cookies](#cookies)
-    - [Custom responses](#responses)
-        - [HtmlResponse](#htmpresponse)
+    - [Custom responses](#custom-responses)
+        - [HtmlResponse](#htmlresponse)
         - [JsonResponse](#jsonresponse)
         - [BasicAuthResponse](#basicauthresponse)
 - [Requests](#requests)
@@ -104,6 +104,7 @@ set-cookie: foo=bar; path=/; httpOnly
 ```
 
 ## Custom responses
+
 ### HtmlResponse
 
 ```php
