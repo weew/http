@@ -227,7 +227,6 @@ echo $request->getHeaders()->find('authentication');
 
 ## Related Projects
 
-[URL](https://github.com/weew/php-url): used throughout the project.
-
-[HTTP Client](https://github.com/weew/php-http-client): a simple http client that allows
+- [URL](https://github.com/weew/php-url): used throughout the project.
+- [HTTP Client](https://github.com/weew/php-http-client): a simple http client that allows
 you to send and receive the standardized HttpRequest and HttpResponse objects.
