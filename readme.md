@@ -1,9 +1,11 @@
 # HTTP layer for PHP
 
-[![Build Status](https://travis-ci.org/weew/php-http.svg?branch=master)](https://travis-ci.org/weew/php-http)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/weew/php-http/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/weew/php-http/?branch=master)
-[![Coverage Status](https://coveralls.io/repos/weew/php-http/badge.svg?branch=master&service=github)](https://coveralls.io/github/weew/php-http?branch=master)
-[![License](https://poser.pugx.org/weew/php-http/license)](https://packagist.org/packages/weew/php-http)
+[![Build Status](https://img.shields.io/travis/weew/php-http.svg)](https://travis-ci.org/weew/php-http)
+[![Code Quality](https://img.shields.io/scrutinizer/g/weew/php-http.svg)](https://scrutinizer-ci.com/g/weew/php-http)
+[![Test Coverage](https://img.shields.io/coveralls/weew/php-http.svg)](https://coveralls.io/github/weew/php-http)
+[![Dependencies](https://img.shields.io/requires/github/weew/php-http.svg)](https://requires.io/github/weew/php-http/requirements)
+[![Version](https://img.shields.io/packagist/v/weew/php-http.svg)](https://packagist.org/packages/weew/php-http)
+[![Licence](https://img.shields.io/packagist/l/weew/php-http.svg)](https://packagist.org/packages/weew/php-http)
 
 ## Table of contents
 
