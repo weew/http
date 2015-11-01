@@ -3,7 +3,7 @@
 [![Build Status](https://img.shields.io/travis/weew/php-http.svg)](https://travis-ci.org/weew/php-http)
 [![Code Quality](https://img.shields.io/scrutinizer/g/weew/php-http.svg)](https://scrutinizer-ci.com/g/weew/php-http)
 [![Test Coverage](https://img.shields.io/coveralls/weew/php-http.svg)](https://coveralls.io/github/weew/php-http)
-[![Dependencies](https://img.shields.io/requires/github/weew/php-http.svg)](https://requires.io/github/weew/php-http/requirements)
+[![Dependencies](https://img.shields.io/versioneye/d/php/weew:php-http.svg)](https://www.versioneye.com/php/weew:php-http)
 [![Version](https://img.shields.io/packagist/v/weew/php-http.svg)](https://packagist.org/packages/weew/php-http)
 [![Licence](https://img.shields.io/packagist/l/weew/php-http.svg)](https://packagist.org/packages/weew/php-http)
 
