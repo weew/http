@@ -2,7 +2,7 @@
 
 namespace Weew\Http;
 
-use Weew\Foundation\Interfaces\IArrayable;
+use Weew\Contracts\IArrayable;
 use Weew\Url\IUrl;
 
 interface IHttpRequest extends

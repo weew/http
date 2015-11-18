@@ -3,7 +3,7 @@
 namespace Weew\Http;
 
 use Exception;
-use Weew\Foundation\Interfaces\IStringable;
+use Weew\Contracts\IStringable;
 
 class HttpResponse implements IHttpResponse {
     /**

@@ -2,7 +2,7 @@
 
 namespace Tests\Weew\Http\Stubs;
 
-use Weew\Foundation\Interfaces\IArrayable;
+use Weew\Contracts\IArrayable;
 
 class ArrayableItem implements IArrayable {
     private $id;

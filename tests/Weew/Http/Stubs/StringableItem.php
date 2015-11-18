@@ -2,7 +2,7 @@
 
 namespace Tests\Weew\Http\Stubs;
 
-use Weew\Foundation\Interfaces\IStringable;
+use Weew\Contracts\IStringable;
 
 class StringableItem implements IStringable {
     /**

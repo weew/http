@@ -3,8 +3,8 @@
 namespace Weew\Http\Responses;
 
 use Weew\Http\HttpResponse;
-use Weew\Foundation\Interfaces\IArrayable;
-use Weew\Foundation\Interfaces\IJsonable;
+use Weew\Contracts\IArrayable;
+use Weew\Contracts\IJsonable;
 use Weew\Http\HttpStatusCode;
 use Weew\Http\IJsonContentHolder;
 

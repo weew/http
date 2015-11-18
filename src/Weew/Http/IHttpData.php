@@ -2,8 +2,8 @@
 
 namespace Weew\Http;
 
-use Weew\Foundation\Interfaces\IArrayable;
-use Weew\Foundation\Interfaces\IStringable;
+use Weew\Contracts\IArrayable;
+use Weew\Contracts\IStringable;
 
 interface IHttpData extends IStringable, IArrayable {
     /**

@@ -19,10 +19,10 @@
         }
     },
     "require": {
-        "weew/php-foundation": "^1.0.0",
         "weew/php-helpers-array": "^1.0.0",
         "weew/php-helpers-string": "^1.0.0",
-        "weew/php-url": "^1.0.0"
+        "weew/php-url": "^1.0.0",
+        "weew/php-contracts": "^1.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.7",

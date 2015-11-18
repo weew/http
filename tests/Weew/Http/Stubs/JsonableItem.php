@@ -2,7 +2,7 @@
 
 namespace Tests\Weew\Http\Stubs;
 
-use Weew\Foundation\Interfaces\IJsonable;
+use Weew\Contracts\IJsonable;
 
 class JsonableItem implements IJsonable {
     private $id;

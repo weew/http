@@ -2,8 +2,8 @@
 
 namespace Weew\Http\Requests;
 
-use Weew\Foundation\Interfaces\IArrayable;
-use Weew\Foundation\Interfaces\IJsonable;
+use Weew\Contracts\IArrayable;
+use Weew\Contracts\IJsonable;
 use Weew\Http\HttpRequest;
 use Weew\Http\IJsonContentHolder;
 
