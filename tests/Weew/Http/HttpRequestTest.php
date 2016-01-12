@@ -8,14 +8,12 @@ use Weew\Http\CookieJar;
 use Weew\Http\HttpData;
 use Weew\Http\HttpHeaders;
 use Weew\Http\HttpProtocol;
-use Weew\Http\HttpQuery;
 use Weew\Http\HttpRequest;
 use Weew\Http\HttpRequestMethod;
 use Weew\Http\IHttpBasicAuth;
 use Weew\Http\ICookieJar;
 use Weew\Http\IHttpData;
 use Weew\Http\IHttpHeaders;
-use Weew\Http\IHttpQuery;
 use Weew\Url\IUrl;
 use Weew\Url\Url;
 

@@ -5,6 +5,7 @@ namespace Weew\Http\Responses;
 use Weew\Http\HttpResponse;
 use Weew\Http\HttpStatusCode;
 use Weew\Http\IHtmlContentHolder;
+use Weew\Http\IHttpHeaders;
 
 class HtmlResponse extends HttpResponse implements IHtmlContentHolder {
     /**

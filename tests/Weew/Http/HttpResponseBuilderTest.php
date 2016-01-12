@@ -2,6 +2,7 @@
 
 namespace Tests\Weew\Http;
 
+use Exception;
 use PHPUnit_Framework_TestCase;
 use Weew\Http\HttpProtocol;
 use Weew\Http\HttpResponse;

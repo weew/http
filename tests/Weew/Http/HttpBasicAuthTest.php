@@ -5,7 +5,6 @@ namespace Tests\Weew\Http;
 use PHPUnit_Framework_TestCase;
 use Weew\Http\BasicAuthParser;
 use Weew\Http\HttpBasicAuth;
-use Weew\Http\HttpHeaders;
 use Weew\Http\HttpRequest;
 
 class HttpBasicAuthTest extends PHPUnit_Framework_TestCase {

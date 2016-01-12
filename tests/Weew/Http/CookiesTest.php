@@ -5,7 +5,6 @@ namespace tests\Weew\Http;
 use PHPUnit_Framework_TestCase;
 use Weew\Http\Cookie;
 use Weew\Http\Cookies;
-use Weew\Http\HttpHeaders;
 use Weew\Http\HttpRequest;
 
 class CookiesTest extends PHPUnit_Framework_TestCase {
