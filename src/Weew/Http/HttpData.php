@@ -6,7 +6,7 @@ class HttpData implements IHttpData {
     /**
      * @var string
      */
-    protected  $dataType = HttpDataType::URL_ENCODED;
+    protected $dataType = HttpDataType::URL_ENCODED;
 
     /**
      * @var IContentHolder

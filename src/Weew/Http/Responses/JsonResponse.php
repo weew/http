@@ -3,10 +3,9 @@
 namespace Weew\Http\Responses;
 
 use Weew\Http\HttpResponse;
-use Weew\Contracts\IArrayable;
-use Weew\Contracts\IJsonable;
 use Weew\Http\HttpStatusCode;
 use Weew\Http\IJsonContentHolder;
+use Weew\JsonEncoder\JsonEncoder;
 
 class JsonResponse extends HttpResponse implements IJsonContentHolder {
     /**
@@ -24,23 +23,18 @@ class JsonResponse extends HttpResponse implements IJsonContentHolder {
     }
 
     /**
-     * Set content type.
-     */
-    protected function setDefaultContentType() {
-        $this->setContentType('application/json');
-    }
-
-    /**
      * @param bool|true $assoc
      *
      * @return string|null
      */
     public function getJsonContent($assoc = true) {
-        if ($this->hasContent()) {
-            return json_decode($this->getContent(), $assoc);
+        $content = $this->getContent();
+
+        if ($content !== null) {
+            $content = (new JsonEncoder())->decode($this->getContent(), $assoc);
         }
 
-        return null;
+        return $content;
     }
 
     /**
@@ -48,17 +42,18 @@ class JsonResponse extends HttpResponse implements IJsonContentHolder {
      * @param int $options
      */
     public function setJsonContent($content, $options = 0) {
-        if ($content instanceof IJsonable) {
-            $content = $content->toJson($options);
-        } else if ($content !== null) {
-            if ($content instanceof IArrayable) {
-                $content = $content->toArray();
-            }
-
-            $content = json_encode($content, $options);
+        if ($content !== null) {
+            $content = (new JsonEncoder())->encode($content, $options);
         }
 
         $this->setDefaultContentType();
         $this->setContent($content);
+    }
+
+    /**
+     * Set content type.
+     */
+    protected function setDefaultContentType() {
+        $this->setContentType('application/json');
     }
 }
