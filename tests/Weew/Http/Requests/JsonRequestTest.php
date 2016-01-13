@@ -3,7 +3,7 @@
 namespace Tests\Weew\Http\Requests;
 
 use PHPUnit_Framework_TestCase;
-use Weew\Http\HttpJsonData;
+use Weew\Http\Data\HttpJsonData;
 use Weew\Http\Requests\JsonRequest;
 
 class JsonRequestTest extends PHPUnit_Framework_TestCase {

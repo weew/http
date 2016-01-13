@@ -2,7 +2,7 @@
 
 namespace Weew\Http\Responses;
 
-use Weew\Http\HttpJsonData;
+use Weew\Http\Data\HttpJsonData;
 use Weew\Http\HttpResponse;
 use Weew\Http\HttpStatusCode;
 use Weew\Http\IHttpHeaders;

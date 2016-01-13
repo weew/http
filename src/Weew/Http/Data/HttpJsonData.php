@@ -1,7 +1,10 @@
 <?php
 
-namespace Weew\Http;
+namespace Weew\Http\Data;
 
+use Weew\Http\HttpDataType;
+use Weew\Http\IContentHolder;
+use Weew\Http\IHttpData;
 use Weew\JsonEncoder\IJsonEncoder;
 use Weew\JsonEncoder\JsonEncoder;
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace Tests\Weew\Http;
+namespace Tests\Weew\Http\Data;
 
 use PHPUnit_Framework_TestCase;
-use Weew\Http\HttpUrlEncodedData;
+use Weew\Http\Data\HttpUrlEncodedData;
 use Weew\Http\HttpDataType;
 use Weew\Http\HttpRequest;
 

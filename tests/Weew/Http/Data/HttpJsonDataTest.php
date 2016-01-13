@@ -1,10 +1,10 @@
 <?php
 
-namespace Tests\Weew\Http;
+namespace Tests\Weew\Http\Data;
 
 use PHPUnit_Framework_TestCase;
+use Weew\Http\Data\HttpJsonData;
 use Weew\Http\HttpDataType;
-use Weew\Http\HttpJsonData;
 use Weew\Http\HttpRequest;
 
 class HttpJsonDataTest extends PHPUnit_Framework_TestCase {

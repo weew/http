@@ -2,7 +2,7 @@
 
 namespace Weew\Http\Requests;
 
-use Weew\Http\HttpJsonData;
+use Weew\Http\Data\HttpJsonData;
 use Weew\Http\HttpRequest;
 
 class JsonRequest extends HttpRequest {

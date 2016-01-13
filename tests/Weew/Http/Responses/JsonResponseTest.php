@@ -3,7 +3,7 @@
 namespace Tests\Weew\Http\Responses;
 
 use PHPUnit_Framework_TestCase;
-use Weew\Http\HttpJsonData;
+use Weew\Http\Data\HttpJsonData;
 use Weew\Http\Responses\JsonResponse;
 
 class JsonResponseTest extends PHPUnit_Framework_TestCase {

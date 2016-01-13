@@ -2,6 +2,8 @@
 
 namespace Weew\Http;
 
+use Weew\Http\Data\HttpJsonData;
+use Weew\Http\Data\HttpUrlEncodedData;
 use Weew\Http\Exceptions\InvalidDataClassException;
 
 class ContentTypeDataMatcher implements IContentTypeDataMatcher {

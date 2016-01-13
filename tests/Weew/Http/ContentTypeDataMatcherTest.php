@@ -4,10 +4,10 @@ namespace Tests\Weew\Http;
 
 use PHPUnit_Framework_TestCase;
 use Weew\Http\ContentTypeDataMatcher;
+use Weew\Http\Data\HttpJsonData;
+use Weew\Http\Data\HttpUrlEncodedData;
 use Weew\Http\Exceptions\InvalidDataClassException;
-use Weew\Http\HttpJsonData;
 use Weew\Http\HttpRequest;
-use Weew\Http\HttpUrlEncodedData;
 
 class ContentTypeDataMatcherTest extends PHPUnit_Framework_TestCase {
     public function test_get_and_set_mappings() {

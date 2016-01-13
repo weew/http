@@ -1,6 +1,10 @@
 <?php
 
-namespace Weew\Http;
+namespace Weew\Http\Data;
+
+use Weew\Http\HttpDataType;
+use Weew\Http\IContentHolder;
+use Weew\Http\IHttpData;
 
 class HttpUrlEncodedData implements IHttpData {
     /**

@@ -3,6 +3,7 @@
 namespace Weew\Http;
 
 use Weew\Contracts\IStringable;
+use Weew\Http\Data\HttpUrlEncodedData;
 
 class HttpResponse implements IHttpResponse {
     /**
