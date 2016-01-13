@@ -126,7 +126,7 @@ content-type: text/html
 
 ```php
 $response = new JsonResponse();
-$response->setJsonContent(['Hello' => 'World!']);
+$response->getData()->set('Hello', 'World!');
 $response->send();
 ```
 ```
