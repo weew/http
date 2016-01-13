@@ -4,13 +4,18 @@ namespace Tests\Weew\Http;
 
 use PHPUnit_Framework_TestCase;
 use Tests\Weew\Http\Stubs\StringableItem;
+use Weew\Http\ContentTypeDataMatcher;
 use Weew\Http\Cookie;
 use Weew\Http\Cookies;
 use Weew\Http\HttpHeaders;
+use Weew\Http\HttpJsonData;
 use Weew\Http\HttpProtocol;
 use Weew\Http\HttpResponse;
 use Weew\Http\HttpStatusCode;
+use Weew\Http\HttpUrlEncodedData;
+use Weew\Http\IContentTypeDataMatcher;
 use Weew\Http\ICookies;
+use Weew\Http\IHttpData;
 use Weew\Http\IHttpHeaders;
 
 class HttpResponseTest extends PHPUnit_Framework_TestCase {
@@ -207,6 +212,35 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase {
         $this->assertFalse($response->isSecure());
         $response->setProtocol(HttpProtocol::HTTPS);
         $this->assertTrue($response->isSecure());
+    }
+
+    public function test_get_and_set_data() {
+        $response = new HttpResponse();
+        $this->assertTrue($response->getData() instanceof IHttpData);
+        $data = new HttpUrlEncodedData($response, ['foo' => 'bar']);
+        $response->setData($data);
+        $this->assertTrue($response->getData() instanceof IHttpData);
+        $this->assertEquals('bar', $response->getData()->get('foo'));
+    }
+
+    public function test_get_and_set_content_type_data_matcher() {
+        $response = new HttpResponse();
+        $this->assertTrue(
+            $response->getContentTypeDataMatcher() instanceof IContentTypeDataMatcher
+        );
+
+        $matcher = new ContentTypeDataMatcher();
+        $response->setContentTypeDataMatcher($matcher);
+        $this->assertTrue($matcher === $response->getContentTypeDataMatcher());
+    }
+
+    public function test_uses_matcher_for_data_creation() {
+        $request = new HttpResponse();
+        $request->setContentType('application/json');
+        $this->assertTrue($request->getData() instanceof HttpJsonData);
+
+        $request = new HttpResponse();
+        $this->assertTrue($request->getData() instanceof HttpUrlEncodedData);
     }
 
     /**

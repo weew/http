@@ -3,13 +3,16 @@
 namespace Tests\Weew\Http;
 
 use PHPUnit_Framework_TestCase;
+use Weew\Http\ContentTypeDataMatcher;
 use Weew\Http\HttpBasicAuth;
 use Weew\Http\CookieJar;
-use Weew\Http\HttpData;
+use Weew\Http\HttpJsonData;
+use Weew\Http\HttpUrlEncodedData;
 use Weew\Http\HttpHeaders;
 use Weew\Http\HttpProtocol;
 use Weew\Http\HttpRequest;
 use Weew\Http\HttpRequestMethod;
+use Weew\Http\IContentTypeDataMatcher;
 use Weew\Http\IHttpBasicAuth;
 use Weew\Http\ICookieJar;
 use Weew\Http\IHttpData;
@@ -69,10 +72,29 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
     public function test_get_and_set_data() {
         $request = new HttpRequest();
         $this->assertTrue($request->getData() instanceof IHttpData);
-        $data = new HttpData($request, ['foo' => 'bar']);
+        $data = new HttpUrlEncodedData($request, ['foo' => 'bar']);
         $request->setData($data);
         $this->assertTrue($request->getData() instanceof IHttpData);
         $this->assertEquals('bar', $request->getData()->get('foo'));
+    }
+
+    public function test_get_and_set_content_type_data_matcher() {
+        $request = new HttpRequest();
+        $this->assertTrue(
+            $request->getContentTypeDataMatcher() instanceof IContentTypeDataMatcher
+        );
+        $matcher = new ContentTypeDataMatcher();
+        $request->setContentTypeDataMatcher($matcher);
+        $this->assertTrue($matcher === $request->getContentTypeDataMatcher());
+    }
+
+    public function test_uses_matcher_for_data_creation() {
+        $request = new HttpRequest();
+        $request->setContentType('application/json');
+        $this->assertTrue($request->getData() instanceof HttpJsonData);
+
+        $request = new HttpRequest();
+        $this->assertTrue($request->getData() instanceof HttpUrlEncodedData);
     }
 
     public function test_get_and_set_basic_auth() {

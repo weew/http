@@ -2,7 +2,7 @@
 
 namespace Weew\Http;
 
-class HttpData implements IHttpData {
+class HttpUrlEncodedData implements IHttpData {
     /**
      * @var string
      */
@@ -11,7 +11,7 @@ class HttpData implements IHttpData {
     /**
      * @var IContentHolder
      */
-    private $holder;
+    protected $holder;
 
     /**
      * @param IContentHolder $holder
@@ -19,7 +19,10 @@ class HttpData implements IHttpData {
      */
     public function __construct(IContentHolder $holder, array $data = []) {
         $this->holder = $holder;
-        $this->setData($data);
+
+        if ( ! empty($data)) {
+            $this->setData($data);
+        }
     }
 
     /**
@@ -63,17 +66,10 @@ class HttpData implements IHttpData {
     /**
      * @param array $data
      */
-    public function add(array $data) {
+    public function extend(array $data) {
         $current = $this->getData();
         $extended = array_extend($current, $data);
         $this->setData($extended);
-    }
-
-    /**
-     * @return int
-     */
-    public function count() {
-        return count($this->getData());
     }
 
     /**
@@ -90,17 +86,15 @@ class HttpData implements IHttpData {
      * @param array $data
      */
     public function setData(array $data) {
-        if (count($data) > 0) {
-            $this->holder->setContent(http_build_query($data));
-            $this->holder->setContentType($this->getDataType());
-        }
+        $this->holder->setContent(http_build_query($data));
+        $this->holder->setContentType($this->getDataType());
     }
 
     /**
      * @return bool
      */
     public function hasData() {
-        return $this->count() > 0;
+        return ! empty($this->getData());
     }
 
     /**
@@ -134,26 +128,6 @@ class HttpData implements IHttpData {
     }
 
     /**
-     * @return string
-     */
-    public function getDataEncoded() {
-        if ( ! $this->hasData()) {
-            return null;
-        }
-
-        // todo: handle multipart data
-        return http_build_query($this->getData());
-    }
-
-    /**
-     * @param string $data
-     */
-    public function setDataEncoded($data) {
-        $this->holder->setContent($data);
-        $this->holder->setContentType($this->getDataType());
-    }
-
-    /**
      * @return array
      */
     public function toArray() {
@@ -164,6 +138,6 @@ class HttpData implements IHttpData {
      * @return string
      */
     public function toString() {
-        return $this->getDataEncoded();
+        return $this->holder->getContent();
     }
 }

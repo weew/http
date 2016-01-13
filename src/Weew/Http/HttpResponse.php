@@ -12,6 +12,16 @@ class HttpResponse implements IHttpResponse {
     protected $headers;
 
     /**
+     * @var IHttpData
+     */
+    protected $data;
+
+    /**
+     * @var IContentTypeDataMatcher
+     */
+    protected $contentTypeDataMatcher;
+
+    /**
      * @var ICookies
      */
     protected $cookies;
@@ -58,6 +68,7 @@ class HttpResponse implements IHttpResponse {
         $this->setHeaders($headers);
         $this->setCookies($this->createCookies());
         $this->setContent($content);
+        $this->setContentTypeDataMatcher($this->createContentTypeDataMatcher());
 
         $this->setDefaults();
     }
@@ -95,6 +106,40 @@ class HttpResponse implements IHttpResponse {
     }
 
     /**
+     * @return IHttpData
+     */
+    public function getData() {
+        if ( ! $this->data instanceof IHttpData) {
+            $this->setData($this->createData());
+        }
+
+        return $this->data;
+    }
+
+    /**
+     * @param IHttpData $data
+     */
+    public function setData(IHttpData $data) {
+        $this->data = $data;
+    }
+
+    /**
+     * @return IContentTypeDataMatcher
+     */
+    public function getContentTypeDataMatcher() {
+        return $this->contentTypeDataMatcher;
+    }
+
+    /**
+     * @param IContentTypeDataMatcher $contentTypeDataMatcher
+     */
+    public function setContentTypeDataMatcher(
+        IContentTypeDataMatcher $contentTypeDataMatcher
+    ) {
+        $this->contentTypeDataMatcher = $contentTypeDataMatcher;
+    }
+
+    /**
      * @return int
      */
     public function getStatusCode() {
@@ -123,54 +168,6 @@ class HttpResponse implements IHttpResponse {
     public function send() {
         $this->getResponseBuilder()->build($this);
     }
-
-    /**
-     * Use this as hook to extend your custom response.
-     */
-    protected function setDefaults() {
-        if ($this->getContentType() === null) {
-            $this->setDefaultContentType();
-        }
-    }
-
-    /**
-     * @return HttpHeaders
-     */
-    protected function createHeaders() {
-        return new HttpHeaders();
-    }
-
-    /**
-     * @return Cookies
-     */
-    protected function createCookies() {
-        return new Cookies($this);
-    }
-
-    /**
-     * @return IHttpResponseBuilder
-     */
-    protected function getResponseBuilder() {
-        return new HttpResponseBuilder();
-    }
-
-    /**
-     * @param $content
-     */
-    public function setContent($content) {
-        if ($content instanceof IStringable) {
-            $content = $content->toString();
-        } else if ( ! is_string($content)) {
-            $content = (string) $content;
-        }
-
-        $this->content = $content;
-    }
-
-    /**
-     * Set the default content type of this response.
-     */
-    protected function setDefaultContentType() {}
 
     /**
      * @return mixed
@@ -230,6 +227,19 @@ class HttpResponse implements IHttpResponse {
      */
     public function setCookies(ICookies $cookies) {
         $this->cookies = $cookies;
+    }
+
+    /**
+     * @param $content
+     */
+    public function setContent($content) {
+        if ($content instanceof IStringable) {
+            $content = $content->toString();
+        } else if ( ! is_string($content)) {
+            $content = (string) $content;
+        }
+
+        $this->content = $content;
     }
 
     /**
@@ -326,5 +336,56 @@ class HttpResponse implements IHttpResponse {
             'headers' => $this->getHeaders()->toArray(),
             'content' => $this->getContent(),
         ];
+    }
+
+    /**
+     * Use this as hook to extend your custom response.
+     */
+    protected function setDefaults() {
+        if ($this->getContentType() === null) {
+            $this->setDefaultContentType();
+        }
+    }
+
+    /**
+     * @return HttpHeaders
+     */
+    protected function createHeaders() {
+        return new HttpHeaders();
+    }
+
+    /**
+     * @return Cookies
+     */
+    protected function createCookies() {
+        return new Cookies($this);
+    }
+
+    /**
+     * @return IHttpResponseBuilder
+     */
+    protected function getResponseBuilder() {
+        return new HttpResponseBuilder();
+    }
+
+    /**
+     * Set the default content type of this response.
+     */
+    protected function setDefaultContentType() {}
+
+    /**
+     * @return HttpUrlEncodedData
+     */
+    protected function createData() {
+        $matcher = new ContentTypeDataMatcher();
+
+        return $matcher->createDataForContentType($this, $this->getContentType());
+    }
+
+    /**
+     * @return IContentTypeDataMatcher
+     */
+    protected function createContentTypeDataMatcher() {
+        return new ContentTypeDataMatcher();
     }
 }

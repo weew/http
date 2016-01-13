@@ -35,12 +35,7 @@ interface IHttpData extends IStringable, IArrayable {
     /**
      * @param array $data
      */
-    function add(array $data);
-
-    /**
-     * @return int
-     */
-    function count();
+    function extend(array $data);
 
     /**
      * @return array
@@ -68,24 +63,4 @@ interface IHttpData extends IStringable, IArrayable {
      * @return string
      */
     function getDataType();
-
-    /**
-     * @return bool
-     */
-    function isMultipart();
-
-    /**
-     * @return bool
-     */
-    function isUrlEncoded();
-
-    /**
-     * @return string
-     */
-    function getDataEncoded();
-
-    /**
-     * @param string $data
-     */
-    function setDataEncoded($data);
 }

@@ -32,6 +32,11 @@ class HttpRequest implements IHttpRequest {
     protected $data;
 
     /**
+     * @var IContentTypeDataMatcher
+     */
+    protected $contentTypeDataMatcher;
+
+    /**
      * @var ICookieJar
      */
     protected $cookieJar;
@@ -74,7 +79,7 @@ class HttpRequest implements IHttpRequest {
         $this->setHeaders($headers);
         $this->setCookieJar($this->createCookieJar());
         $this->setBasicAuth($this->createBasicAuth());
-        $this->setData($this->createData());
+        $this->setContentTypeDataMatcher($this->createContentTypeDataMatcher());
 
         $this->setDefaults();
     }
@@ -108,40 +113,6 @@ class HttpRequest implements IHttpRequest {
     }
 
     /**
-     * Use this as hook to extend your custom request.
-     */
-    protected function setDefaults() {
-        if ($this->getAccept() === null) {
-            $this->setDefaultAccept();
-        }
-
-        if ($this->getContentType() === null) {
-            $this->setDefaultContentType();
-        }
-    }
-
-    /**
-     * @return HttpHeaders
-     */
-    protected function createHeaders() {
-        return new HttpHeaders();
-    }
-
-    /**
-     * @return CookieJar
-     */
-    protected function createCookieJar() {
-        return new CookieJar($this);
-    }
-
-    /**
-     * @return IUrl
-     */
-    protected function createUrl() {
-        return new Url();
-    }
-
-    /**
      * @param $method
      *
      * @see HttpRequestMethods
@@ -149,13 +120,6 @@ class HttpRequest implements IHttpRequest {
     public function setMethod($method) {
         $this->method = $method;
     }
-
-    /**
-     * Get default accept header.
-     *
-     * @return string
-     */
-    protected function setDefaultAccept() {}
 
     /**
      * @return string
@@ -166,33 +130,10 @@ class HttpRequest implements IHttpRequest {
     }
 
     /**
-     * @return string
-     */
-    protected function setDefaultContentType() {}
-
-    /**
      * @return IUrl
      */
     public function getUrl() {
         return $this->url;
-    }
-
-    /**
-     * @return HttpData
-     */
-    protected function createData() {
-        $data = new HttpData($this);
-
-        return $data;
-    }
-
-    /**
-     * @return HttpBasicAuth
-     */
-    protected function createBasicAuth() {
-        $auth = new HttpBasicAuth($this);
-
-        return $auth;
     }
 
     /**
@@ -255,6 +196,10 @@ class HttpRequest implements IHttpRequest {
      * @return IHttpData
      */
     public function getData() {
+        if ( ! $this->data instanceof IHttpData) {
+            $this->setData($this->createData());
+        }
+
         return $this->data;
     }
 
@@ -263,6 +208,22 @@ class HttpRequest implements IHttpRequest {
      */
     public function setData(IHttpData $data) {
         $this->data = $data;
+    }
+
+    /**
+     * @return IContentTypeDataMatcher
+     */
+    public function getContentTypeDataMatcher() {
+        return $this->contentTypeDataMatcher;
+    }
+
+    /**
+     * @param IContentTypeDataMatcher $contentTypeDataMatcher
+     */
+    public function setContentTypeDataMatcher(
+        IContentTypeDataMatcher $contentTypeDataMatcher
+    ) {
+        $this->contentTypeDataMatcher = $contentTypeDataMatcher;
     }
 
     /**
@@ -333,5 +294,74 @@ class HttpRequest implements IHttpRequest {
             'cookies' => $this->getCookieJar()->toArray(),
             'content' => $this->getContent(),
         ];
+    }
+
+    /**
+     * Use this as hook to extend your custom request.
+     */
+    protected function setDefaults() {
+        if ($this->getAccept() === null) {
+            $this->setDefaultAccept();
+        }
+
+        if ($this->getContentType() === null) {
+            $this->setDefaultContentType();
+        }
+    }
+
+    /**
+     * @return HttpHeaders
+     */
+    protected function createHeaders() {
+        return new HttpHeaders();
+    }
+
+    /**
+     * @return CookieJar
+     */
+    protected function createCookieJar() {
+        return new CookieJar($this);
+    }
+
+    /**
+     * @return IUrl
+     */
+    protected function createUrl() {
+        return new Url();
+    }
+
+    /**
+     * Get default accept header.
+     *
+     * @return string
+     */
+    protected function setDefaultAccept() {}
+
+    /**
+     * @return string
+     */
+    protected function setDefaultContentType() {}
+
+    /**
+     * @return IHttpData
+     */
+    protected function createData() {
+        $matcher = $this->getContentTypeDataMatcher();
+
+        return $matcher->createDataForContentType($this, $this->getContentType());
+    }
+
+    /**
+     * @return HttpBasicAuth
+     */
+    protected function createBasicAuth() {
+        return new HttpBasicAuth($this);
+    }
+
+    /**
+     * @return IContentTypeDataMatcher
+     */
+    protected function createContentTypeDataMatcher() {
+        return new ContentTypeDataMatcher();
     }
 }

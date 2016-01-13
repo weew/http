@@ -2,37 +2,15 @@
 
 namespace Weew\Http\Requests;
 
+use Weew\Http\HttpJsonData;
 use Weew\Http\HttpRequest;
-use Weew\Http\IJsonContentHolder;
-use Weew\JsonEncoder\JsonEncoder;
 
-class JsonRequest extends HttpRequest implements IJsonContentHolder {
+class JsonRequest extends HttpRequest {
     /**
-     * @param bool $assoc
-     *
-     * @return array
+     * @return HttpJsonData
      */
-    public function getJsonContent($assoc = true) {
-        $content = $this->getContent();
-
-        if ($content !== null) {
-            $content = (new JsonEncoder())->decode($content, $assoc);
-        }
-
-        return $content;
-    }
-
-    /**
-     * @param $content
-     * @param int $options
-     */
-    public function setJsonContent($content, $options = 0) {
-        if ($content !== null) {
-            $content = (new JsonEncoder())->encode($content, $options);
-        }
-
-        $this->setDefaultContentType();
-        $this->setContent($content);
+    protected function createData() {
+        return new HttpJsonData($this);
     }
 
     /**

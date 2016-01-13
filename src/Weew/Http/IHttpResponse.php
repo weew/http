@@ -7,6 +7,7 @@ use Weew\Contracts\IArrayable;
 interface IHttpResponse extends
     IHttpHeadersHolder,
     IContentHolder,
+    IHttpDataHolder,
     IHttpProtocolHolder,
     IStatusHolder,
     ICookiesHolder,
