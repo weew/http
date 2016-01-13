@@ -3,13 +3,13 @@
 namespace Tests\Weew\Http\Requests;
 
 use PHPUnit_Framework_TestCase;
-use Weew\Http\Data\HttpJsonData;
+use Weew\Http\Data\JsonData;
 use Weew\Http\Requests\JsonRequest;
 
 class JsonRequestTest extends PHPUnit_Framework_TestCase {
     public function test_uses_json_data() {
         $request = new JsonRequest();
-        $this->assertTrue($request->getData() instanceof HttpJsonData);
+        $this->assertTrue($request->getData() instanceof JsonData);
     }
 
     public function test_content_type_and_accept_header() {

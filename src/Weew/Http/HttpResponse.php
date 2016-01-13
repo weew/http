@@ -3,7 +3,7 @@
 namespace Weew\Http;
 
 use Weew\Contracts\IStringable;
-use Weew\Http\Data\HttpUrlEncodedData;
+use Weew\Http\Data\UrlEncodedData;
 
 class HttpResponse implements IHttpResponse {
     /**
@@ -372,7 +372,7 @@ class HttpResponse implements IHttpResponse {
     protected function setDefaultContentType() {}
 
     /**
-     * @return HttpUrlEncodedData
+     * @return UrlEncodedData
      */
     protected function createData() {
         $matcher = new ContentTypeDataMatcher();

@@ -3,14 +3,14 @@
 namespace Tests\Weew\Http\Data;
 
 use PHPUnit_Framework_TestCase;
-use Weew\Http\Data\HttpJsonData;
+use Weew\Http\Data\JsonData;
 use Weew\Http\HttpDataType;
 use Weew\Http\HttpRequest;
 
-class HttpJsonDataTest extends PHPUnit_Framework_TestCase {
+class JsonDataTest extends PHPUnit_Framework_TestCase {
     public function test_get_data() {
         $request = new HttpRequest();
-        $data = new HttpJsonData($request);
+        $data = new JsonData($request);
 
         $this->assertEquals([], $data->getData());
         $request->setContent(json_encode(['foo' => 'bar']));
@@ -19,7 +19,7 @@ class HttpJsonDataTest extends PHPUnit_Framework_TestCase {
 
     public function test_set_data() {
         $request = new HttpRequest();
-        $data = new HttpJsonData($request);
+        $data = new JsonData($request);
 
         $this->assertNotEquals($request->getContentType(), $data->getDataType());
         $data->setData(['foo' => 'bar']);
@@ -29,7 +29,7 @@ class HttpJsonDataTest extends PHPUnit_Framework_TestCase {
 
     public function test_has_data() {
         $request = new HttpRequest();
-        $data = new HttpJsonData($request);
+        $data = new JsonData($request);
 
         $this->assertFalse($data->hasData());
         $data->setData(['foo' => 'bar']);
@@ -38,14 +38,14 @@ class HttpJsonDataTest extends PHPUnit_Framework_TestCase {
 
     public function test_create_with_data() {
         $request = new HttpRequest();
-        $data = new HttpJsonData($request, ['foo' => 'bar']);
+        $data = new JsonData($request, ['foo' => 'bar']);
 
         $this->assertEquals(['foo' => 'bar'], $data->getData());
     }
 
     public function test_getters_and_setters() {
         $request = new HttpRequest();
-        $data = new HttpJsonData($request, ['foo' => 'bar']);
+        $data = new JsonData($request, ['foo' => 'bar']);
 
         $this->assertEquals('bar', $data->get('foo'));
         $this->assertNull($data->get('bar'));
@@ -67,7 +67,7 @@ class HttpJsonDataTest extends PHPUnit_Framework_TestCase {
 
     public function test_data_type() {
         $request = new HttpRequest();
-        $data = new HttpJsonData($request);
+        $data = new JsonData($request);
 
         $this->assertNotEquals(
             $data->getDataType(), $request->getContentType()
@@ -81,14 +81,14 @@ class HttpJsonDataTest extends PHPUnit_Framework_TestCase {
 
     public function test_to_string() {
         $request = new HttpRequest();
-        $data = new HttpJsonData($request, ['foo' => 'bar']);
+        $data = new JsonData($request, ['foo' => 'bar']);
 
         $this->assertEquals(json_encode(['foo' => 'bar']), $data->toString());
     }
 
     public function test_to_array() {
         $request = new HttpRequest();
-        $data = new HttpJsonData($request, ['foo' => 'bar']);
+        $data = new JsonData($request, ['foo' => 'bar']);
 
         $this->assertEquals(['foo' => 'bar'], $data->toArray());
     }

@@ -2,8 +2,8 @@
 
 namespace Weew\Http;
 
-use Weew\Http\Data\HttpJsonData;
-use Weew\Http\Data\HttpUrlEncodedData;
+use Weew\Http\Data\JsonData;
+use Weew\Http\Data\UrlEncodedData;
 use Weew\Http\Exceptions\InvalidDataClassException;
 
 class ContentTypeDataMatcher implements IContentTypeDataMatcher {
@@ -77,13 +77,13 @@ class ContentTypeDataMatcher implements IContentTypeDataMatcher {
      * @throws InvalidDataClassException
      */
     protected function registerDefaultMappings() {
-        $this->addMapping('application/json', HttpJsonData::class);
+        $this->addMapping('application/json', JsonData::class);
     }
 
     /**
      * @return string
      */
     protected function getDefaultDataClass() {
-        return HttpUrlEncodedData::class;
+        return UrlEncodedData::class;
     }
 }

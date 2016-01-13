@@ -4,8 +4,8 @@ namespace Tests\Weew\Http;
 
 use PHPUnit_Framework_TestCase;
 use Weew\Http\ContentTypeDataMatcher;
-use Weew\Http\Data\HttpJsonData;
-use Weew\Http\Data\HttpUrlEncodedData;
+use Weew\Http\Data\JsonData;
+use Weew\Http\Data\UrlEncodedData;
 use Weew\Http\Exceptions\InvalidDataClassException;
 use Weew\Http\HttpRequest;
 
@@ -15,22 +15,22 @@ class ContentTypeDataMatcherTest extends PHPUnit_Framework_TestCase {
         $this->assertTrue(is_array($matcher->getMappings()));
 
         $matcher->setMappings([
-            'foo' => HttpUrlEncodedData::class,
+            'foo' => UrlEncodedData::class,
         ]);
         $this->assertEquals(
-            HttpUrlEncodedData::class, array_get($matcher->getMappings(), 'foo')
+            UrlEncodedData::class, array_get($matcher->getMappings(), 'foo')
         );
     }
 
     public function test_add_mapping() {
         $matcher = new ContentTypeDataMatcher();
         $matcher->setMappings([]);
-        $matcher->addMapping('foo', HttpUrlEncodedData::class);
-        $matcher->addMapping('bar', HttpUrlEncodedData::class);
+        $matcher->addMapping('foo', UrlEncodedData::class);
+        $matcher->addMapping('bar', UrlEncodedData::class);
 
         $this->assertEquals([
-            'foo' => HttpUrlEncodedData::class,
-            'bar' => HttpUrlEncodedData::class,
+            'foo' => UrlEncodedData::class,
+            'bar' => UrlEncodedData::class,
         ], $matcher->getMappings());
     }
 
@@ -44,9 +44,9 @@ class ContentTypeDataMatcherTest extends PHPUnit_Framework_TestCase {
         $request = new HttpRequest();
         $matcher = new ContentTypeDataMatcher();
         $data = $matcher->createDataForContentType($request, 'foo');
-        $this->assertTrue($data instanceof HttpUrlEncodedData);
+        $this->assertTrue($data instanceof UrlEncodedData);
 
         $data = $matcher->createDataForContentType($request, 'application/json');
-        $this->assertTrue($data instanceof HttpJsonData);
+        $this->assertTrue($data instanceof JsonData);
     }
 }

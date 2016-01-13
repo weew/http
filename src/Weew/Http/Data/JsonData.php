@@ -8,7 +8,7 @@ use Weew\Http\IHttpData;
 use Weew\JsonEncoder\IJsonEncoder;
 use Weew\JsonEncoder\JsonEncoder;
 
-class HttpJsonData implements IHttpData {
+class JsonData implements IHttpData {
     /**
      * @var string
      */
@@ -20,7 +20,7 @@ class HttpJsonData implements IHttpData {
     protected $holder;
 
     /**
-     * HttpJsonData constructor.
+     * JsonData constructor.
      *
      * @param IContentHolder $holder
      * @param array $data

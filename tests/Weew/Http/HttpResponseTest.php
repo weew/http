@@ -7,8 +7,8 @@ use Tests\Weew\Http\Stubs\StringableItem;
 use Weew\Http\ContentTypeDataMatcher;
 use Weew\Http\Cookie;
 use Weew\Http\Cookies;
-use Weew\Http\Data\HttpJsonData;
-use Weew\Http\Data\HttpUrlEncodedData;
+use Weew\Http\Data\JsonData;
+use Weew\Http\Data\UrlEncodedData;
 use Weew\Http\HttpHeaders;
 use Weew\Http\HttpProtocol;
 use Weew\Http\HttpResponse;
@@ -217,7 +217,7 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase {
     public function test_get_and_set_data() {
         $response = new HttpResponse();
         $this->assertTrue($response->getData() instanceof IHttpData);
-        $data = new HttpUrlEncodedData($response, ['foo' => 'bar']);
+        $data = new UrlEncodedData($response, ['foo' => 'bar']);
         $response->setData($data);
         $this->assertTrue($response->getData() instanceof IHttpData);
         $this->assertEquals('bar', $response->getData()->get('foo'));
@@ -237,10 +237,10 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase {
     public function test_uses_matcher_for_data_creation() {
         $request = new HttpResponse();
         $request->setContentType('application/json');
-        $this->assertTrue($request->getData() instanceof HttpJsonData);
+        $this->assertTrue($request->getData() instanceof JsonData);
 
         $request = new HttpResponse();
-        $this->assertTrue($request->getData() instanceof HttpUrlEncodedData);
+        $this->assertTrue($request->getData() instanceof UrlEncodedData);
     }
 
     /**

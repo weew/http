@@ -6,7 +6,7 @@ use Weew\Http\HttpDataType;
 use Weew\Http\IContentHolder;
 use Weew\Http\IHttpData;
 
-class HttpUrlEncodedData implements IHttpData {
+class UrlEncodedData implements IHttpData {
     /**
      * @var string
      */

@@ -3,14 +3,14 @@
 namespace Tests\Weew\Http\Data;
 
 use PHPUnit_Framework_TestCase;
-use Weew\Http\Data\HttpUrlEncodedData;
+use Weew\Http\Data\UrlEncodedData;
 use Weew\Http\HttpDataType;
 use Weew\Http\HttpRequest;
 
-class HttpUrlEncodedDataTest extends PHPUnit_Framework_TestCase {
+class UrlEncodedDataTest extends PHPUnit_Framework_TestCase {
     public function test_get_data() {
         $request = new HttpRequest();
-        $data = new HttpUrlEncodedData($request);
+        $data = new UrlEncodedData($request);
 
         $this->assertEquals([], $data->getData());
         $request->setContent(http_build_query(['foo' => 'bar']));
@@ -19,7 +19,7 @@ class HttpUrlEncodedDataTest extends PHPUnit_Framework_TestCase {
 
     public function test_set_data() {
         $request = new HttpRequest();
-        $data = new HttpUrlEncodedData($request);
+        $data = new UrlEncodedData($request);
 
         $this->assertNotEquals($request->getContentType(), $data->getDataType());
         $data->setData(['foo' => 'bar']);
@@ -29,7 +29,7 @@ class HttpUrlEncodedDataTest extends PHPUnit_Framework_TestCase {
 
     public function test_has_data() {
         $request = new HttpRequest();
-        $data = new HttpUrlEncodedData($request);
+        $data = new UrlEncodedData($request);
 
         $this->assertFalse($data->hasData());
         $data->setData(['foo' => 'bar']);
@@ -38,14 +38,14 @@ class HttpUrlEncodedDataTest extends PHPUnit_Framework_TestCase {
 
     public function test_create_with_data() {
         $request = new HttpRequest();
-        $data = new HttpUrlEncodedData($request, ['foo' => 'bar']);
+        $data = new UrlEncodedData($request, ['foo' => 'bar']);
 
         $this->assertEquals(['foo' => 'bar'], $data->getData());
     }
 
     public function test_getters_and_setters() {
         $request = new HttpRequest();
-        $data = new HttpUrlEncodedData($request, ['foo' => 'bar']);
+        $data = new UrlEncodedData($request, ['foo' => 'bar']);
 
         $this->assertEquals('bar', $data->get('foo'));
         $this->assertNull($data->get('bar'));
@@ -67,7 +67,7 @@ class HttpUrlEncodedDataTest extends PHPUnit_Framework_TestCase {
 
     public function test_data_type() {
         $request = new HttpRequest();
-        $data = new HttpUrlEncodedData($request);
+        $data = new UrlEncodedData($request);
 
         $this->assertNotEquals(
             $data->getDataType(), $request->getContentType()
@@ -87,14 +87,14 @@ class HttpUrlEncodedDataTest extends PHPUnit_Framework_TestCase {
 
     public function test_to_string() {
         $request = new HttpRequest();
-        $data = new HttpUrlEncodedData($request, ['foo' => 'bar']);
+        $data = new UrlEncodedData($request, ['foo' => 'bar']);
 
         $this->assertEquals('foo=bar', $data->toString());
     }
 
     public function test_to_array() {
         $request = new HttpRequest();
-        $data = new HttpUrlEncodedData($request, ['foo' => 'bar']);
+        $data = new UrlEncodedData($request, ['foo' => 'bar']);
 
         $this->assertEquals(['foo' => 'bar'], $data->toArray());
     }

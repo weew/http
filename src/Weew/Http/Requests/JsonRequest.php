@@ -2,15 +2,15 @@
 
 namespace Weew\Http\Requests;
 
-use Weew\Http\Data\HttpJsonData;
+use Weew\Http\Data\JsonData;
 use Weew\Http\HttpRequest;
 
 class JsonRequest extends HttpRequest {
     /**
-     * @return HttpJsonData
+     * @return JsonData
      */
     protected function createData() {
-        return new HttpJsonData($this);
+        return new JsonData($this);
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace Weew\Http\Responses;
 
-use Weew\Http\Data\HttpJsonData;
+use Weew\Http\Data\JsonData;
 use Weew\Http\HttpResponse;
 use Weew\Http\HttpStatusCode;
 use Weew\Http\IHttpHeaders;
@@ -26,10 +26,10 @@ class JsonResponse extends HttpResponse {
     }
 
     /**
-     * @return HttpJsonData
+     * @return JsonData
      */
     protected function createData() {
-        return new HttpJsonData($this);
+        return new JsonData($this);
     }
 
     /**
