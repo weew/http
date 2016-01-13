@@ -2,7 +2,6 @@
 
 namespace Weew\Http;
 
-use Exception;
 use Weew\Contracts\IStringable;
 
 class HttpResponse implements IHttpResponse {
@@ -98,8 +97,6 @@ class HttpResponse implements IHttpResponse {
 
     /**
      * @param IHttpHeaders $headers
-     *
-     * @throws Exception
      */
     public function setHeaders(IHttpHeaders $headers) {
         $this->headers = $headers;
