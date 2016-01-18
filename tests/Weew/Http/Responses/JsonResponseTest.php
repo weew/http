@@ -3,6 +3,8 @@
 namespace Tests\Weew\Http\Responses;
 
 use PHPUnit_Framework_TestCase;
+use Tests\Weew\Http\Stubs\ArrayableItem;
+use Tests\Weew\Http\Stubs\JsonableItem;
 use Weew\Http\Data\JsonData;
 use Weew\Http\Responses\JsonResponse;
 
@@ -31,5 +33,20 @@ class JsonResponseTest extends PHPUnit_Framework_TestCase {
         $response = new JsonResponse();
         $response->setContent(json_encode(['foo' => 'bar']));
         $this->assertEquals('bar', $response->getData()->get('foo'));
+    }
+
+    public function test_accepts_strings() {
+        $response = new JsonResponse(null, json_encode(['foo' => 'bar']));
+        $this->assertEquals('bar', $response->getData()->get('foo'));
+    }
+
+    public function test_accepts_arrayables() {
+        $response = new JsonResponse(null, new ArrayableItem('bar'));
+        $this->assertEquals('bar', $response->getData()->get('id'));
+    }
+
+    public function test_accepts_jsonables() {
+        $response = new JsonResponse(null, new JsonableItem('bar'));
+        $this->assertEquals('bar', $response->getData()->get('id'));
     }
 }

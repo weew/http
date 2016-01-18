@@ -2,6 +2,9 @@
 
 namespace Weew\Http\Responses;
 
+use Weew\Contracts\IArrayable;
+use Weew\Contracts\IJsonable;
+use Weew\Contracts\IStringable;
 use Weew\Http\Data\JsonData;
 use Weew\Http\HttpResponse;
 use Weew\Http\HttpStatusCode;
@@ -20,8 +23,14 @@ class JsonResponse extends HttpResponse {
     ) {
         parent::__construct($statusCode, null, $headers);
 
-        if ( ! empty($content)) {
+        if (is_array($content) && ! empty($content)) {
             $this->getData()->setData($content);
+        } else if ($content instanceof IArrayable) {
+            $this->getData()->setData($content->toArray());
+        } else if ($content instanceof IJsonable) {
+            $this->setContent($content->toJson());
+        } else {
+            $this->setContent($content);
         }
     }
 
