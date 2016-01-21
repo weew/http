@@ -44,6 +44,21 @@ class JsonData implements IHttpData {
     }
 
     /**
+     * @param array $keys
+     *
+     * @return array
+     */
+    public function pick(array $keys) {
+        $data = [];
+
+        foreach ($keys as $key) {
+            array_set($data, $key, $this->get($key));
+        }
+
+        return $data;
+    }
+
+    /**
      * @param string $key
      * @param $value
      */

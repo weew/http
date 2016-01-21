@@ -92,4 +92,16 @@ class JsonDataTest extends PHPUnit_Framework_TestCase {
 
         $this->assertEquals(['foo' => 'bar'], $data->toArray());
     }
+
+    public function test_pick() {
+        $request = new HttpRequest();
+        $data = new JsonData(
+            $request, ['foo' => 'bar', 'bar' => 'baz', 'yolo' => 'swag']
+        );
+
+        $this->assertEquals([
+            'foo' => 'bar',
+            'yolo' => 'swag',
+        ], $data->pick(['foo', 'yolo']));
+    }
 }

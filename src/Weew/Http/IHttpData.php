@@ -15,6 +15,13 @@ interface IHttpData extends IStringable, IArrayable {
     function get($key, $default = null);
 
     /**
+     * @param array $keys
+     *
+     * @return array
+     */
+    function pick(array $keys);
+
+    /**
      * @param string $key
      * @param $value
      */
