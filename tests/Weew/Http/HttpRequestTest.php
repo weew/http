@@ -3,6 +3,7 @@
 namespace Tests\Weew\Http;
 
 use PHPUnit_Framework_TestCase;
+use Tests\Weew\Http\Stubs\ArrayableItem;
 use Weew\Http\ContentTypeDataMatcher;
 use Weew\Http\CookieJar;
 use Weew\Http\Data\JsonData;
@@ -177,5 +178,11 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
         $this->assertFalse($request->isSecure());
         $request->setProtocol(HttpProtocol::HTTPS);
         $this->assertTrue($request->isSecure());
+    }
+
+    public function test_set_complex_content() {
+        $response = new HttpRequest();
+        $response->setContent([new ArrayableItem('foo'), new ArrayableItem('bar')]);
+        $this->assertEquals([['id' => 'foo'], ['id' => 'bar']], $response->getData()->toArray());
     }
 }

@@ -3,6 +3,7 @@
 namespace Tests\Weew\Http\Requests;
 
 use PHPUnit_Framework_TestCase;
+use Tests\Weew\Http\Stubs\ArrayableItem;
 use Weew\Http\Data\JsonData;
 use Weew\Http\Requests\JsonRequest;
 
@@ -32,5 +33,11 @@ class JsonRequestTest extends PHPUnit_Framework_TestCase {
         $request = new JsonRequest();
         $request->setContent(json_encode(['foo' => 'bar']));
         $this->assertEquals('bar', $request->getData()->get('foo'));
+    }
+
+    public function test_set_complex_content() {
+        $response = new JsonRequest();
+        $response->setContent([new ArrayableItem('foo'), new ArrayableItem('bar')]);
+        $this->assertEquals([['id' => 'foo'], ['id' => 'bar']], $response->getData()->toArray());
     }
 }

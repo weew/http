@@ -147,7 +147,11 @@ class HttpRequest implements IHttpRequest {
      * @param $content
      */
     public function setContent($content) {
-        $this->content = $content;
+        if (is_array($content) || is_object($content)) {
+            $this->getData()->setData($content);
+        } else {
+            $this->content = (string) $content;
+        }
     }
 
     /**
