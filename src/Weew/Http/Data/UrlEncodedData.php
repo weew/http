@@ -2,8 +2,10 @@
 
 namespace Weew\Http\Data;
 
+use Weew\Http\DataSerializer;
 use Weew\Http\HttpDataType;
 use Weew\Http\IContentHolder;
+use Weew\Http\IDataSerializer;
 use Weew\Http\IHttpData;
 
 class UrlEncodedData implements IHttpData {
@@ -102,10 +104,16 @@ class UrlEncodedData implements IHttpData {
     }
 
     /**
-     * @param array $data
+     * @param $data
      */
-    public function setData(array $data) {
-        $this->holder->setContent(http_build_query($data));
+    public function setData($data) {
+        $data = $this->getSerializer()->serialize($data);
+
+        if (is_array($data)) {
+            $data = http_build_query($data);
+        }
+
+        $this->holder->setContent($data);
         $this->holder->setContentType($this->getDataType());
     }
 
@@ -158,5 +166,12 @@ class UrlEncodedData implements IHttpData {
      */
     public function toString() {
         return $this->holder->getContent();
+    }
+
+    /**
+     * @return IDataSerializer
+     */
+    protected function getSerializer() {
+        return new DataSerializer();
     }
 }

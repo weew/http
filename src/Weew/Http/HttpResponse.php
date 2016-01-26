@@ -231,13 +231,11 @@ class HttpResponse implements IHttpResponse {
      * @param $content
      */
     public function setContent($content) {
-        if ($content instanceof IStringable) {
-            $content = $content->toString();
-        } else if ( ! is_string($content)) {
-            $content = (string) $content;
+        if (is_array($content) || is_object($content)) {
+            $this->getData()->setData($content);
+        } else {
+            $this->content = (string) $content;
         }
-
-        $this->content = $content;
     }
 
     /**

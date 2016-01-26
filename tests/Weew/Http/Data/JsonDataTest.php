@@ -3,9 +3,11 @@
 namespace Tests\Weew\Http\Data;
 
 use PHPUnit_Framework_TestCase;
+use Tests\Weew\Http\Stubs\ArrayableItem;
 use Weew\Http\Data\JsonData;
 use Weew\Http\HttpDataType;
 use Weew\Http\HttpRequest;
+use Weew\Http\Responses\JsonResponse;
 
 class JsonDataTest extends PHPUnit_Framework_TestCase {
     public function test_get_data() {
@@ -103,5 +105,11 @@ class JsonDataTest extends PHPUnit_Framework_TestCase {
             'foo' => 'bar',
             'yolo' => 'swag',
         ], $data->pick(['foo', 'yolo']));
+    }
+
+    public function test_accepts_complex_structures() {
+        $data = new JsonData(new JsonResponse());
+        $data->setData([new ArrayableItem('foo'), new ArrayableItem('bar')]);
+        $this->assertEquals([['id' => 'foo'], ['id' => 'bar']], $data->toArray());
     }
 }

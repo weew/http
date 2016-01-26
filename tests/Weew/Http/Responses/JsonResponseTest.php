@@ -64,5 +64,9 @@ class JsonResponseTest extends PHPUnit_Framework_TestCase {
     public function test_accepts_complex_structures() {
         $response = new JsonResponse(null, [new ArrayableItem('foo'), new ArrayableItem('bar')]);
         $this->assertEquals([['id' => 'foo'], ['id' => 'bar']], $response->getData()->toArray());
+
+        $response = new JsonResponse();
+        $response->setContent([new ArrayableItem('foo'), new ArrayableItem('bar')]);
+        $this->assertEquals([['id' => 'foo'], ['id' => 'bar']], $response->getData()->toArray());
     }
 }

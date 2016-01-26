@@ -2,8 +2,10 @@
 
 namespace Weew\Http\Data;
 
+use Weew\Http\DataSerializer;
 use Weew\Http\HttpDataType;
 use Weew\Http\IContentHolder;
+use Weew\Http\IDataSerializer;
 use Weew\Http\IHttpData;
 use Weew\JsonEncoder\IJsonEncoder;
 use Weew\JsonEncoder\JsonEncoder;
@@ -25,7 +27,10 @@ class JsonData implements IHttpData {
      * @param IContentHolder $holder
      * @param array $data
      */
-    public function __construct(IContentHolder $holder, array $data = []) {
+    public function __construct(
+        IContentHolder $holder,
+        array $data = []
+    ) {
         $this->holder = $holder;
 
         if ( ! empty($data)) {
@@ -105,11 +110,17 @@ class JsonData implements IHttpData {
     }
 
     /**
-     * @param array $data
+     * @param $data
      */
-    public function setData(array $data) {
+    public function setData($data) {
+        $data = $this->getSerializer()->serialize($data);
+
+        if ( ! is_string($data)) {
+            $data = $this->getJsonEncoder()->encode($data);
+        }
+
         $this->holder->setContentType($this->getDataType());
-        $this->holder->setContent($this->getJsonEncoder()->encode($data));
+        $this->holder->setContent($data);
     }
 
     /**
@@ -154,5 +165,12 @@ class JsonData implements IHttpData {
      */
     protected function getJsonEncoder() {
         return new JsonEncoder();
+    }
+
+    /**
+     * @return IDataSerializer
+     */
+    protected function getSerializer() {
+        return new DataSerializer();
     }
 }

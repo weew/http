@@ -52,7 +52,7 @@ interface IHttpData extends IStringable, IArrayable {
     /**
      * @param array $data
      */
-    function setData(array $data);
+    function setData($data);
 
     /**
      * @return bool

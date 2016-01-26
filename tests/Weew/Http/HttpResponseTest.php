@@ -3,6 +3,7 @@
 namespace Tests\Weew\Http;
 
 use PHPUnit_Framework_TestCase;
+use Tests\Weew\Http\Stubs\ArrayableItem;
 use Tests\Weew\Http\Stubs\StringableItem;
 use Weew\Http\ContentTypeDataMatcher;
 use Weew\Http\Cookie;
@@ -241,6 +242,19 @@ class HttpResponseTest extends PHPUnit_Framework_TestCase {
 
         $request = new HttpResponse();
         $this->assertTrue($request->getData() instanceof UrlEncodedData);
+    }
+
+    public function test_set_complex_content() {
+        $response = new HttpResponse(null, [new ArrayableItem('foo'), new ArrayableItem('bar')]);
+        $this->assertEquals([['id' => 'foo'], ['id' => 'bar']], $response->getData()->toArray());
+
+        $response = new HttpResponse();
+        $response->setContent([new ArrayableItem('foo'), new ArrayableItem('bar')]);
+        $this->assertEquals([['id' => 'foo'], ['id' => 'bar']], $response->getData()->toArray());
+
+        $response = new HttpResponse();
+        $response->getData()->setData([new ArrayableItem('foo'), new ArrayableItem('bar')]);
+        $this->assertEquals([['id' => 'foo'], ['id' => 'bar']], $response->getData()->toArray());
     }
 
     /**

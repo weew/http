@@ -3,9 +3,11 @@
 namespace Tests\Weew\Http\Data;
 
 use PHPUnit_Framework_TestCase;
+use Tests\Weew\Http\Stubs\ArrayableItem;
 use Weew\Http\Data\UrlEncodedData;
 use Weew\Http\HttpDataType;
 use Weew\Http\HttpRequest;
+use Weew\Http\HttpResponse;
 
 class UrlEncodedDataTest extends PHPUnit_Framework_TestCase {
     public function test_get_data() {
@@ -109,5 +111,11 @@ class UrlEncodedDataTest extends PHPUnit_Framework_TestCase {
             'foo' => 'bar',
             'yolo' => 'swag',
         ], $data->pick(['foo', 'yolo']));
+    }
+
+    public function test_set_complex_data() {
+        $data = new UrlEncodedData(new HttpResponse());
+        $data->setData([new ArrayableItem('foo'), new ArrayableItem('bar')]);
+        $this->assertEquals([['id' => 'foo'], ['id' => 'bar']], $data->toArray());
     }
 }
