@@ -57,6 +57,11 @@ class HttpRequest implements IHttpRequest {
     protected $version = HttpProtocol::CURRENT_VERSION;
 
     /**
+     * @var ISuperGlobal
+     */
+    protected $serverGlobal;
+
+    /**
      * @param string $method
      * @param null|IUrl $url
      * @param IHttpHeaders $headers
@@ -80,6 +85,7 @@ class HttpRequest implements IHttpRequest {
         $this->setCookieJar($this->createCookieJar());
         $this->setBasicAuth($this->createBasicAuth());
         $this->setContentTypeDataMatcher($this->createContentTypeDataMatcher());
+        $this->setServerGlobal($this->createServerGlobal());
 
         $this->setDefaults();
     }
@@ -284,6 +290,20 @@ class HttpRequest implements IHttpRequest {
     }
 
     /**
+     * @return ISuperGlobal
+     */
+    public function getServerGlobal() {
+        return $this->serverGlobal;
+    }
+
+    /**
+     * @param ISuperGlobal $serverGlobal
+     */
+    public function setServerGlobal(ISuperGlobal $serverGlobal) {
+        $this->serverGlobal = $serverGlobal;
+    }
+
+    /**
      * @return array
      */
     public function toArray() {
@@ -367,5 +387,12 @@ class HttpRequest implements IHttpRequest {
      */
     protected function createContentTypeDataMatcher() {
         return new ContentTypeDataMatcher();
+    }
+
+    /**
+     * @return ServerGlobal
+     */
+    protected function createServerGlobal() {
+        return new ServerGlobal();
     }
 }

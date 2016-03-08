@@ -7,6 +7,7 @@ use Weew\Http\HttpRequest;
 use Weew\Http\IHttpHeaders;
 use Weew\Http\IHttpRequest;
 use Weew\Http\ReceivedRequestParser;
+use Weew\Http\ServerGlobal;
 
 class ReceivedRequestParserTest extends PHPUnit_Framework_TestCase {
     public function test_parse_url() {
@@ -54,6 +55,14 @@ class ReceivedRequestParserTest extends PHPUnit_Framework_TestCase {
 
         $parser->setContent($request, 'foo');
         $this->assertEquals('foo', $request->getContent());
+    }
+
+    public function test_set_server_global() {
+        $request = new HttpRequest();
+        $parser = new ReceivedRequestParser();
+
+        $parser->setServerGlobal($request, ['foo']);
+        $this->assertTrue(['foo'] === $request->getServerGlobal()->toArray());
     }
 
     /**

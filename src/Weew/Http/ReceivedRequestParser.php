@@ -21,6 +21,7 @@ class ReceivedRequestParser implements IReceivedRequestParser {
         $this->setHeaders($request, $server);
         $this->setProtocol($request, $server);
         $this->setContent($request);
+        $this->setServerGlobal($request, $server);
 
         return $request;
     }
@@ -117,6 +118,14 @@ class ReceivedRequestParser implements IReceivedRequestParser {
      */
     public function setHeaders(IHttpRequest $request, array $server) {
         $request->setHeaders($this->parseHeaders($server));
+    }
+
+    /**
+     * @param IHttpRequest $request
+     * @param array $server
+     */
+    public function setServerGlobal(IHttpRequest $request, array $server) {
+        $request->setServerGlobal(new ServerGlobal($server));
     }
 
     /**

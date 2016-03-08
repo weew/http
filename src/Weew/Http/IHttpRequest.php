@@ -46,4 +46,14 @@ interface IHttpRequest extends
      * @param string $accept
      */
     function setAccept($accept);
+
+    /**
+     * @return ISuperGlobal
+     */
+    function getServerGlobal();
+
+    /**
+     * @param ISuperGlobal $serverGlobal
+     */
+    function setServerGlobal(ISuperGlobal $serverGlobal);
 }

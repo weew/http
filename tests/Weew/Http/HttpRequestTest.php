@@ -18,6 +18,8 @@ use Weew\Http\ICookieJar;
 use Weew\Http\IHttpBasicAuth;
 use Weew\Http\IHttpData;
 use Weew\Http\IHttpHeaders;
+use Weew\Http\ISuperGlobal;
+use Weew\Http\ServerGlobal;
 use Weew\Url\IUrl;
 use Weew\Url\Url;
 
@@ -184,5 +186,18 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
         $response = new HttpRequest();
         $response->setContent([new ArrayableItem('foo'), new ArrayableItem('bar')]);
         $this->assertEquals([['id' => 'foo'], ['id' => 'bar']], $response->getData()->toArray());
+    }
+
+    public function test_get_and_set_server_global() {
+        $request = new HttpRequest();
+        $global = $request->getServerGlobal();
+        $this->assertTrue($global instanceof ISuperGlobal);
+
+        $_SERVER['foo'] = 'bar';
+
+        $this->assertEquals('bar', $global->get('foo'));
+        $global = new ServerGlobal();
+        $request->setServerGlobal($global);
+        $this->assertTrue($global === $request->getServerGlobal());
     }
 }
