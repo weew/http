@@ -37,7 +37,7 @@ class BasicAuthHeaderParserTest extends PHPUnit_Framework_TestCase {
         $parser = new BasicAuthParser();
 
         $this->assertEquals(
-            'basic foo', $parser->createHeader('foo')
+            'Basic foo', $parser->createHeader('foo')
         );
     }
 

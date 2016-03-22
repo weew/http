@@ -150,7 +150,7 @@ class ReceivedHeadersParser implements IReceivedHeadersParser {
      */
     protected function authIsValid($auth) {
         if ($auth !== null &&
-            preg_match('/^basic|digest|bearer/', $auth)
+            preg_match('/^Basic|Digest|Bearer/', $auth)
         ) {
             return true;
         }

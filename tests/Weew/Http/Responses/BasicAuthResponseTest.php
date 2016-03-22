@@ -17,7 +17,7 @@ class BasicAuthResponseTest extends PHPUnit_Framework_TestCase {
         $this->assertEquals('bar', $response->getRealm());
         $this->assertEquals(
             $response->getHeaders()->find('www-authenticate'),
-            'basic realm="bar"'
+            'Basic realm="bar"'
         );
     }
 }

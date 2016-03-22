@@ -137,7 +137,7 @@ class BasicAuthParser implements IBasicAuthParser {
      * @return string
      */
     public function createHeader($token) {
-        return s('basic %s', $token);
+        return s('Basic %s', $token);
     }
 
     /**
@@ -146,8 +146,8 @@ class BasicAuthParser implements IBasicAuthParser {
      * @return null|string
      */
     public function parseHeader($header) {
-        if (str_starts_with($header, 'basic')) {
-            return trim(substr($header, strlen('basic')));
+        if (str_starts_with($header, 'Basic')) {
+            return trim(substr($header, strlen('Basic')));
         }
 
         return null;

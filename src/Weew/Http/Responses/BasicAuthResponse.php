@@ -39,6 +39,6 @@ class BasicAuthResponse extends HttpResponse {
      */
     public function setRealm($realm) {
         $this->realm = $realm;
-        $this->getHeaders()->set('www-authenticate', s('basic realm="%s"', $realm));
+        $this->getHeaders()->set('www-authenticate', s('Basic realm="%s"', $realm));
     }
 }

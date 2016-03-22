@@ -28,9 +28,9 @@ class ReceivedHeadersParserTest extends PHPUnit_Framework_TestCase {
 
     public function write_common_auth_headers_provider() {
         return [
-            [['authorization' => 'basic foo'], ['HTTP_AUTHORIZATION' => 'basic foo']],
-            [['authorization' => 'digest foo'], ['HTTP_AUTHORIZATION' => 'digest foo']],
-            [['authorization' => 'bearer foo'], ['REDIRECT_HTTP_AUTHORIZATION' => 'bearer foo']],
+            [['authorization' => 'Basic foo'], ['HTTP_AUTHORIZATION' => 'Basic foo']],
+            [['authorization' => 'Digest foo'], ['HTTP_AUTHORIZATION' => 'Digest foo']],
+            [['authorization' => 'Bearer foo'], ['REDIRECT_HTTP_AUTHORIZATION' => 'Bearer foo']],
         ];
     }
 
@@ -66,10 +66,10 @@ class ReceivedHeadersParserTest extends PHPUnit_Framework_TestCase {
         $headers = new HttpHeaders();
 
         $this->assertFalse($headers->has('authorization'));
-        $parser->extractAuthHeaders($headers, ['HTTP_AUTHORIZATION' => 'bearer foo']);
-        $this->assertEquals('bearer foo', $headers->find('authorization'));
-        $parser->extractAuthHeaders($headers, ['HTTP_AUTHORIZATION' => 'bearer bar']);
-        $this->assertEquals('bearer foo', $headers->find('authorization'));
+        $parser->extractAuthHeaders($headers, ['HTTP_AUTHORIZATION' => 'Bearer foo']);
+        $this->assertEquals('Bearer foo', $headers->find('authorization'));
+        $parser->extractAuthHeaders($headers, ['HTTP_AUTHORIZATION' => 'Bearer bar']);
+        $this->assertEquals('Bearer foo', $headers->find('authorization'));
     }
 
     public function test_extract_special_headers() {
@@ -114,7 +114,7 @@ class ReceivedHeadersParserTest extends PHPUnit_Framework_TestCase {
 
     public function test_parse_headers() {
         $source = [
-            'HTTP_AUTHORIZATION' => 'basic foo',
+            'HTTP_AUTHORIZATION' => 'Basic foo',
             'FOO_BAR' => 'foo',
             'CONTENT_LENGTH' => 1337,
             'HTTP_SWAG' => 'swag',
@@ -123,7 +123,7 @@ class ReceivedHeadersParserTest extends PHPUnit_Framework_TestCase {
         ];
         $specialHeaders = ['FOO_BAR'];
         $expected = [
-            'authorization' => 'basic foo',
+            'authorization' => 'Basic foo',
             'foo-bar' => 'foo',
             'content-length' => 1337,
             'swag' => 'swag',
