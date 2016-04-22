@@ -46,7 +46,7 @@ class ReceivedHeadersParser implements IReceivedHeadersParser {
         array $specialHeaders
     ) {
         foreach ($server as $header => $value) {
-            if (in_array($header, $specialHeaders)) {
+            if (array_contains($specialHeaders, $header)) {
                 $headers->add(
                     $this->formatHeader($header), $value
                 );

@@ -29,6 +29,6 @@ class HttpRequestMethod {
      * @return bool
      */
     public static function isValid($method) {
-        return in_array($method, static::getMethods());
+        return array_contains(static::getMethods(), $method);
     }
 }

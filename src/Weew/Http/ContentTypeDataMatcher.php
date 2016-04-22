@@ -63,7 +63,7 @@ class ContentTypeDataMatcher implements IContentTypeDataMatcher {
      */
     public function addMapping($contentType, $dataClass) {
         if ( ! class_exists($dataClass)
-            || ! in_array(IHttpData::class, class_implements($dataClass))) {
+            || ! array_contains(class_implements($dataClass), IHttpData::class)) {
             throw new InvalidDataClassException(
                 s('Class "%s" must implement the "%s" interface.',
                     $dataClass, IHttpData::class)

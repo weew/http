@@ -171,7 +171,7 @@ class Cookie implements ICookie {
      * @return bool
      */
     public function hasPath() {
-        return ! in_array($this->getPath(), ['/', null]);
+        return ! array_contains(['/', null], $this->getPath());
     }
 
     /**
