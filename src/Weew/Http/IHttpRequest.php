@@ -56,4 +56,12 @@ interface IHttpRequest extends
      * @param ISuperGlobal $serverGlobal
      */
     function setServerGlobal(ISuperGlobal $serverGlobal);
+
+    /**
+     * @param string $key
+     * @param null $default
+     *
+     * @return mixed
+     */
+    function getParameter($key, $default = null);
 }

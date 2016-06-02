@@ -304,6 +304,24 @@ class HttpRequest implements IHttpRequest {
     }
 
     /**
+     * Retrieve a value from url query or message body.
+     *
+     * @param string $key
+     * @param null $default
+     *
+     * @return mixed
+     */
+    public function getParameter($key, $default = null) {
+        $value = $this->getUrl()->getQuery()->get($key);
+
+        if ($value === null) {
+            $value = $this->getData()->get($key, $default);
+        }
+
+        return $value;
+    }
+
+    /**
      * @return array
      */
     public function toArray() {

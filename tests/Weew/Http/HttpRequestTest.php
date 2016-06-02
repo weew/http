@@ -200,4 +200,15 @@ class HttpRequestTest extends PHPUnit_Framework_TestCase {
         $request->setServerGlobal($global);
         $this->assertTrue($global === $request->getServerGlobal());
     }
+
+    public function test_get_parameter() {
+        $request = new HttpRequest();
+        $request->getUrl()->getQuery()->set('foo', 'bar');
+        $request->getData()->set('foo', 'baz');
+        $request->getData()->set('yolo', 'swag');
+
+        $this->assertEquals('bar', $request->getParameter('foo', 'default'));
+        $this->assertEquals('swag', $request->getParameter('yolo', 'default'));
+        $this->assertEquals('default', $request->getParameter('swag', 'default'));
+    }
 }
