@@ -1,10 +1,10 @@
 # HTTP layer for PHP
 
-[![Build Status](https://img.shields.io/travis/weew/php-http.svg)](https://travis-ci.org/weew/php-http)
-[![Code Quality](https://img.shields.io/scrutinizer/g/weew/php-http.svg)](https://scrutinizer-ci.com/g/weew/php-http)
-[![Test Coverage](https://img.shields.io/coveralls/weew/php-http.svg)](https://coveralls.io/github/weew/php-http)
-[![Version](https://img.shields.io/packagist/v/weew/php-http.svg)](https://packagist.org/packages/weew/php-http)
-[![Licence](https://img.shields.io/packagist/l/weew/php-http.svg)](https://packagist.org/packages/weew/php-http)
+[![Build Status](https://img.shields.io/travis/weew/http.svg)](https://travis-ci.org/weew/http)
+[![Code Quality](https://img.shields.io/scrutinizer/g/weew/http.svg)](https://scrutinizer-ci.com/g/weew/http)
+[![Test Coverage](https://img.shields.io/coveralls/weew/http.svg)](https://coveralls.io/github/weew/http)
+[![Version](https://img.shields.io/packagist/v/weew/http.svg)](https://packagist.org/packages/weew/http)
+[![Licence](https://img.shields.io/packagist/l/weew/http.svg)](https://packagist.org/packages/weew/http)
 
 ## Table of contents
 
@@ -30,7 +30,7 @@
 
 ## Installation
 
-`composer require weew/php-http`
+`composer require weew/http`
 
 ## Responses
 
@@ -228,6 +228,6 @@ echo $request->getHeaders()->find('authentication');
 
 ## Related Projects
 
-- [URL](https://github.com/weew/php-url): used throughout the project.
-- [HTTP Client](https://github.com/weew/php-http-client): a simple http client that allows
+- [URL](https://github.com/weew/url): used throughout the project.
+- [HTTP Client](https://github.com/weew/http-client): a simple http client that allows
 you to send and receive the standardized HttpRequest and HttpResponse objects.
