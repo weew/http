@@ -26,7 +26,15 @@ class ContentTypeDataMatcher implements IContentTypeDataMatcher {
      * @return IHttpData
      */
     public function createDataForContentType(IContentHolder $holder, $contentType) {
-        $class = array_get($this->getMappings(), $contentType);
+        $parts = $this->parseContentType($contentType);
+
+        foreach ($parts as $part) {
+            $class = array_get($this->getMappings(), $part);
+
+            if ($class !== null) {
+                break;
+            }
+        }
 
         if ($class === null) {
             $class = $this->getDefaultDataClass();
@@ -71,6 +79,21 @@ class ContentTypeDataMatcher implements IContentTypeDataMatcher {
         }
 
         $this->mappings[$contentType] = $dataClass;
+    }
+
+    /**
+     * @param string $contentType
+     *
+     * @return array
+     */
+    protected function parseContentType($contentType) {
+        $parts = explode(';', $contentType);
+
+        foreach ($parts as $key => $value) {
+            $parts[$key] = trim($value);
+        }
+
+        return $parts;
     }
 
     /**

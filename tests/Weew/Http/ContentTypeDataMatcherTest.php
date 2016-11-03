@@ -48,5 +48,11 @@ class ContentTypeDataMatcherTest extends PHPUnit_Framework_TestCase {
 
         $data = $matcher->createDataForContentType($request, 'application/json');
         $this->assertTrue($data instanceof JsonData);
+
+        $data = $matcher->createDataForContentType($request, 'application/json;charset=UTF-8');
+        $this->assertTrue($data instanceof JsonData);
+
+        $data = $matcher->createDataForContentType($request, ' application/json ;charset=UTF-8');
+        $this->assertTrue($data instanceof JsonData);
     }
 }
